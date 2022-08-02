@@ -1,0 +1,104 @@
+{
+  "name": "vscode-yls",
+  "displayName": "YARA Language Server",
+  "description": "A Visual Studio Code extension for YARA based on YLS (Yara Language Server).",
+  "author": "Matej Kastak",
+  "license": "MIT",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/avast/yls"
+  },
+  "publisher": "avast-threatlabs-yara",
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Snippets",
+    "Formatters",
+    "Other"
+  ],
+  "keywords": [
+    "yara",
+    "yar",
+    "lsp",
+    "yls"
+  ],
+  "engines": {
+    "vscode": "^1.68.0"
+  },
+  "activationEvents": [
+    "onLanguage:yara"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "YARA",
+      "properties": {
+        "yara.yls.executable_path": {
+          "scope": "machine",
+          "type": "string",
+          "default": "",
+          "description": "Specifies an absolute path to the yls executable. If empty yls is expected to be in $PATH variable. (example: /home/user/yls/env/bin/yls) (Restart required)"
+        }
+      }
+    },
+    "configurationDefaults": {
+      "[yara]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": false,
+        "editor.detectIndentation": false
+      }
+    },
+    "languages": [
+      {
+        "id": "yara",
+        "extensions": [
+          ".yar",
+          ".yara"
+        ],
+        "aliases": [
+          "yara",
+          "Yara",
+          "YARA",
+          "YAR",
+          "Yar",
+          "yar"
+        ],
+        "configuration": "./language/config.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "yara",
+        "scopeName": "source.yara",
+        "path": "./language/yara.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "yarn run compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.68.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "@vscode/test-electron": "^2.1.3",
+    "eslint": "^8.16.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.2",
+    "vsce": "^2.9.2"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.0.1"
+  }
+}

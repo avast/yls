@@ -1,0 +1,4 @@
+.coverage
+.ropeproject
+__pycache__
+dist

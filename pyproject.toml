@@ -1,0 +1,100 @@
+[tool.poetry]
+name = "yls"
+version = "1.0.0"
+description = "YARA Language Server"
+authors = ["Matej Kašťák <matej.kastak@avast.com>"]
+maintainers = ["Matej Kašťák <matej.kastak@avast.com>"]
+readme = "README.md"
+license = "MIT"
+include = ["py.typed", "LICENSE", "LICENSE-THIRD-PARTY"]
+
+[tool.black]
+line-length = 100
+target-version = ['py36', 'py37', 'py38', 'py39']
+skip-magic-trailing-comma = true
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | env
+  | venv
+)/
+'''
+
+[tool.isort]
+profile = "black"
+force_single_line = true
+
+[tool.poe.tasks]
+_black = "black ."
+_isort = "isort ."
+format = ["_isort", "_black"]
+
+[tool.poetry.scripts]
+yls = 'yls.server:main'
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pygls = "^0.11.3"
+yaramod = "^3.12.8"
+pluggy = "^1.0.0"
+
+[tool.poetry.dev-dependencies]
+pytest-asyncio = "^0.18.3"
+pytest-cov = "^3.0.0"
+pytest-mock = "^3.7.0"
+pytest = "^7.1.2"
+bandit = "^1.7.4"
+pytest-pylint = "^0.18.0"
+pytest-mypy = "^0.9.1"
+black = "^22.3.0"
+isort = "^5.10.1"
+poethepoet = "^0.13.1"
+pytest-black = "^0.3.12"
+pytest-yls = "^0.1.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = "-vvv --cov-report term-missing --cov=yls -l --pylint --pylint-rcfile=pyproject.toml --mypy --black ./yls ./tests"
+asyncio_mode = "auto"
+
+[tool.mypy]
+disallow_untyped_calls = false
+disallow_untyped_defs = true
+disallow_untyped_decorators = false
+ignore_missing_imports = true
+strict = true
+warn_unused_ignores = true
+
+[tool.pylint.master]
+good-names = "ls,logger,x,y,c,e,i,j,n,m,f"
+ignored-classes = "_HookRelay"
+extension-pkg-allow-list = "yaramod"
+
+[tool.pylint.messages_control]
+disable = """,
+    cyclic-import,
+    line-too-long,
+    logging-format-interpolation,
+    logging-fstring-interpolation,
+    missing-class-docstring,
+    missing-function-docstring,
+    missing-module-docstring,
+    no-else-return,
+    redefined-outer-name,
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-return-statements
+    """

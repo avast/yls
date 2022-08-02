@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "pytest-yls"
+version = "0.1.0"
+description = "Pytest plugin to test the YLS as a whole."
+authors = ["Matej Kastak <matej.kastak@avast.com>"]
+maintainers = ["Matej Kašťák <matej.kastak@avast.com>"]
+readme = "README.md"
+license = "MIT"
+include = ["py.typed", "LICENSE"]
+
+[tool.poetry.dependencies]
+pytest = "^7.1.2"
+python = "^3.8"
+tenacity = "^8.0.1"
+yls = "^1"
+
+[tool.poetry.plugins.pytest11]
+pytest_yls = "pytest_yls"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
