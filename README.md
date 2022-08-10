@@ -38,11 +38,6 @@ You can run tests with the following command:
 poetry run pytest
 ```
 
-### Code style
-
-YLS uses [black](https://github.com/psf/black) to format and check code. In
-order to format the code accordingly you can use prepared `poetry run poe format`.
-
 ## License
 
 Copyright (c) 2022 Avast Software, licensed under the MIT license. See the
