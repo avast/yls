@@ -664,7 +664,7 @@ def main() -> None:
     args = utils.create_options_parser().parse_args()
 
     utils.set_logging_level(args.verbose)
-    utils.logging_prolog()
+    utils.logging_prolog(PluginManagerProvider.instance())
 
     SERVER.start_io()
 

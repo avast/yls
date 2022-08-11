@@ -14,6 +14,7 @@ from typing import Any
 from typing import Iterator
 from typing import TypeVar
 
+from pluggy import PluginManager
 import pygls.lsp.types as lsp_types
 import yaramod
 from pygls.workspace import Document
@@ -75,12 +76,15 @@ def log_command(command: str) -> None:
     log.info(f"LSP_COMMAND = {command}")
 
 
-def logging_prolog() -> None:
+def logging_prolog(plugin_manager: PluginManager) -> None:
     """Emit dependency version information."""
     log.info("Starting yls language server...")
     log.info(f"System platform: {platform.system()}")
     log.info(f"YLS version: {__version__}")
     log.info(f"Yaramod version: {yaramod.YARAMOD_VERSION}")
+
+    plugins = ', '.join(plugin[0] for plugin in plugin_manager.list_name_plugin())
+    log.info(f"Activated plugins: {plugins}")
 
 
 def range_from_coords(x: tuple[int, int], y: tuple[int, int]) -> lsp_types.Range:

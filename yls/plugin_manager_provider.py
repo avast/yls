@@ -23,7 +23,7 @@ def get_plugin_manager() -> PluginManager:
     manager = PluginManager("yls")
     manager.add_hookspecs(hookspecs)
     manager.load_setuptools_entrypoints("yls")
-    manager.register(YlsCorePlugin())
+    manager.register(YlsCorePlugin(), name="core")
     log.info(f"\t{manager.get_plugins()=}")
     log.info(f"\t{manager.list_name_plugin()=}")
     manager.trace.root.setwriter(print)
