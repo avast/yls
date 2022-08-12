@@ -1,4 +1,8 @@
 # YLS
+
+![PyPI](https://img.shields.io/pypi/v/yls?label=yls)
+![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/avast-threatlabs-yara.vscode-yls?label=vscode)
+
 [Language server](https://microsoft.github.io/language-server-protocol/) for
 [YARA](https://yara.readthedocs.io/en/stable/) language.
 
