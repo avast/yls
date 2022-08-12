@@ -1,5 +1,7 @@
 # pytest-yls
 
+![PyPI](https://img.shields.io/pypi/v/pytest-yls)
+
 Pytest plugin adding primitives for E2E/integration tests.
 
 Public fixtures:

@@ -1,5 +1,8 @@
 # YARA Language Server for Visual Studio Code
 
+![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/avast-threatlabs-yara.vscode-yls)
+![Open VSX Version](https://img.shields.io/open-vsx/v/avast-threatlabs-yara/vscode-yls)
+
 Visual Studio Code wrapper for [YLS](https://www.github.com/avast/yls). Provides
 YARA language configuration, code completion, linting, formatting, and many
 more features.

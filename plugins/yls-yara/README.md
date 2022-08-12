@@ -1,5 +1,7 @@
 # yls-yara
 
+![PyPI](https://img.shields.io/pypi/v/yls-yara)
+
 An [YLS](https://www.github.com/avast/yls) plugin adding
 [YARA](https://github.com/VirusTotal/yara) linting capabilities.
 
