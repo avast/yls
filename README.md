@@ -19,6 +19,10 @@
 
 ![Showcase](https://github.com/avast/yls/raw/master/assets/yls.png)
 
+For more information, check out:
+- [Blog post](https://engineering.avast.io/yls-first-step-towards-yara-development-environment/)
+- [Wiki](https://www.github.com/avast/yls/wiki)
+
 :snake: Minimal supported version of Python is `3.8`.
 
 ## Installation
