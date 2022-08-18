@@ -21,6 +21,10 @@
       "match": "\\b0x[a-fA-F0-9]+\\b"
     },
     {
+      "name": "constant.numeric.oct.yara",
+      "match": "\\b0o[0-7]+\\b"
+    },
+    {
       "name": "constant.numeric.decimal.yara",
       "match": "\\b[0-9]+(MB|KB)?\\b"
     },
