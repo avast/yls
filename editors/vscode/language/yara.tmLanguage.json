@@ -211,7 +211,7 @@
     "hex-string-value": {
       "contentName": "entity.name.hex.yara",
       "begin": "\\{",
-      "end": "\\}|(?=[^?0-9A-Fa-f\\[\\-\\]()/ \\n])(.*)",
+      "end": "\\}|(?=[^?0-9A-Fa-f\\[\\-\\]()/\\s\\n])(.*)",
       "endCaptures": {
         "1": {"name": "invalid.illegal.newline.yara"}
       },
@@ -243,7 +243,7 @@
       "patterns": [
         {
           "name": "invalid.illegal.hex.missingchar.yara",
-          "match": "(?<![0-9?A-Fa-f])[0-9A-Fa-f]([0-9A-Fa-f]{2})*(?![0-9?A-Fa-f])"
+          "match": "(?<![0-9?A-Fa-f])[0-9?A-Fa-f]([0-9?A-Fa-f]{2})*(?![0-9?A-Fa-f])"
         },
         {
           "name": "string.other.hex.yara",
