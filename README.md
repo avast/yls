@@ -17,7 +17,7 @@
 - Debugging? Stay tuned...
 - ...
 
-![Showcase](https://github.com/avast/yls/raw/master/assets/yls.png)
+![Showcase](https://github.com/avast/yls/raw/master/docs/assets/yls.png)
 
 For more information, check out:
 - [Blog post](https://engineering.avast.io/yls-first-step-towards-yara-development-environment/)
