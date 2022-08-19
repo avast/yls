@@ -518,7 +518,7 @@
           "include": "#regexp-escape-sequence"
         },
         {
-          "name": "constant.other.placeholder.regexp",
+          "name": "string.regexp.yara",
           "match": "[\\x20!\"#%&+,\\-'0->@-Z\\\\_`a-z~]"
         }
       ]
@@ -631,11 +631,11 @@
           "match": "\\\\([nrt\\\\\"]|x[0-9A-Fa-f]{2})"
         },
         {
-          "name": "constant.other.placeholder.ascii.yara",
+          "name": "string.quoted.double.ascii.yara",
           "match": "[\\x20\\x21\\x23-\\x5B\\x5D-\\x7E]"
         },
         {
-          "name": "constant.other.placeholder.unicode.yara",
+          "name": "string.quoted.double.unicode.yara",
           "match": "[^\\x00-\\x7F]"
         },
         {
@@ -662,7 +662,7 @@
           "match": "\\\\([nrt\\\\\"]|x[0-9A-Fa-f]{2})"
         },
         {
-          "name": "constant.other.placeholder.yara",
+          "name": "string.double.quoted.ascii.yara",
           "match": "[\\x20\\x21\\x23-\\x5B\\x5D-\\x7E]"
         }
       ]
