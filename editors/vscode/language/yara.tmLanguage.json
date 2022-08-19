@@ -343,6 +343,7 @@
         {"include": "#quoted-strings"},
         {"include": "#numbers"},
         {"include": "#separator"},
+        {"include": "#range-operator"},
         {"include": "#string-identifiers"},
         {"include": "#booleans"},
         {
@@ -391,6 +392,10 @@
     "separator": {
       "name": "punctuation.separator.arguments.yara",
       "match": ","
+    },
+    "range-operator": {
+      "name": "keyword.operator.range.yara",
+      "match": "\\.\\."
     },
     "boolean-operators": {
       "name": "keyword.operator.logical.yara",
