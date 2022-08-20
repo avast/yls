@@ -383,7 +383,7 @@
     },
     "struct-member-access": {
       "name": "meta.struct.access.yara",
-      "match": "\\.\\s*(?!\\.)"
+      "match": "(?!<\\.\\s*)\\.\\s*(?!\\.)"
     },
     "array-subscripting": {
       "name": "punctuation.definition.array.access.yara",
@@ -395,7 +395,7 @@
     },
     "range-operator": {
       "name": "keyword.operator.range.yara",
-      "match": "\\.\\."
+      "match": "(?<!\\.)\\.\\.(?!\\.)"
     },
     "boolean-operators": {
       "name": "keyword.operator.logical.yara",
@@ -474,13 +474,13 @@
     "regexp-expression": {
       "patterns": [
         {
-          "include": "#regexp-base-expression"
+          "include": "#regexp-parentheses"
         },
         {
           "include": "#regexp-character-set"
         },
         {
-          "include": "#regexp-parentheses"
+          "include": "#regexp-base-expression"
         },
         {
           "name": "invalid.illegal.regexp.end.yara",
@@ -512,14 +512,20 @@
         },
         {
           "name": "keyword.operator.quantifier.regexp",
-          "match": "\\{([0-9]+|[0-9]+,([0-9]+)?|,[0-9]+)\\}"
+          "match": "\\{([0-9]+|[0-9]+,(?:[0-9]+)?|,[0-9]+)\\}",
+          "captures": {
+            "1": {"name": "constant.numeric.yara"}
+          }
         },
         {
           "include": "#regexp-escape-sequence"
         },
         {
           "name": "string.regexp.yara",
-          "match": "[\\x20!\"#%&+,\\-'0->@-Z\\\\_`a-z~]"
+          "match": "[\\x20!\"#%&+,\\-'0->@-Z\\\\_`a-z{}~]"
+        },
+        {
+          "include": "#unmatched-characters"
         }
       ]
     },
@@ -531,7 +537,7 @@
         {
           "name": "meta.character.set.regexp",
           "begin": "(\\[)(\\^)?(\\])?",
-          "end": "(\\]|(?=\"))|((?=(?<!\\\\)\\n))",
+          "end": "(\\]|(?=/))|([^\\]]*?(?=/|\\n))",
           "beginCaptures": {
             "1": {
               "name": "constant.other.set.regexp punctuation.character.set.begin.regexp"
@@ -570,8 +576,11 @@
           "match": "\\\\[.afnrt\\\\]"
         },
         {
-          "name": "constant.character.escape.yara",
-          "match": "\\\\x[0-9A-Fa-f]{2}"
+          "match": "(\\\\x[0-9A-Fa-f]{2})|(\\\\x.{2})",
+          "captures": {
+            "1": {"name": "constant.character.escape.regexp"},
+            "2": {"name": "invalid.illegal.character.escape.regex"}
+          }
         }
       ]
     },
@@ -582,8 +591,11 @@
           "match": "\\\\[.afnrt\\\\]"
         },
         {
-          "name": "constant.character.escape.regexp",
-          "match": "\\\\x[0-9A-Fa-f]{2}"
+          "match": "(\\\\x[0-9A-Fa-f]{2})|(\\\\x.{2})",
+          "captures": {
+            "1": {"name": "constant.character.escape.regexp"},
+            "2": {"name": "invalid.illegal.character.escape.regex"}
+          }
         },
         {
           "name": "constant.character.class.regexp",
@@ -601,7 +613,7 @@
     },
     "regexp-parentheses": {
       "begin": "(\\()([+*?])?",
-      "end": "(\\)|(?=/))|((?=(?<!\\\\)\\n))",
+      "end": "(\\)|(?=/))|([^\\)]*?(?=/|\\n))",
       "beginCaptures": {
         "1": {"name": "punctuation.parenthesis.begin.regexp support.other.parenthesis.regexp"},
         "2": {"name": "invalid.illegal.group.construct.regexp"}
@@ -617,7 +629,7 @@
     "quoted-strings": {
       "name": "string.quoted.double.yara",
       "begin": "(?<!\")(\")(?!\\n)",
-      "end": "(?<!\\\\)(\")|((?:\\\")?[^\"]*\\n)",
+      "end": "(\")|((?:\\\\\")?[^\"]*\\n)",
       "beginCaptures": {
         "1": {"name": "punctuation.definition.string.begin.yara"}
       },
