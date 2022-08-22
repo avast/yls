@@ -491,15 +491,15 @@
     "regexp-base-expression": {
       "patterns": [
         {
-          "name": "support.other.match.any.regexp",
+          "name": "constant.character.class.regexp",
           "match": "\\."
         },
         {
-          "name": "support.other.match.begin.regexp",
+          "name": "constant.character.assertion.regexp",
           "match": "\\^"
         },
         {
-          "name": "support.other.match.end.regexp",
+          "name": "constant.character.assertion.regexp",
           "match": "\\$"
         },
         {
