@@ -522,7 +522,7 @@
         },
         {
           "name": "string.regexp.yara",
-          "match": "[\\x20!\"#%&+,\\-'0->@-Z\\\\_`a-z{}~]"
+          "match": "[\\x20!\"#%&',\\-0-9:->@A-Z\\]_`a-z{}~]"
         },
         {
           "include": "#unmatched-characters"
@@ -532,12 +532,20 @@
     "regexp-character-set": {
       "patterns": [
         {
-          "match": "\\[\\^?\\](?!.*?\\])"
+          "match": "(\\[\\^?)(\\])(?!])",
+          "captures": {
+            "1": {
+              "name": "constant.other.set.regexp punctuation.character.set.end.regexp"
+            },
+            "2": {
+              "name": "invalid.illegal.character.set.empty.yara"
+            }
+          }
         },
         {
           "name": "meta.character.set.regexp",
           "begin": "(\\[)(\\^)?(\\])?",
-          "end": "(\\]|(?=/))|([^\\]]*?(?=/|\\n))",
+          "end": "(\\])|([^\\]]*)(?=\\n)",
           "beginCaptures": {
             "1": {
               "name": "constant.other.set.regexp punctuation.character.set.begin.regexp"
@@ -562,8 +570,11 @@
               "include": "#regexp-character-set-escapes"
             },
             {
+              "include": "#regexp-escape-sequence"
+            },
+            {
               "name": "constant.character.set.regexp",
-              "match": "[\\x20\\x21\\x23-\\x2E\\x30-\\x7E]"
+              "match": "[\\x20-\\x2E\\x30-\\x5B\\x5E-\\x7E]"
             }
           ]
         }
@@ -573,14 +584,7 @@
       "patterns": [
         {
           "name": "constant.character.escape.regexp",
-          "match": "\\\\[.afnrt\\\\]"
-        },
-        {
-          "match": "(\\\\x[0-9A-Fa-f]{2})|(\\\\x.{2})",
-          "captures": {
-            "1": {"name": "constant.character.escape.regexp"},
-            "2": {"name": "invalid.illegal.character.escape.regex"}
-          }
+          "match": "\\\\([\\]bB])"
         }
       ]
     },
@@ -588,10 +592,10 @@
       "patterns": [
         {
           "name": "constant.character.escape.regexp",
-          "match": "\\\\[.afnrt\\\\]"
+          "match": "\\\\[./afnrt\\\\]"
         },
         {
-          "match": "(\\\\x[0-9A-Fa-f]{2})|(\\\\x.{2})",
+          "match": "(\\\\x[0-9A-Fa-f]{2})|(\\\\x[^\\]/]{0,2})",
           "captures": {
             "1": {"name": "constant.character.escape.regexp"},
             "2": {"name": "invalid.illegal.character.escape.regex"}
@@ -613,7 +617,7 @@
     },
     "regexp-parentheses": {
       "begin": "(\\()([+*?])?",
-      "end": "(\\)|(?=/))|([^\\)]*?(?=/|\\n))",
+      "end": "(\\))|([^)]*)(?=\\n)",
       "beginCaptures": {
         "1": {"name": "punctuation.parenthesis.begin.regexp support.other.parenthesis.regexp"},
         "2": {"name": "invalid.illegal.group.construct.regexp"}
