@@ -537,7 +537,7 @@
       "patterns": [
         {
           "name": "meta.character.set.regexp",
-          "begin": "(\\[)(\\^)?(\\])?(-)?",
+          "begin": "(\\[)(\\^)?(\\])?(?=.*?])",
           "end": "(-?)(\\])|([^\\]]*)(?=\\n)",
           "beginCaptures": {
             "1": {
@@ -547,9 +547,6 @@
               "name": "keyword.operator.negation.regexp"
             },
             "3": {
-              "name": "constant.character.set.regexp"
-            },
-            "4": {
               "name": "constant.character.set.regexp"
             }
           },
@@ -566,6 +563,9 @@
           },
           "patterns": [
             {
+              "include": "#regexp-character-set-range"
+            },
+            {
               "include": "#regexp-character-set-escapes"
             },
             {
@@ -579,26 +579,22 @@
         }
       ]
     },
+    "regexp-character-set-range": {
+      "name": "meta.character.range.regexp",
+      "match": "(?:(\\\\x[0-9A-Fa-f]{2}|(\\\\x[^\\]/]{0,2})|\\\\[^\\n])|[\\x20-\\x2E\\x30-\\x5B\\x5E-\\x7E])(-)(?!])(?:(\\\\x[0-9A-Fa-f]{2}|(\\\\x[^\\]/]{0,2})|\\\\[^\\n])|[\\x20-\\x2E\\x30-\\x5B\\x5E-\\x7E])",
+      "captures":{
+        "1": {"name": "constant.character.escape.regexp"},
+        "2": {"name": "invalid.illegal.character.escape.regex"},
+        "3": {"name": "constant.character.range.regexp"},
+        "4": {"name": "constant.character.escape.regexp"},
+        "5": {"name": "invalid.illegal.character.escape.regex"}
+      }
+    },
     "regexp-character-set-escapes": {
       "patterns": [
         {
           "name": "constant.character.escape.regexp",
           "match": "\\\\([\\]bB])"
-        },
-        {
-          "match": "(-)(-)(-)",
-          "captures":{
-            "1": {"name": "constant.character.set.regexp"},
-            "2": {"name": "constant.character.class.range.regexp"},
-            "3": {"name": "constant.character.set.regexp"}
-          }
-        },
-
-        {
-          "match": "(-)",
-          "captures":{
-            "1": {"name": "constant.character.class.range.regexp"}
-          }
         }
       ]
     },
