@@ -108,10 +108,10 @@ class EvalError:
 
 
 @hookspec
-def yls_eval(ls: Any, document: Document, position: Position) -> PluggyRes[str | EvalError]:
+def yls_eval(ls: Any, expr: str) -> PluggyRes[str | EvalError]:
     ...
 
 
 @hookspec
-def yls_eval_set_context(ls: Any, _hash: str) -> PluggyRes[str | EvalError]:
+def yls_eval_set_context(ls: Any, _hash: str, ruleset: str) -> PluggyRes[str | EvalError]:
     ...
