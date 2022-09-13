@@ -78,7 +78,7 @@ class YlsCorePlugin:
     @hookimpl
     @staticmethod
     def yls_scan_enabled() -> bool:
-        return True
+        return False
 
     @hookimpl
     @staticmethod

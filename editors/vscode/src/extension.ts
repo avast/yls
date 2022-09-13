@@ -1,4 +1,4 @@
-import { ExtensionContext, workspace } from "vscode";
+import { commands, ExtensionContext, window, workspace } from "vscode";
 import {
   Executable,
   LanguageClient,
@@ -10,13 +10,32 @@ let client: LanguageClient;
 export function activate(_context: ExtensionContext) {
   console.log("YARA vscode initialization");
 
+  workspace.onDidChangeConfiguration(event => {
+    let langServerAffected = event.affectsConfiguration("yls.executablePath");
+    if (langServerAffected)
+      restartLanguageClient();
+
+    let sampleDirAffected = event.affectsConfiguration("yls.yari.samplesDirectory");
+    if (sampleDirAffected)
+      updateSamplesDirectory();
+  });
+
+  restartLanguageClient();
+}
+
+async function restartLanguageClient(): Promise<void> {
+  console.log("Restarting language client");
+
+  // Deactivate previously launched client.
+  deactivate();
+
   // Get the editor configuration
-  const config = workspace.getConfiguration("yara");
+  const config = workspace.getConfiguration("yls");
   console.log("YLS configuration ", config);
 
   let execPath: string =
     process.env.YLS_EXECUTABLE_PATH ||
-    config.get("yls.executable_path") ||
+    config.get("executablePath") ||
     "yls";
   let execArgs: Array<string> = ["-vv"];
 
@@ -43,7 +62,17 @@ export function activate(_context: ExtensionContext) {
   );
 
   // Start the client. This will also launch the server
-  client.start();
+  await client.start();
+  window.showInformationMessage("New instance of YLS has been launched");
+
+  // After each restart we have to set the current sample directory for the new client
+  updateSamplesDirectory();
+}
+
+function updateSamplesDirectory(): void {
+  let dir_path = workspace.getConfiguration("yls.yari").get("samplesDirectory");
+  console.log("Local samples directory changed: ", dir_path);
+  commands.executeCommand("yls.eval_set_samples_dir", dir_path);
 }
 
 export function deactivate(): Promise<void> | undefined {

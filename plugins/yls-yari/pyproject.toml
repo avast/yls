@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "yls-yari"
+version = "0.1.0"
+description = "YLS plugin adding debugger using yari-py."
+authors = ["Tomáš Kender <tomas.kender@avast.com>"]
+maintainers = ["Tomáš Kender <tomas.kender@avast.com>"]
+readme = "README.md"
+license = "MIT"
+include = ["py.typed", "LICENSE"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+yari-py = {file="../yari/target/wheels/yari_py-1.0.0-cp310-cp310-linux_x86_64.whl"}
+yls = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.plugins.yls]
+yari = "yls_yari"
