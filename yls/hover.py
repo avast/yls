@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 class Hoverer:
     def __init__(self, ls: Any) -> None:
         self.ls = ls
-        self.selected_range = None
+        self.selected_range: lsp_types.Range | None = None
 
     async def hover(self, params: lsp_types.TextDocumentPositionParams) -> lsp_types.Hover | None:
 
@@ -39,15 +39,18 @@ class Hoverer:
                 return None
 
             expr = utils.text_from_range(document, expr_range)
-            log.debug('[HOVER] Hover request with selected text "{}"'.format(expr))
+            log.debug(f'[HOVER] Hover request with selected text "{expr}"')
             eval_result = await self.eval_expression(expr)
             log.debug(f"[HOVER] Evaluation returned {eval_result}")
             return lsp_types.Hover(
                 contents=utils.markdown_content(
-                    "{}\n"
-                    "*Expression*:\n```\n{}\n```\n\n".format(
-                        self.result_to_markdown(eval_result), utils.display_oneline_expr(expr)
-                    )
+                    f"""{self.result_to_markdown(eval_result)}
+*Expression*:
+```
+{utils.display_oneline_expr(expr)}
+```
+
+"""
                 )
             )
 

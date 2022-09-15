@@ -10,7 +10,7 @@ import platform
 import re
 import sys
 import uuid
-from typing import Any, List, Optional
+from typing import Any
 from typing import Iterator
 from typing import TypeVar
 
@@ -312,7 +312,8 @@ def position_in_range(position: lsp_types.Position, _range: lsp_types.Range) -> 
     )
 
 
-class YaramodExpressionExtractor(yaramod.ObservingVisitor):
+# pylint: disable-next=too-many-public-methods
+class YaramodExpressionExtractor(yaramod.ObservingVisitor):  # type: ignore
     """Helper to extract interesting expressions."""
 
     def __init__(self, position: lsp_types.Position) -> None:
@@ -320,7 +321,7 @@ class YaramodExpressionExtractor(yaramod.ObservingVisitor):
         self.position = position
         self.expr = None
 
-    def run(self, condition: yaramod.Expression) -> Optional[yaramod.Expression]:
+    def run(self, condition: yaramod.Expression) -> yaramod.Expression | None:
         self.observe(condition)
         return self.expr
 
@@ -338,11 +339,11 @@ class YaramodExpressionExtractor(yaramod.ObservingVisitor):
         self.extract(expr)
 
     # pylint: disable-next=invalid-name
-    def visit_StructAccessExpression(self, expr):
+    def visit_StructAccessExpression(self, expr: yaramod.StructAccessExperssion) -> None:
         self.extract(expr)
 
     # pylint: disable-next=invalid-name
-    def visit_ArrayAccessExpression(self, expr):
+    def visit_ArrayAccessExpression(self, expr: yaramod.ArrayAccessExpression) -> None:
         self.extract(expr)
 
     # pylint: disable-next=invalid-name
@@ -677,11 +678,11 @@ def extract_rule_context_from_yarafile(yara_file: yaramod.YaraFile, rule: yaramo
     # Find private rule references inside the condition
     all_rules = yara_file.rules
 
-    def _extract(curr_rule: yaramod.Rule, extracted_rules: List[str]) -> List[str]:
+    def _extract(curr_rule: yaramod.Rule, extracted_rules: list[str]) -> list[str]:
         # This rule has already been added, remove it before adding it again
         try:
             extracted_rules.remove(curr_rule.text)
-        except:
+        except ValueError:
             pass
 
         extracted_rules.insert(0, curr_rule.text)
@@ -692,10 +693,10 @@ def extract_rule_context_from_yarafile(yara_file: yaramod.YaraFile, rule: yaramo
             if identifier and identifier == identifier.upper()
         ]
         for uppercase_identifier in uppercase_identifiers:
-            for r in all_rules:
-                if r.name == uppercase_identifier:
+            for rule in all_rules:
+                if rule.name == uppercase_identifier:
                     # Add private rule dependencies
-                    _extract(r, extracted_rules)
+                    _extract(rule, extracted_rules)
                     break
 
         return extracted_rules
@@ -733,14 +734,14 @@ def text_from_range(document: Document, expr_range: lsp_types.Range) -> str:
         return expr
 
 
-def range_to_expression(document, range: lsp_types.Range) -> Optional[lsp_types.Range]:
+def range_to_expression(document: Document, _range: lsp_types.Range) -> lsp_types.Range | None:
     """Converts selected range in expression to the smallest possible Yaramod expression that covers the entire range."""
     yara_file = yaramod_parse_file(document.path)
     if yara_file is None:
         return None
 
-    start = cursor_expression(yara_file, range.start)
-    end = cursor_expression(yara_file, range.end)
+    start = cursor_expression(yara_file, _range.start)
+    end = cursor_expression(yara_file, _range.end)
 
     if start and end:
         return lsp_types.Range(
@@ -753,4 +754,4 @@ def range_to_expression(document, range: lsp_types.Range) -> Optional[lsp_types.
 
 def display_oneline_expr(expr_text: str) -> str:
     """Remove redundant whitespaces to display expression in a single line."""
-    return re.sub("\s+", " ", expr_text)
+    return re.sub(r"\s+", " ", expr_text)

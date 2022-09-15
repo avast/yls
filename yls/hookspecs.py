@@ -28,7 +28,6 @@ from pygls.lsp.types import CompletionParams
 from pygls.lsp.types import Diagnostic
 from pygls.lsp.types import DocumentFormattingParams
 from pygls.lsp.types import MessageType
-from pygls.lsp.types import Position
 from pygls.lsp.types import TextEdit
 from pygls.workspace import Document
 
