@@ -32,7 +32,7 @@ from yls import linting
 from yls import utils
 from yls.completer import Completer
 from yls.hover import Hoverer
-from yls.hookspecs import EvalError
+from yls.hookspecs import PopupMessage
 from yls.plugin_manager_provider import PluginManagerProvider
 from yls.yaramod_provider import YaramodProvider
 
@@ -662,14 +662,7 @@ async def command_eval_set_context(ls: YaraLanguageServer, args: list[Any]) -> N
     )
 
     for res_hash in res_hashes:
-        if isinstance(res_hash, EvalError):
-                res_hash.show(ls)
-                continue
-
-        ls.show_message(
-            f"Connection to debugger established with context({res_hash})",
-            lsp_types.MessageType.Info,
-        )
+        res_hash.show(ls)
 
 
 @SERVER.command(YaraLanguageServer.COMMAND_EVAL_SET_SAMPLES_DIR)

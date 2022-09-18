@@ -94,25 +94,37 @@ def yls_eval_enabled() -> bool:
     ...
 
 
-class EvalError:
-    def __init__(self, message: str, message_type: MessageType = MessageType.Error):
+class PopupMessage:
+    def __init__(self, message: str, message_type: MessageType):
         self.message = message
         self.message_type = message_type
 
-    def __str__(self) -> str:
-        return f"Evaluation error: {self.message}"
-
     def show(self, ls: Any) -> None:
-        ls.show_message(str(self), self.message_type)
+        ls.show_message(self.message, self.message_type)
+
+
+class InfoMessage(PopupMessage):
+    def __init__(self, message: str):
+        super().__init__(message, MessageType.Info)
+
+
+class WarningMessage(PopupMessage):
+    def __init__(self, message: str):
+        super().__init__(message, MessageType.Warning)
+
+
+class ErrorMessage(PopupMessage):
+    def __init__(self, message: str):
+        super().__init__(message, MessageType.Error)
 
 
 @hookspec
-def yls_eval(ls: Any, expr: str) -> PluggyRes[str | EvalError]:
+def yls_eval(ls: Any, expr: str) -> PluggyRes[str | PopupMessage]:
     ...
 
 
 @hookspec
-def yls_eval_set_context(ls: Any, _hash: str, ruleset: str) -> PluggyRes[str | EvalError]:
+def yls_eval_set_context(ls: Any, _hash: str, ruleset: str) -> PluggyRes[PopupMessage]:
     ...
 
 
