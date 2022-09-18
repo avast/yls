@@ -756,5 +756,6 @@ def remove_whitespace(text: str) -> str:
     """Remove redundant whitespaces to display text in a single line."""
     return re.sub(r"\s+", " ", text)
 
+
 def truncate_message(text: str, limit: int = 150) -> str:
-    return (text[:limit] + '..') if len(text) > limit else text
+    return (text[:limit] + "..") if len(text) > limit else text

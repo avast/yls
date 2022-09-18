@@ -32,7 +32,6 @@ from yls import linting
 from yls import utils
 from yls.completer import Completer
 from yls.hover import Hoverer
-from yls.hookspecs import PopupMessage
 from yls.plugin_manager_provider import PluginManagerProvider
 from yls.yaramod_provider import YaramodProvider
 
@@ -681,8 +680,7 @@ async def command_eval_set_samples_dir(ls: YaraLanguageServer, args: list[Any]) 
 
     for res_samples_dir in res_samples_dirs:
         ls.show_message(
-            f"Samples directory changed to {res_samples_dir}",
-            lsp_types.MessageType.Info,
+            f"Samples directory changed to {res_samples_dir}", lsp_types.MessageType.Info
         )
 
 

@@ -46,6 +46,7 @@ yls = 'yls.server:main'
 python = "^3.8"
 pygls = "^0.11.3"
 yaramod = "^3.12.8"
+yari-py = "0.1.0"
 pluggy = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
