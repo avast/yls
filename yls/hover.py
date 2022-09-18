@@ -47,7 +47,7 @@ class Hoverer:
                     f"""{self.result_to_markdown(eval_result)}
 *Expression*:
 ```
-{utils.display_oneline_expr(expr)}
+{utils.remove_whitespace(expr)}
 ```
 
 """

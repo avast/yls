@@ -705,11 +705,9 @@ def extract_rule_context_from_yarafile(yara_file: yaramod.YaraFile, rule: yaramo
 
     # Import only modules that are needed by context
     imports = "\n".join(
-        [
-            f'import "{module.name}"'
-            for module in yara_file.imports
-            if re.search(rf"\W{module.name}\.", rule_context)
-        ]
+        f'import "{module.name}"'
+        for module in yara_file.imports
+        if re.search(rf"\W{module.name}\.", rule_context)
     )
     if imports:
         rule_context = imports + "\n\n" + rule_context
@@ -752,6 +750,6 @@ def range_to_expression(document: Document, _range: lsp_types.Range) -> lsp_type
         return None
 
 
-def display_oneline_expr(expr_text: str) -> str:
-    """Remove redundant whitespaces to display expression in a single line."""
-    return re.sub(r"\s+", " ", expr_text)
+def remove_whitespace(text: str) -> str:
+    """Remove redundant whitespaces to display text in a single line."""
+    return re.sub(r"\s+", " ", text)
