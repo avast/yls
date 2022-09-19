@@ -14,9 +14,9 @@ from typing import Any
 from typing import Iterator
 from typing import TypeVar
 
-from pluggy import PluginManager
 import pygls.lsp.types as lsp_types
 import yaramod
+from pluggy import PluginManager
 from pygls.workspace import Document
 
 from yls.version import __version__
@@ -83,7 +83,7 @@ def logging_prolog(plugin_manager: PluginManager) -> None:
     log.info(f"YLS version: {__version__}")
     log.info(f"Yaramod version: {yaramod.YARAMOD_VERSION}")
 
-    plugins = ', '.join(plugin[0] for plugin in plugin_manager.list_name_plugin())
+    plugins = ", ".join(plugin[0] for plugin in plugin_manager.list_name_plugin())
     log.info(f"Activated plugins: {plugins}")
 
 
