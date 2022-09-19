@@ -673,35 +673,37 @@ async def start_progress(ls: Any, msg: str) -> str | None:
     return token
 
 
+class RuleDependencyIdentifier(yaramod.ObservingVisitor):  # type: ignore
+    """A class for obtaining rules that are in the condition (recursively)."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.discovered_rules: set[str] = set()
+        self.last_rule: yaramod.Rule = None
+
+    def indirectly_affected(self, yara_file: yaramod.YaraFile, root_rule: str) -> set[str]:
+        self.discovered_rules = {root_rule}
+
+        last_discovered: set[str] = set()
+        while last_discovered != self.discovered_rules:
+            last_discovered = set(self.discovered_rules)
+            for rule in yara_file.rules:
+                self.last_rule = rule
+                self.observe(rule.condition)
+
+        return self.discovered_rules
+
+    def visit_IdExpression(self, expr: yaramod.IdExpression) -> None:
+        if self.last_rule and self.last_rule.name in self.discovered_rules:
+            self.discovered_rules.add(expr.symbol.name)
+
+
 def extract_rule_context_from_yarafile(yara_file: yaramod.YaraFile, rule: yaramod.Rule) -> str:
     """Extract specified rule, private rules and modules it is dependent on from YaraFile."""
-    # Find private rule references inside the condition
-    all_rules = yara_file.rules
 
-    def _extract(curr_rule: yaramod.Rule, extracted_rules: list[str]) -> list[str]:
-        # This rule has already been added, remove it before adding it again
-        try:
-            extracted_rules.remove(curr_rule.text)
-        except ValueError:
-            pass
-
-        extracted_rules.insert(0, curr_rule.text)
-
-        uppercase_identifiers = [
-            identifier
-            for identifier in re.split("[ \t()]", curr_rule.condition.text)
-            if identifier and identifier == identifier.upper()
-        ]
-        for uppercase_identifier in uppercase_identifiers:
-            for rule in all_rules:
-                if rule.name == uppercase_identifier:
-                    # Add private rule dependencies
-                    _extract(rule, extracted_rules)
-                    break
-
-        return extracted_rules
-
-    rule_context = "\n\n".join(_extract(rule, []))
+    # Get rules ordered from deepest dependency to `rule` so they can be compiled.
+    rule_names = RuleDependencyIdentifier().indirectly_affected(yara_file, rule.name)
+    rule_context = "\n\n".join(rule.text for rule in yara_file.rules if rule.name in rule_names)
 
     # Import only modules that are needed by context
     imports = "\n".join(
