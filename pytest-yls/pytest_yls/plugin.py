@@ -61,8 +61,8 @@ class Context:
     server: YaraLanguageServer
     cursor_pos: types.Position | None = None
 
-    NOTIFICATION_TIMEOUT_SECONDS = 0.10
-    CALL_TIMEOUT_SECONDS = 2
+    NOTIFICATION_TIMEOUT_SECONDS = 2.00
+    CALL_TIMEOUT_SECONDS = 2.00
     LANGUAGE_ID = "yara"
     CURSOR_SYMBOL = "<$>"
 

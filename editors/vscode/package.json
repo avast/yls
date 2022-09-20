@@ -35,11 +35,17 @@
       "type": "object",
       "title": "YARA",
       "properties": {
-        "yara.yls.executable_path": {
+        "yls.executablePath": {
           "scope": "machine",
           "type": "string",
           "default": "",
-          "description": "Specifies an absolute path to the yls executable. If empty yls is expected to be in $PATH variable. (example: /home/user/yls/env/bin/yls) (Restart required)"
+          "description": "Specifies an absolute path to the yls executable. If empty yls is expected to be in $PATH variable. (example: /home/user/yls/env/bin/yls)"
+        },
+        "yls.yari.samplesDirectory": {
+          "scope": "machine",
+          "type": "string",
+          "default": "",
+          "description": "Specifies an absolute path to the directory used to store samples and module data. Used only for local YARI. (example: /home/user/samples)"
         }
       }
     },
