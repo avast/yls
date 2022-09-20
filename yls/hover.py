@@ -18,6 +18,7 @@ log = logging.getLogger(__name__)
 class Hoverer:
     def __init__(self, ls: Any) -> None:
         self.ls = ls
+        self.selected_range: lsp_types.Range | None = None
 
     async def hover(self, params: lsp_types.TextDocumentPositionParams) -> lsp_types.Hover | None:
 
@@ -26,6 +27,32 @@ class Hoverer:
 
         if self.ls.debug_hover:
             return utils.debug_hover(document, position)
+
+        # Evaluate entire block of selected expressions
+        if (
+            self.selected_range
+            and self.selected_range.start != self.selected_range.end
+            and utils.position_in_range(position, self.selected_range)
+        ):
+            expr_range = utils.range_to_expression(document, self.selected_range)
+            if not expr_range:
+                return None
+
+            expr = utils.text_from_range(document, expr_range)
+            log.debug(f'[HOVER] Hover request with selected text "{expr}"')
+            eval_result = await self.eval_expression(expr)
+            log.debug(f"[HOVER] Evaluation returned {eval_result}")
+            return lsp_types.Hover(
+                contents=utils.markdown_content(
+                    f"""{self.result_to_markdown(eval_result)}
+*Expression*:
+```
+{utils.remove_whitespace(expr)}
+```
+
+"""
+                )
+            )
 
         token = utils.cursor_token(document, position)
 
@@ -37,7 +64,7 @@ class Hoverer:
 
         log.debug(f'[HOVER] Hover request with token "{token}" and type "{token.type}"')
         if token.type == yaramod.TokenType.StringId:
-            return self.hover_string(token, document, position)
+            return await self.hover_string(token, document, position)
         elif token.type == yaramod.TokenType.Id:
             yara_file = utils.yaramod_parse_file(document.path)
             if yara_file is None:
@@ -45,9 +72,7 @@ class Hoverer:
 
             for rule in yara_file.rules:
                 if rule.name == token.text:
-                    return lsp_types.Hover(
-                        contents=utils.markdown_content(
-                            f"""*Rule name* = "{rule.name}"
+                    rule_doc = f"""*Rule name* = "{rule.name}"
 
 ```
 {rule.text}
@@ -58,12 +83,27 @@ class Hoverer:
 {rule.condition.text}
 ```
 """
-                        )
-                    )
+
+                    eval_result = await self.eval_expression(rule.name)
+                    if eval_result:
+                        rule_doc = f"{self.result_to_markdown(eval_result)}\n{rule_doc}"
+
+                    return lsp_types.Hover(contents=utils.markdown_content(rule_doc))
         elif token.type in [
             yaramod.TokenType.ValueSymbol,
             yaramod.TokenType.StructureSymbol,
             yaramod.TokenType.FunctionSymbol,
+            yaramod.TokenType.DictionarySymbol,
+            yaramod.TokenType.ArraySymbol,
+            yaramod.TokenType.Lt,
+            yaramod.TokenType.Gt,
+            yaramod.TokenType.Le,
+            yaramod.TokenType.Ge,
+            yaramod.TokenType.Eq,
+            yaramod.TokenType.Neq,
+            yaramod.TokenType.And,
+            yaramod.TokenType.Or,
+            yaramod.TokenType.Not,
         ]:
             return await self.hover_cursor(document, position)
 
@@ -78,24 +118,28 @@ class Hoverer:
 
         hover_string = ""
 
-        eval_result = await self.hover_eval(document, position)
-        if eval_result:
-            eval_result_formatted = f"Evaluation result:\n{eval_result}\n********\n\n"
-            hover_string += eval_result_formatted
+        yara_file = utils.yaramod_parse_file(document.path)
+        if yara_file:
+            expr = utils.cursor_expression(yara_file, position)
+            if expr:
+                eval_result = await self.eval_expression(expr.text)
+                if eval_result:
+                    hover_string += self.result_to_markdown(eval_result)
 
         hover_string += cursor_documentation
 
         return lsp_types.Hover(contents=utils.markdown_content(hover_string))
 
-    async def hover_eval(self, document: Document, position: lsp_types.Position) -> str:
-        log.debug(f'[HOVER] Hover eval "{document}" @ "{position}"')
+    def result_to_markdown(self, result: str) -> str:
+        return f"*Evaluation result*:\n{result}\n********\n\n"
+
+    async def eval_expression(self, expr: str) -> str:
+        log.debug(f'[HOVER] Evaluate expression "{expr}"')
 
         # Evaluate the expression
         eval_result_collected = ""
         eval_results = await utils.pluggy_results(
-            PluginManagerProvider.instance().hook.yls_eval(
-                ls=self.ls, document=document, position=position
-            )
+            PluginManagerProvider.instance().hook.yls_eval(ls=self.ls, expr=expr)
         )
         for eval_result in eval_results:
             # Handle errors from the plugins
@@ -126,7 +170,7 @@ class Hoverer:
 
         return doc
 
-    def hover_string(
+    async def hover_string(
         self, token: yaramod.Token, document: Document, position: lsp_types.Position
     ) -> lsp_types.Hover | None:
         """Generate Hover for string"""
@@ -138,8 +182,12 @@ class Hoverer:
         for string in cur_rule.strings:
             # NOTE: Check the type of string
             if string.identifier == token.pure_text:
-                return lsp_types.Hover(
-                    contents=utils.markdown_content(f"{string.identifier} = {string.text}")
-                )
+                string_doc = f"{string.identifier} = {string.text}"
+
+                eval_result = await self.eval_expression(string.identifier)
+                if eval_result:
+                    string_doc = f"{self.result_to_markdown(eval_result)}\n{string_doc}"
+
+                return lsp_types.Hover(contents=utils.markdown_content(string_doc))
 
         return None

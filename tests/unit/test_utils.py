@@ -254,15 +254,15 @@ rule asd {
         pe.entry<$>_point == 123 and
         cuckoo.sync.mutex(/test/)
 }""",
-            yaramod.EqExpression,
-            utils.range_from_coords((4, 8), (4, 29)),
+            yaramod.StructAccessExpression,
+            utils.range_from_coords((4, 8), (4, 22)),
         ),
         (
             """import "cuckoo"
 import "pe"
 rule asd {
     condition:
-        pe.entry<$>_point != 123 and
+        pe.entry_point <$>!= 123 and
         cuckoo.sync.mutex(/test/)
 }""",
             yaramod.NeqExpression,
@@ -273,7 +273,7 @@ rule asd {
 import "pe"
 rule asd {
     condition:
-        pe.entry<$>_point >= 123 and
+        pe.entry_point <$>>= 123 and
         cuckoo.sync.mutex(/test/)
 }""",
             yaramod.GeExpression,
@@ -284,7 +284,7 @@ rule asd {
 import "pe"
 rule asd {
     condition:
-        pe.entry<$>_point > 123 and
+        pe.entry_point <$>> 123 and
         cuckoo.sync.mutex(/test/)
 }""",
             yaramod.GtExpression,
@@ -295,7 +295,7 @@ rule asd {
 import "pe"
 rule asd {
     condition:
-        pe.entry<$>_point <= 123 and
+        pe.entry_point <$><= 123 and
         cuckoo.sync.mutex(/test/)
 }""",
             yaramod.LeExpression,
@@ -306,11 +306,11 @@ rule asd {
 import "pe"
 rule asd {
     condition:
-        pe.entry<$>_point < 123 and
+        pe.entry_point<$> < 123 and
         cuckoo.sync.mutex(/test/)
 }""",
-            yaramod.LtExpression,
-            utils.range_from_coords((4, 8), (4, 28)),
+            yaramod.StructAccessExpression,
+            utils.range_from_coords((4, 8), (4, 22)),
         ),
         (
             """import "cuckoo"
@@ -320,7 +320,7 @@ rule asd {
         fa<$>lse
 }""",
             None,
-            utils.range_from_coords((4, 8), (4, 28)),
+            utils.range_from_coords((4, 8), (4, 22)),
         ),
     ],
 )
