@@ -49,6 +49,7 @@ class YaraLanguageServer(LanguageServer):
     COMMAND_SCAN = "yls.scan"
     COMMAND_SCAN_ALL = "yls.scan_all"
     COMMAND_EVAL_SET_CONTEXT = "yls.eval_set_context"
+    COMMAND_EVAL_SET_SAMPLES_DIR = "yls.eval_set_samples_dir"
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -553,8 +554,8 @@ def code_lens_eval(yara_file: yaramod.YaraFile) -> list[lsp_types.CodeLens]:
 
 def code_lens_scan(yara_file: yaramod.YaraFile, uri: str) -> list[lsp_types.CodeLens]:
     """Create scannig code lenses from YaraFile."""
-    yls_eval_enabled = any(PluginManagerProvider.instance().hook.yls_eval_enabled())
-    if not yls_eval_enabled:
+    yls_scan_enabled = any(PluginManagerProvider.instance().hook.yls_scan_enabled())
+    if not yls_scan_enabled:
         return []
 
     res = []
@@ -659,9 +660,26 @@ async def command_eval_set_context(ls: YaraLanguageServer, args: list[Any]) -> N
     )
 
     for res_hash in res_hashes:
+        res_hash.show(ls)
+
+
+@SERVER.command(YaraLanguageServer.COMMAND_EVAL_SET_SAMPLES_DIR)
+async def command_eval_set_samples_dir(ls: YaraLanguageServer, args: list[Any]) -> None:
+    utils.log_command(YaraLanguageServer.COMMAND_EVAL_SET_SAMPLES_DIR)
+    log.debug(f"{args=}")
+
+    if len(args) != 1:
+        return
+
+    _dir = args[0]
+
+    res_samples_dirs = await utils.pluggy_results(
+        PluginManagerProvider.instance().hook.yls_eval_set_samples_dir(ls=ls, _dir=_dir)
+    )
+
+    for res_samples_dir in res_samples_dirs:
         ls.show_message(
-            f"Connection to debugger established with context({res_hash})",
-            lsp_types.MessageType.Info,
+            f"Samples directory changed to {res_samples_dir}", lsp_types.MessageType.Info
         )
 
 

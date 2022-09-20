@@ -9,7 +9,7 @@ from pygls.workspace import Document
 
 from yls import completion
 from yls import utils
-from yls.hookspecs import EvalError
+from yls.hookspecs import PopupMessage
 from yls.plugin_manager_provider import PluginManagerProvider
 
 log = logging.getLogger(__name__)
@@ -131,25 +131,33 @@ class Hoverer:
         return lsp_types.Hover(contents=utils.markdown_content(hover_string))
 
     def result_to_markdown(self, result: str) -> str:
-        return f"*Evaluation result*:\n{result}\n********\n\n"
+        return f"*Evaluation result*:\n\n{result}\n********\n\n"
 
     async def eval_expression(self, expr: str) -> str:
         log.debug(f'[HOVER] Evaluate expression "{expr}"')
 
         # Evaluate the expression
-        eval_result_collected = ""
+        eval_result_collected = []
         eval_results = await utils.pluggy_results(
             PluginManagerProvider.instance().hook.yls_eval(ls=self.ls, expr=expr)
         )
-        for eval_result in eval_results:
+
+        sources = ["avast", "core"]
+        for i, eval_result in enumerate(eval_results):
             # Handle errors from the plugins
-            if isinstance(eval_result, EvalError):
+            if isinstance(eval_result, PopupMessage):
                 eval_result.show(self.ls)
                 continue
 
-            eval_result_collected += eval_result
+            if not eval_result:
+                continue
 
-        return eval_result_collected
+            if len(eval_results) > 1:
+                eval_result_collected.append(f"**{sources[i]}**:\n{eval_result}")
+            else:
+                eval_result_collected.append(eval_result)
+
+        return "\n".join(eval_result_collected)
 
     def get_cursor_documentation(self, document: Document, position: lsp_types.Position) -> str:
         word = utils.cursor_symbol(document, position)
