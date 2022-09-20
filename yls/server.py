@@ -513,6 +513,8 @@ def code_action(
     """List available code actions for given context."""
     utils.log_command(CODE_ACTION)
 
+    # Provide hoverer service with selected text range context
+    ls.hoverer.selected_range = params.range
     return code_actions.from_params(ls, params)
 
 
@@ -538,7 +540,10 @@ def code_lens_eval(yara_file: yaramod.YaraFile) -> list[lsp_types.CodeLens]:
                 command=lsp_types.Command(
                     title=f"{icons.SEARCH} Select hash for context",
                     command=YaraLanguageServer.COMMAND_EVAL_SET_CONTEXT,
-                    arguments=[meta.value.pure_text],
+                    arguments=[
+                        meta.value.pure_text,
+                        utils.extract_rule_context_from_yarafile(yara_file, rule),
+                    ],
                 ),
             )
             res.append(lens)
@@ -641,13 +646,16 @@ async def command_eval_set_context(ls: YaraLanguageServer, args: list[Any]) -> N
     utils.log_command(YaraLanguageServer.COMMAND_EVAL_SET_CONTEXT)
     log.debug(f"{args=}")
 
-    if len(args) != 1 or not utils.is_sha256_hash(args[0]):
+    if len(args) != 2 or not utils.is_sha256_hash(args[0]):
         return
 
     _hash = args[0]
+    ruleset = args[1]
 
     res_hashes = await utils.pluggy_results(
-        PluginManagerProvider.instance().hook.yls_eval_set_context(ls=ls, _hash=_hash)
+        PluginManagerProvider.instance().hook.yls_eval_set_context(
+            ls=ls, _hash=_hash, ruleset=ruleset
+        )
     )
 
     for res_hash in res_hashes:

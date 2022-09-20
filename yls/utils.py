@@ -304,11 +304,15 @@ def is_in_yara_section(document: Document, cursor_line: int, section_name: str) 
 def position_in_range(position: lsp_types.Position, _range: lsp_types.Range) -> bool:
     """Returns if a given position is contained within the specified range."""
     return (
-        _range.start.line <= position.line <= _range.end.line
-        and _range.start.character <= position.character <= _range.end.character
+        _range.start.line < position.line
+        or (_range.start.line == position.line and _range.start.character <= position.character)
+    ) and (
+        _range.end.line > position.line
+        or (_range.end.line == position.line and _range.end.character >= position.character)
     )
 
 
+# pylint: disable-next=too-many-public-methods
 class YaramodExpressionExtractor(yaramod.ObservingVisitor):  # type: ignore
     """Helper to extract interesting expressions."""
 
@@ -331,28 +335,116 @@ class YaramodExpressionExtractor(yaramod.ObservingVisitor):  # type: ignore
         self.extract(expr)
 
     # pylint: disable-next=invalid-name
-    def visit_EqExpression(self, expr: yaramod.EqExpression) -> None:
+    def visit_IdExpression(self, expr: yaramod.IdExpression) -> None:
         self.extract(expr)
 
     # pylint: disable-next=invalid-name
-    def visit_NeqExpression(self, expr: yaramod.NeqExpression) -> None:
+    def visit_StructAccessExpression(self, expr: yaramod.StructAccessExperssion) -> None:
         self.extract(expr)
 
     # pylint: disable-next=invalid-name
-    def visit_GtExpression(self, expr: yaramod.GtExpression) -> None:
+    def visit_ArrayAccessExpression(self, expr: yaramod.ArrayAccessExpression) -> None:
         self.extract(expr)
 
     # pylint: disable-next=invalid-name
-    def visit_GeExpression(self, expr: yaramod.GeExpression) -> None:
+    def visit_StringExpression(self, expr: yaramod.StringExpression) -> None:
         self.extract(expr)
+
+    # pylint: disable-next=invalid-name
+    def visit_StringCountExpression(self, expr: yaramod.StringCountExpression) -> None:
+        self.extract(expr)
+
+    # pylint: disable-next=invalid-name
+    def visit_StringOffsetExpression(self, expr: yaramod.StringOffsetExpression) -> None:
+        self.extract(expr)
+
+    # pylint: disable-next=invalid-name
+    def visit_StringLengthExpression(self, expr: yaramod.StringLengthExpression) -> None:
+        self.extract(expr)
+
+    # pylint: disable-next=invalid-name
+    def visit_OfExpression(self, expr: yaramod.OfExpression) -> None:
+        self.extract(expr)
+
+    # pylint: disable-next=invalid-name
+    def visit_ForExpression(self, expr: yaramod.ForExpression) -> None:
+        self.extract(expr)
+
+    # pylint: disable-next=invalid-name
+    def visit_IequalsExpression(self, expr: yaramod.IequalsExpression) -> None:
+        self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
     def visit_LtExpression(self, expr: yaramod.LtExpression) -> None:
         self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
+
+    # pylint: disable-next=invalid-name
+    def visit_GtExpression(self, expr: yaramod.GtExpression) -> None:
+        self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
     def visit_LeExpression(self, expr: yaramod.LeExpression) -> None:
         self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
+
+    # pylint: disable-next=invalid-name
+    def visit_GeExpression(self, expr: yaramod.GeExpression) -> None:
+        self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
+
+    # pylint: disable-next=invalid-name
+    def visit_EqExpression(self, expr: yaramod.EqExpression) -> None:
+        self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
+
+    # pylint: disable-next=invalid-name
+    def visit_NeqExpression(self, expr: yaramod.NeqExpression) -> None:
+        self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
+
+    # pylint: disable-next=invalid-name
+    def visit_AndExpression(self, expr: yaramod.AndExpression) -> None:
+        self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
+
+    # pylint: disable-next=invalid-name
+    def visit_OrExpression(self, expr: yaramod.OrExpression) -> None:
+        self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
+
+    # pylint: disable-next=invalid-name
+    def visit_NotExpression(self, expr: yaramod.NotExpression) -> None:
+        self.extract(expr)
+        expr.operand.accept(self)
+
+    # pylint: disable-next=invalid-name
+    def visit_DefinedExpression(self, expr: yaramod.DefinedExpression) -> None:
+        self.extract(expr)
+        expr.operand.accept(self)
+
+    # pylint: disable-next=invalid-name
+    def visit_ContainsExpression(self, expr: yaramod.ContainsExpression) -> None:
+        self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
+
+    # pylint: disable-next=invalid-name
+    def visit_MatchesExpression(self, expr: yaramod.MatchesExpression) -> None:
+        self.extract(expr)
+        expr.left_operand.accept(self)
+        expr.right_operand.accept(self)
 
 
 def cursor_expression(
@@ -579,3 +671,87 @@ async def start_progress(ls: Any, msg: str) -> str | None:
         )
 
     return token
+
+
+class RuleDependencyIdentifier(yaramod.ObservingVisitor):  # type: ignore
+    """A class for obtaining rules that are in the condition (recursively)."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.discovered_rules: set[str] = set()
+        self.last_rule: yaramod.Rule = None
+
+    def indirectly_affected(self, yara_file: yaramod.YaraFile, root_rule: str) -> set[str]:
+        self.discovered_rules = {root_rule}
+
+        last_discovered: set[str] = set()
+        while last_discovered != self.discovered_rules:
+            last_discovered = set(self.discovered_rules)
+            for rule in yara_file.rules:
+                self.last_rule = rule
+                self.observe(rule.condition)
+
+        return self.discovered_rules
+
+    def visit_IdExpression(self, expr: yaramod.IdExpression) -> None:
+        if self.last_rule and self.last_rule.name in self.discovered_rules:
+            self.discovered_rules.add(expr.symbol.name)
+
+
+def extract_rule_context_from_yarafile(yara_file: yaramod.YaraFile, rule: yaramod.Rule) -> str:
+    """Extract specified rule, private rules and modules it is dependent on from YaraFile."""
+
+    # Get rules ordered from deepest dependency to `rule` so they can be compiled.
+    rule_names = RuleDependencyIdentifier().indirectly_affected(yara_file, rule.name)
+    rule_context = "\n\n".join(rule.text for rule in yara_file.rules if rule.name in rule_names)
+
+    # Import only modules that are needed by context
+    imports = "\n".join(
+        f'import "{module.name}"'
+        for module in yara_file.imports
+        if re.search(rf"\W{module.name}\.", rule_context)
+    )
+    if imports:
+        rule_context = imports + "\n\n" + rule_context
+
+    return rule_context
+
+
+def text_from_range(document: Document, expr_range: lsp_types.Range) -> str:
+    """Extract text from `document` which is located in provided `range`"""
+    first_line = document_line(document, expr_range.start.line)
+
+    if expr_range.start.line == expr_range.end.line:
+        return first_line[expr_range.start.character : expr_range.end.character]
+    else:
+        expr = first_line[expr_range.start.character :]
+
+        for line_idx in range(expr_range.start.line + 1, expr_range.end.line):
+            expr += document_line(document, line_idx) + "\n"
+
+        end_line = document_line(document, expr_range.end.line)
+        expr += end_line[0 : expr_range.end.character + 1]
+        return expr
+
+
+def range_to_expression(document: Document, _range: lsp_types.Range) -> lsp_types.Range | None:
+    """Converts selected range in expression to the smallest possible Yaramod expression that covers the entire range."""
+    yara_file = yaramod_parse_file(document.path)
+    if yara_file is None:
+        return None
+
+    start = cursor_expression(yara_file, _range.start)
+    end = cursor_expression(yara_file, _range.end)
+
+    if start and end:
+        return lsp_types.Range(
+            start=range_from_yaramod_expression(start).start,
+            end=range_from_yaramod_expression(end).end,
+        )
+    else:
+        return None
+
+
+def remove_whitespace(text: str) -> str:
+    """Remove redundant whitespaces to display text in a single line."""
+    return re.sub(r"\s+", " ", text)

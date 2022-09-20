@@ -28,7 +28,6 @@ from pygls.lsp.types import CompletionParams
 from pygls.lsp.types import Diagnostic
 from pygls.lsp.types import DocumentFormattingParams
 from pygls.lsp.types import MessageType
-from pygls.lsp.types import Position
 from pygls.lsp.types import TextEdit
 from pygls.workspace import Document
 
@@ -108,10 +107,10 @@ class EvalError:
 
 
 @hookspec
-def yls_eval(ls: Any, document: Document, position: Position) -> PluggyRes[str | EvalError]:
+def yls_eval(ls: Any, expr: str) -> PluggyRes[str | EvalError]:
     ...
 
 
 @hookspec
-def yls_eval_set_context(ls: Any, _hash: str) -> PluggyRes[str | EvalError]:
+def yls_eval_set_context(ls: Any, _hash: str, ruleset: str) -> PluggyRes[str | EvalError]:
     ...
