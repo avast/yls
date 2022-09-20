@@ -522,7 +522,6 @@ def code_action(
 def code_lens_eval(yara_file: yaramod.YaraFile) -> list[lsp_types.CodeLens]:
     """Create evaluation code lenses from YaraFile."""
     yls_eval_enabled = any(PluginManagerProvider.instance().hook.yls_eval_enabled())
-    log.debug(f"[TEST] yls_eval_enabled: {yls_eval_enabled}")
     if not yls_eval_enabled:
         return []
 

@@ -13,7 +13,7 @@ from pygls.workspace import Document
 from yls import hookimpl
 from yls import hookspecs
 from yls import utils
-from yls.debugger import DEBUGGER
+from yls.debugger import DebuggerProvider
 from yls.hookspecs import PopupMessage
 from yls.hookspecs import PluggyRes
 
@@ -87,7 +87,7 @@ class YlsCorePlugin:
         ls: Any,  # pylint: disable=unused-argument
         _dir: str,
     ) -> str:
-        return DEBUGGER.set_samples_dir(_dir)
+        return DebuggerProvider().instance().set_samples_dir(_dir)
 
     @hookimpl(trylast=True)
     def yls_eval(
@@ -95,7 +95,7 @@ class YlsCorePlugin:
         ls: Any,  # pylint: disable=unused-argument
         expr: str,
     ) -> PluggyRes[str | PopupMessage]:
-        return DEBUGGER.eval(expr)
+        return DebuggerProvider().instance().eval(expr)
 
     @hookimpl
     def yls_eval_set_context(
@@ -104,7 +104,7 @@ class YlsCorePlugin:
         _hash: str,
         ruleset: str,
     ) -> PluggyRes[PopupMessage]:
-        return DEBUGGER.set_context(_hash, ruleset)
+        return DebuggerProvider().instance().set_context(_hash, ruleset)
 
     @hookimpl
     def yls_eval_enabled(self) -> bool:
