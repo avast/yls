@@ -1,4 +1,5 @@
-import os
+# type: ignore
+
 from typing import Any
 import pytest
 
@@ -11,8 +12,8 @@ from yls.hookspecs import ErrorMessage
     [
         (
             "pe.number_of_sections",
-            """- context(SAMPLE) -> Integer (4, 0x4) -> True
-- context(CUCKOO) -> Integer (4, 0x4) -> True
+            """- context(SAMPLE) -> Integer (18, 0x12) -> True
+- context(CUCKOO) -> Integer (18, 0x12) -> True
 """,
         ),
         (
@@ -35,11 +36,11 @@ from yls.hookspecs import ErrorMessage
         ),
     ],
 )
-async def test_debugger(expr: str, expected: Any) -> None:
+async def test_debugger(expr: str, expected: Any, samples_dir_with_pe) -> None:
     debugger = Debugger()
-    debugger.set_samples_dir(os.path.join(os.path.dirname(__file__), "assets"))
+    debugger.set_samples_dir(str(samples_dir_with_pe))
     ctx_res = await debugger.set_context(
-        "7eb8f8828fa773fbea73b4d481b9ac007255f63c83e7a61b632e9ec4637ab828",
+        "fa6b73d710b5c96df05632ad6b979e787befd257284f986c3264dbbbb0481609",
         """import "pe"
 
 rule test_rule {
@@ -50,7 +51,7 @@ rule test_rule {
 }
 """,
     )
-    assert isinstance(ctx_res, ErrorMessage) is False
+    assert not isinstance(ctx_res, ErrorMessage)
 
     eval_res = debugger.eval(expr)
     assert eval_res == expected
