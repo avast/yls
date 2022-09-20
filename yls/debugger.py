@@ -22,8 +22,7 @@ class Debugger:
 
     async def set_context(self, sample_hash: str, ruleset: str) -> PopupMessage:
         log.debug(f"[DEBUGGER] Setting context on bundled YARI to {sample_hash}")
-        self.ctxs = {}
-        self.ctxs["GENERIC"] = yari.Context(rule_string=ruleset)  # pylint: disable=no-member
+        self.ctxs = {"GENERIC": yari.Context(rule_string=ruleset)}  # pylint: disable=no-member
 
         self.context_rule_name = re.findall(r"(?<=^rule )\w+(?= {$)", ruleset, re.MULTILINE)[-1]
 
