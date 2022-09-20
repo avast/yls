@@ -31,9 +31,7 @@ class Debugger:
 
         files = glob(os.path.join(self.samples_dir, "**", sample_hash + "*"), recursive=True)
 
-        log.debug(
-            f"[DEBUGGER] Found sample and module files for hash \"{sample_hash}\": {', '.join(files)}"
-        )
+        log.debug(f'[DEBUGGER] Found sample and module files for hash "{sample_hash}": {files}')
         if not files:
             return ErrorMessage(f"Sample with hash {sample_hash} not found in local directory")
 
@@ -67,6 +65,7 @@ class Debugger:
         return _dir
 
     def eval(self, expr: str) -> str | PopupMessage:
+        log.info(f"[DEBUGGER] Evaluating {expr}")
         if not self.ctxs:
             return ErrorMessage("YARI is not ready to evaluate... Ignoring evaluation request")
 
