@@ -31,6 +31,7 @@ from yls import icons
 from yls import linting
 from yls import utils
 from yls.completer import Completer
+from yls.hookspecs import ErrorMessage
 from yls.hover import Hoverer
 from yls.plugin_manager_provider import PluginManagerProvider
 from yls.yaramod_provider import YaramodProvider
@@ -653,14 +654,22 @@ async def command_eval_set_context(ls: YaraLanguageServer, args: list[Any]) -> N
     _hash = args[0]
     ruleset = args[1]
 
-    res_hashes = await utils.pluggy_results(
+    res_set_contexts = await utils.pluggy_results(
         PluginManagerProvider.instance().hook.yls_eval_set_context(
             ls=ls, _hash=_hash, ruleset=ruleset
         )
     )
 
-    for res_hash in res_hashes:
-        res_hash.show(ls)
+    res_success = next((res for res in res_set_contexts if not isinstance(res, ErrorMessage)), None)
+
+    if res_success:
+        res_success.show(ls)
+    else:
+        for i, res_set_context in enumerate(res_set_contexts):
+            if len(res_set_contexts) > 1:
+                res_set_context.message = f"{utils.DEBUGGER_SOURCES[i]}: {res_set_context.message}"
+            log.debug(res_set_context.message)
+            res_set_context.show(ls)
 
 
 @SERVER.command(YaraLanguageServer.COMMAND_EVAL_SET_SAMPLES_DIR)

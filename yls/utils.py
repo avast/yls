@@ -25,6 +25,9 @@ from yls.yaramod_provider import YaramodProvider
 log = logging.getLogger(__name__)
 
 
+DEBUGGER_SOURCES = ["avast", "core"]
+
+
 def create_options_parser() -> argparse.ArgumentParser:
     """Create argparse parser object."""
     parser = argparse.ArgumentParser(description="Yara Language Server")
