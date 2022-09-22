@@ -9,7 +9,7 @@ from pygls.workspace import Document
 
 from yls import completion
 from yls import utils
-from yls.hookspecs import PopupMessage
+from yls.hookspecs import ErrorMessage, PopupMessage
 from yls.plugin_manager_provider import PluginManagerProvider
 
 log = logging.getLogger(__name__)
@@ -142,18 +142,24 @@ class Hoverer:
             PluginManagerProvider.instance().hook.yls_eval(ls=self.ls, expr=expr)
         )
 
-        sources = ["avast", "core"]
+        res_success = next((res for res in eval_results if not isinstance(res, ErrorMessage)), None)
         for i, eval_result in enumerate(eval_results):
-            # Handle errors from the plugins
+            # Display errors
             if isinstance(eval_result, PopupMessage):
-                eval_result.show(self.ls)
+                # Show errors only if no debugger returned a valid result
+                if not res_success:
+                    if len(eval_results) > 1:
+                        eval_result.message = f"{utils.DEBUGGER_SOURCES[i]}: {eval_result.message}"
+                    eval_result.show(self.ls)
+
+                log.debug(eval_result.message)
                 continue
 
             if not eval_result:
                 continue
 
             if len(eval_results) > 1:
-                eval_result_collected.append(f"**{sources[i]}**:\n{eval_result}")
+                eval_result_collected.append(f"**{utils.DEBUGGER_SOURCES[i]}**:\n{eval_result}")
             else:
                 eval_result_collected.append(eval_result)
 

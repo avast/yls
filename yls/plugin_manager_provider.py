@@ -81,7 +81,7 @@ class YlsCorePlugin:
     def yls_scan_enabled(self) -> bool:
         return False
 
-    @hookimpl
+    @hookimpl(trylast=True)
     def yls_eval_set_samples_dir(
         self,  # pylint: disable=unused-argument
         ls: Any,  # pylint: disable=unused-argument
