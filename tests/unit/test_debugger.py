@@ -37,10 +37,12 @@ from yls.hookspecs import ErrorMessage
         ),
     ],
 )
-async def test_debugger(expr: str, expected: Any, samples_dir_with_pe) -> None:
+async def test_debugger(mocker, expr: str, expected: Any, samples_dir_with_pe) -> None:
     debugger = Debugger()
-    debugger.set_samples_dir(str(samples_dir_with_pe))
+    ls_mock = mocker.AsyncMock()
+    ls_mock.get_configuration_async.return_value = [str(samples_dir_with_pe)]
     ctx_res = await debugger.set_context(
+        ls_mock,
         "fa6b73d710b5c96df05632ad6b979e787befd257284f986c3264dbbbb0481609",
         """import "pe"
 
