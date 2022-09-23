@@ -1,5 +1,8 @@
 # type: ignore
 
+from __future__ import annotations
+
+import pytest
 from pygls.lsp import methods
 from pygls.lsp import types
 from pytest_yls.utils import assert_completable
@@ -279,3 +282,48 @@ rule test {
         ("MACHINE_ARM64", types.CompletionItemKind.Constant),
     )
     assert_completable(expect, response)
+
+
+@pytest.mark.parametrize(
+    "line, expected",
+    (
+        (
+            '$s00 = "test" <$>',
+            {"private", "base64wide", "xor", "ascii", "base64", "nocase", "wide", "fullword"},
+        ),
+        ('$s00 = "test" base<$>', {"base64wide", "base64"}),
+        ("$s00 = /test/ <$>", {"private", "ascii", "nocase", "wide", "fullword"}),
+        ("$s00 = { 11 } <$>", {"private"}),
+        ("<$>", set()),
+        ('$s00 = "noca<$>"', set()),
+        ('$s00 =<$> ""', set()),
+        (
+            '$s00 = "/test/" <$>',
+            {"private", "base64wide", "xor", "ascii", "base64", "nocase", "wide", "fullword"},
+        ),
+        ('$s00 = /"test"/ <$>', {"private", "ascii", "nocase", "wide", "fullword"}),
+    ),
+)
+def test_completion_string_modifiers(yls_prepare, line: str, expected: set[str]):
+    contents = f"""rule test {{
+    strings:
+        {line}
+    condition:
+        any of them
+}}"""
+    context = yls_prepare(contents)
+
+    response = context.send_request(
+        methods.COMPLETION,
+        types.CompletionParams(
+            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+            position=context.get_cursor_position(),
+        ),
+    )
+    assert response
+
+    completed_modifiers = set()
+    for item in response["items"]:
+        completed_modifiers.add(item["label"])
+
+    assert completed_modifiers == expected

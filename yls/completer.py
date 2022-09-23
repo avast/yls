@@ -10,6 +10,8 @@ from pygls.workspace import Document
 from yls import completion
 from yls import utils
 from yls.plugin_manager_provider import PluginManagerProvider
+from yls.strings import estimate_string_type
+from yls.strings import string_modifiers_completion_items
 
 log = logging.getLogger(__name__)
 
@@ -80,6 +82,10 @@ class Completer:
         # Import completion
         log.debug("[COMPLETION] Adding import completion")
         res += self.complete_import(document, params.position)
+
+        # String modifiers completion
+        log.debug("[COMPLETION] Adding string modifiers completion")
+        res += self.complete_string_modifiers(document, params.position, word)
 
         # Function completion
         log.debug("[COMPLETION] Adding module completion")
@@ -176,3 +182,30 @@ class Completer:
                 )
 
         return res
+
+    def complete_string_modifiers(
+        self, document: Document, position: lsp_types.Position, word: str
+    ) -> list[lsp_types.CompletionItem]:
+        """Complete string modifiers."""
+
+        # Check if the line is not empty
+        line = utils.cursor_line(document, position)
+        if not line.strip():
+            return []
+
+        # Complete only if end of the string is before the cursor
+        characters_after_cursor = set(line[position.character :])
+        if {'"', "/", "}"}.intersection(characters_after_cursor):
+            return []
+
+        # Complete only in `strings:` section
+        if not utils.is_in_yara_section(document, position.line, "strings"):
+            return []
+
+        # Filter out the modifiers based on the string type
+        estimated_string_type = estimate_string_type(line)
+        final_list = iter(string_modifiers_completion_items(estimated_string_type))
+
+        # Filter the modifiers based on the word under the cursor
+        final_list = filter(lambda item: item.label.startswith(word), final_list)
+        return list(final_list)
