@@ -14,8 +14,8 @@ from yls import hookimpl
 from yls import hookspecs
 from yls import utils
 from yls.debugger import DebuggerProvider
-from yls.hookspecs import PopupMessage
 from yls.hookspecs import PluggyRes
+from yls.hookspecs import PopupMessage
 
 log = logging.getLogger(__name__)
 

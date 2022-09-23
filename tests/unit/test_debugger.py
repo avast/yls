@@ -1,6 +1,7 @@
 # type: ignore
 
 from typing import Any
+
 import pytest
 
 from yls.debugger import Debugger

@@ -9,7 +9,8 @@ from pygls.workspace import Document
 
 from yls import completion
 from yls import utils
-from yls.hookspecs import ErrorMessage, PopupMessage
+from yls.hookspecs import ErrorMessage
+from yls.hookspecs import PopupMessage
 from yls.plugin_manager_provider import PluginManagerProvider
 
 log = logging.getLogger(__name__)

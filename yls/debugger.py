@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-from glob import glob
 import logging
 import os
 import re
+from glob import glob
 from typing import Any
 
 import yari
 
 from yls import utils
-from yls.hookspecs import InfoMessage, ErrorMessage, PopupMessage
+from yls.hookspecs import ErrorMessage
+from yls.hookspecs import InfoMessage
+from yls.hookspecs import PopupMessage
 
 log = logging.getLogger(__name__)
 
