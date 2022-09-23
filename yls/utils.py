@@ -762,3 +762,18 @@ def remove_whitespace(text: str) -> str:
 
 def truncate_message(text: str, limit: int = 150) -> str:
     return (text[:limit] + "..") if len(text) > limit else text
+
+
+async def get_config_from_editor(ls: Any, section: str) -> Any:
+    """Get the configuration from the editor."""
+    config = await ls.get_configuration_async(
+        lsp_types.ConfigurationParams(
+            items=[lsp_types.ConfigurationItem(scope_uri="", section=section)]
+        )
+    )
+
+    # We should get list of configuration items here with exactly one element
+    assert isinstance(config, list)
+    assert len(config) == 1
+
+    return config[0]

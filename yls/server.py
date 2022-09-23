@@ -50,7 +50,6 @@ class YaraLanguageServer(LanguageServer):
     COMMAND_SCAN = "yls.scan"
     COMMAND_SCAN_ALL = "yls.scan_all"
     COMMAND_EVAL_SET_CONTEXT = "yls.eval_set_context"
-    COMMAND_EVAL_SET_SAMPLES_DIR = "yls.eval_set_samples_dir"
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -670,26 +669,6 @@ async def command_eval_set_context(ls: YaraLanguageServer, args: list[Any]) -> N
                 res_set_context.message = f"{utils.DEBUGGER_SOURCES[i]}: {res_set_context.message}"
             log.debug(res_set_context.message)
             res_set_context.show(ls)
-
-
-@SERVER.command(YaraLanguageServer.COMMAND_EVAL_SET_SAMPLES_DIR)
-async def command_eval_set_samples_dir(ls: YaraLanguageServer, args: list[Any]) -> None:
-    utils.log_command(YaraLanguageServer.COMMAND_EVAL_SET_SAMPLES_DIR)
-    log.debug(f"{args=}")
-
-    if len(args) != 1:
-        return
-
-    _dir = args[0]
-
-    res_samples_dirs = await utils.pluggy_results(
-        PluginManagerProvider.instance().hook.yls_eval_set_samples_dir(ls=ls, _dir=_dir)
-    )
-
-    for res_samples_dir in res_samples_dirs:
-        ls.show_message(
-            f"Samples directory changed to {res_samples_dir}", lsp_types.MessageType.Info
-        )
 
 
 def main() -> None:

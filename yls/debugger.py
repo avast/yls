@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 import logging
-import os
 import re
-from glob import glob
+from pathlib import Path
 from typing import Any
 
 import yari
@@ -18,32 +17,33 @@ log = logging.getLogger(__name__)
 
 class Debugger:
     def __init__(self) -> None:
-        self.samples_dir: str | None = None
         self.context_rule_name: str | None = None
         self.ctxs: dict[str, yari.Context] = {}
 
-    async def set_context(self, sample_hash: str, ruleset: str) -> PopupMessage:
+    async def set_context(self, ls: Any, sample_hash: str, ruleset: str) -> PopupMessage:
         log.debug(f"[DEBUGGER] Setting context on bundled YARI to {sample_hash}")
         self.ctxs = {}
 
         self.context_rule_name = re.findall(r"(?<=^rule )\w+(?= {$)", ruleset, re.MULTILINE)[-1]
 
-        if not self.samples_dir:
+        samples_dir = await self.get_samples_dir(ls)
+        if samples_dir is None:
             return ErrorMessage("Samples folder is not set")
 
-        files = glob(os.path.join(self.samples_dir, "**", sample_hash + "*"), recursive=True)
+        files = list(samples_dir.rglob(f"{sample_hash}*"))
 
         log.debug(f'[DEBUGGER] Found sample and module files for hash "{sample_hash}": {files}')
         if not files:
-            return ErrorMessage(f"Sample with hash {sample_hash} not found in local directory")
+            return ErrorMessage(f"Sample {sample_hash} not found in {samples_dir}")
 
         # Sort files into groups by type of source
-        sample, module = None, None
+        sample: str | None = None
+        module: str | None = None
         for f in files:
-            if f.endswith(sample_hash) and not sample:
-                sample = f
+            if f.name == sample_hash and not sample:
+                sample = str(f)
             elif not module:
-                module = f
+                module = str(f)
             else:
                 break
 
@@ -60,11 +60,6 @@ class Debugger:
         return InfoMessage(
             f"Connection to debugger established with context(\n\t{sample_hash},\n\t{utils.truncate_message(ruleset)}\n)"
         )
-
-    def set_samples_dir(self, _dir: str) -> str:
-        log.debug(f'[DEBUGGER] Samples directory has been set to: "{_dir}"')
-        self.samples_dir = _dir
-        return _dir
 
     def eval(self, expr: str) -> str | PopupMessage:
         log.info(f"[DEBUGGER] Evaluating {expr}")
@@ -105,6 +100,22 @@ class Debugger:
             log.warning(f"Unknown type of value {value}")
 
         return res
+
+    @staticmethod
+    async def get_samples_dir(ls: Any) -> Path | None:
+        samples_dir_config = await utils.get_config_from_editor(ls, "yls.yari.samplesDirectory")
+        log.debug(f"[DEBUGGER] Got {samples_dir_config=}")
+        samples_dir_path = Path(samples_dir_config)
+
+        if not samples_dir_path.is_dir():
+            log.debug("[DEBUGGER] Samples dir does not exist or is not a directory")
+            return None
+
+        if len(list(samples_dir_path.iterdir())) == 0:
+            log.debug("[DEBUGGER] Samples dir is empty")
+            return None
+
+        return samples_dir_path
 
 
 class DebuggerProvider:

@@ -9,10 +9,10 @@ from pygls.workspace import Document
 
 from yls import completion
 from yls import utils
+from yls.completion import CONDITION_KEYWORDS
 from yls.plugin_manager_provider import PluginManagerProvider
 from yls.strings import estimate_string_type
 from yls.strings import string_modifiers_completion_items
-from yls.completion import CONDITION_KEYWORDS
 
 log = logging.getLogger(__name__)
 

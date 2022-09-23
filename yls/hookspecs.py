@@ -126,8 +126,3 @@ def yls_eval(ls: Any, expr: str) -> PluggyRes[str | PopupMessage]:
 @hookspec
 def yls_eval_set_context(ls: Any, _hash: str, ruleset: str) -> PluggyRes[PopupMessage]:
     ...
-
-
-@hookspec
-def yls_eval_set_samples_dir(ls: Any, _dir: str) -> str:
-    ...

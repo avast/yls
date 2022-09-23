@@ -6,6 +6,7 @@ import pytest
 from pygls.lsp import methods
 from pygls.lsp import types
 from pytest_yls.utils import assert_completable
+
 from yls.completion import CONDITION_KEYWORDS
 
 

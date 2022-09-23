@@ -82,14 +82,6 @@ class YlsCorePlugin:
         return False
 
     @hookimpl(trylast=True)
-    def yls_eval_set_samples_dir(
-        self,  # pylint: disable=unused-argument
-        ls: Any,  # pylint: disable=unused-argument
-        _dir: str,
-    ) -> str:
-        return DebuggerProvider().instance().set_samples_dir(_dir)
-
-    @hookimpl(trylast=True)
     def yls_eval(
         self,  # pylint: disable=unused-argument
         ls: Any,  # pylint: disable=unused-argument
@@ -99,12 +91,9 @@ class YlsCorePlugin:
 
     @hookimpl
     def yls_eval_set_context(
-        self,  # pylint: disable=unused-argument
-        ls: Any,  # pylint: disable=unused-argument
-        _hash: str,
-        ruleset: str,
+        self, ls: Any, _hash: str, ruleset: str  # pylint: disable=unused-argument
     ) -> PluggyRes[PopupMessage]:
-        return DebuggerProvider().instance().set_context(_hash, ruleset)
+        return DebuggerProvider().instance().set_context(ls, _hash, ruleset)
 
     @hookimpl
     def yls_eval_enabled(self) -> bool:
