@@ -11,6 +11,46 @@ from yls import utils
 
 log = logging.getLogger(__name__)
 
+# Keywords which can occur in condition section
+CONDITION_KEYWORDS = {
+    "all",
+    "and",
+    "any",
+    "at",
+    "contains",
+    "endswith",
+    "entrypoint",
+    "false",
+    "filesize",
+    "for",
+    "icontains",
+    "iendswith",
+    "iequals",
+    "in",
+    "int16",
+    "int16be",
+    "int32",
+    "int32be",
+    "int8",
+    "int8be",
+    "istartswith",
+    "matches",
+    "none",
+    "not",
+    "of",
+    "or",
+    "startswith",
+    "them",
+    "true",
+    "uint16",
+    "uint16be",
+    "uint32",
+    "uint32be",
+    "uint8",
+    "uint8be",
+    "defined",
+}
+
 
 @dataclass
 class Symbol:
