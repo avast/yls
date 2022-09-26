@@ -6,6 +6,7 @@ import pytest
 from pygls.lsp import methods
 from pygls.lsp import types
 from pytest_yls.utils import assert_completable
+from yls.completion import CONDITION_KEYWORDS
 
 
 def test_completion_basic(yls_prepare):
@@ -92,11 +93,10 @@ def test_completion_in_condition(yls_prepare):
 
 
 def test_completion_no_suggestions(yls_prepare):
-    contents = """rule test {
-    strings:
-        $s1 = "test"
+    contents = """import "pe"
+rule test {
     condition:
-        any of<$> them
+        pe.this_should_not_have_any_completion<$>
 }"""
     context = yls_prepare(contents)
 
@@ -327,3 +327,29 @@ def test_completion_string_modifiers(yls_prepare, line: str, expected: set[str])
         completed_modifiers.add(item["label"])
 
     assert completed_modifiers == expected
+
+
+@pytest.mark.parametrize(
+    "line, expected", (("<$>", CONDITION_KEYWORDS), ("a<$>", {"all", "and", "any", "at"}))
+)
+def test_completion_condition_keywords(yls_prepare, line: str, expected: set[str]):
+    contents = f"""rule test {{
+    condition:
+        {line}
+}}"""
+    context = yls_prepare(contents)
+
+    response = context.send_request(
+        methods.COMPLETION,
+        types.CompletionParams(
+            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+            position=context.get_cursor_position(),
+        ),
+    )
+    assert response
+
+    completed_modifiers = set()
+    for item in response["items"]:
+        completed_modifiers.add(item["label"])
+
+    assert completed_modifiers.issuperset(expected)
