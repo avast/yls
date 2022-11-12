@@ -227,13 +227,13 @@ def initiliazed(ls: YaraLanguageServer, _params: Any) -> None:
 
 
 @SERVER.feature(COMPLETION, lsp_types.CompletionOptions(trigger_characters=["."]))
-def completion(
+async def completion(
     ls: YaraLanguageServer, params: lsp_types.CompletionParams
 ) -> lsp_types.CompletionList:
     """Code completion."""
     utils.log_command(COMPLETION)
 
-    return ls.completer.complete(params)
+    return await ls.completer.complete(params)
 
 
 @SERVER.feature(SIGNATURE_HELP, lsp_types.SignatureHelpOptions(trigger_characters=["("]))

@@ -13,6 +13,7 @@ from yls.completion import CONDITION_KEYWORDS
 from yls.plugin_manager_provider import PluginManagerProvider
 from yls.strings import estimate_string_type
 from yls.strings import string_modifiers_completion_items
+from yls.snippets import SnippetGenerator
 
 log = logging.getLogger(__name__)
 
@@ -26,8 +27,9 @@ class Completer:
         self.ls = ls
         self.completion_cache = completion.CompletionCache.from_yaramod(self.ls.ymod)
 
-    def complete(self, params: lsp_types.CompletionParams) -> lsp_types.CompletionList:
-        return lsp_types.CompletionList(is_incomplete=False, items=self._complete(params))
+    async def complete(self, params: lsp_types.CompletionParams) -> lsp_types.CompletionList:
+        items = await self._complete(params)
+        return lsp_types.CompletionList(is_incomplete=False, items=items)
 
     def signature_help(self, params: lsp_types.CompletionParams) -> lsp_types.SignatureHelp | None:
         signatures = self._signature_help(params)
@@ -71,7 +73,7 @@ class Completer:
 
         return info
 
-    def _complete(self, params: lsp_types.CompletionParams) -> list[lsp_types.CompletionItem]:
+    async def _complete(self, params: lsp_types.CompletionParams) -> list[lsp_types.CompletionItem]:
         document = self.ls.workspace.get_document(params.text_document.uri)
 
         res = []
@@ -99,6 +101,10 @@ class Completer:
         # Symbols from last yara file completion
         log.debug("[COMPLETION] Adding last valid yara file")
         res += self.complete_last_valid_yara_file(document, params, word)
+
+        # Dynamic snippets
+        log.debug("[COMPLETION] Adding dynamic snippets")
+        res += await self.complete_dynamic_snippets()
 
         # Plugin completion
         log.debug("COMPLETION] Adding completion items from plugings")
@@ -238,3 +244,12 @@ class Completer:
 
             res.append(item)
         return res
+
+    async def complete_dynamic_snippets(self) -> list[lsp_types.CompletionItem]:
+        config = await utils.get_config_from_editor(self.ls, "yls.snippets")
+        log.debug(f"[COMPLETION] lsp configuration {config=}")
+        if config is None:
+            return []
+
+        generator = SnippetGenerator(config)
+        return generator.generate_snippets()

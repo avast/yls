@@ -46,6 +46,38 @@
           "type": "string",
           "default": "",
           "description": "Specifies an absolute path to the directory used to store samples and module data. Used only for local YARI. (example: /home/user/samples)"
+        },
+        "yls.snippets.metaEntries": {
+          "type": "object",
+          "default": {},
+          "description": "A set of metadata entries to insert into rules. Empty values will create meta keys with a tabstop, and built-in variables are accepted (though transforms are ignored).",
+          "maxProperties": 50,
+          "additionalProperties": true
+        },
+        "yls.snippets.sortMeta": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sort the metadata entries in alphabetical order by keys. Otherwise, insert keys as listed."
+        },
+        "yls.snippets.condition": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the condition snippet on YARA rules. Has no effect on the presence of the condition section in the rule snippet."
+        },
+        "yls.snippets.meta": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the meta snippet on YARA rules. Has no effect on the presence of the meta section in the rule snippet."
+        },
+        "yls.snippets.rule": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the rule skeleton snippet on YARA rules. Settings for other snippets do not affect the sections provided in this snippet."
+        },
+        "yls.snippets.strings": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the strings snippet on YARA rules. Has no effect on the presence of the strings section in the rule snippet."
         }
       }
     },
