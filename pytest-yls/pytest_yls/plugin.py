@@ -133,6 +133,19 @@ class Context:
             yar_file.write_text(new_text)
             self.cursor_pos = cursor_pos or self.cursor_pos
 
+        original_deserialize_params = pygls.protocol.deserialize_params
+
+        def _deserialize_params(data, get_params_type):
+            method = data.get("method")
+            params = data.get("params")
+            if method == methods.WORKSPACE_CONFIGURATION and params is not None:
+                data["params"] = pygls.protocol.dict_to_object(**params)
+                return data
+
+            return original_deserialize_params(data, get_params_type)
+
+        patch("pygls.protocol.deserialize_params", _deserialize_params).start()
+
         # Reset the captured notifications
         self.client.yls_notifications = defaultdict(list)
 
@@ -151,6 +164,7 @@ class Context:
         self.open_file(name)
 
         # Setup the config handler
+        log.error("CCCCCCC")
         client.editor_config = self.config
 
     def open_file(self, name: str) -> None:
@@ -314,10 +328,11 @@ def _hook_feature(ls: LanguageServer, feature_name: str) -> None:
         ls.yls_notifications[feature_name].append(params)
 
 
-def configuration_hook(editor_config, params) -> None:
+def configuration_hook(ls, params) -> None:
     os.system("notify-send hi configuration hook")
     log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {params=}")
-    # items = params["items"]
+    editor_config = ls.editor_config
+    log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {editor_config=}")
     items = params.items
     log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {items=}")
     assert len(items) >= 1, "we currently only support single requests"
@@ -330,6 +345,10 @@ def configuration_hook(editor_config, params) -> None:
             config = config[part]
     except KeyError:
         config = None
+    log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {config=}")
+
+    if config is None:
+        return []
 
     return [config]
 
@@ -368,7 +387,7 @@ def client_server() -> Any:
 
     @client.feature(methods.WORKSPACE_CONFIGURATION)
     def _hook(ls, params):
-        os.system("notify-send hi hook")
+        os.system("notify-send configuration")
         log.error("PLLLLLLLLLLLLLLLLLLLLLLLZ")
         configuration_hook(ls, params)
 

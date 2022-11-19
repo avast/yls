@@ -82,6 +82,7 @@ def log_command(command: str) -> None:
 def logging_prolog(plugin_manager: PluginManager) -> None:
     """Emit dependency version information."""
     log.info("Starting yls language server...")
+    log.info(f"Current file: {__file__}")
     log.info(f"System platform: {platform.system()}")
     log.info(f"YLS version: {__version__}")
     log.info(f"Yaramod version: {yaramod.YARAMOD_VERSION}")
