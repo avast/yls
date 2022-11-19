@@ -105,6 +105,7 @@ class Completer:
         # Dynamic snippets
         log.debug("[COMPLETION] Adding dynamic snippets")
         res += await self.complete_dynamic_snippets()
+        log.debug("[COMPLETION] Adding dynamic snippets done")
 
         # Plugin completion
         log.debug("COMPLETION] Adding completion items from plugings")

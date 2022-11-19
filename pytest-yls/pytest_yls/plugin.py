@@ -9,16 +9,20 @@ import os
 import pathlib
 import subprocess
 import time
+import wrapt
 from collections import defaultdict
 from pathlib import Path
 from threading import Thread
 from typing import Any
+from unittest.mock import patch
 
 import pytest
 import pytest_yls.utils as _utils
 import yaramod
+import pygls.protocol
 from pygls.lsp import methods
 from pygls.lsp import types
+from pygls.lsp import LSP_METHODS_MAP
 from pygls.server import LanguageServer
 from tenacity import retry
 from tenacity import stop_after_delay
@@ -61,6 +65,9 @@ class Context:
     server: YaraLanguageServer
     cursor_pos: types.Position | None = None
 
+    # Config from the client (editor)
+    config: dict[str, Any]
+
     NOTIFICATION_TIMEOUT_SECONDS = 2.00
     CALL_TIMEOUT_SECONDS = 2.00
     LANGUAGE_ID = "yara"
@@ -71,23 +78,26 @@ class Context:
         client: LanguageServer,
         server: YaraLanguageServer,
         tmp_path: Path,
-        config: Any,
+        pytest_config: Any,
         files: dict[str, str] | None = None,
         is_valid_yara_rules_repo: bool = False,
+        config: dict[str, Any] | None = None,
     ):
+        log.error("BBBBBBBBBBBBBBBBBBB")
         self.client = client
         self.server = server
         self.cursor_pos = None
         self.files = files or {}
+        self.config = config or {}
         self.is_valid_yara_rules_repo = is_valid_yara_rules_repo
         self.notification_timeout_seconds = (
-            int(config.getoption("yls_notification_timeout"))
-            if config.getoption("yls_notification_timeout")
+            int(pytest_config.getoption("yls_notification_timeout"))
+            if pytest_config.getoption("yls_notification_timeout")
             else self.NOTIFICATION_TIMEOUT_SECONDS
         )
         self.call_timeout_seconds = (
-            int(config.getoption("yls_call_timeout"))
-            if config.getoption("yls_call_timeout")
+            int(pytest_config.getoption("yls_call_timeout"))
+            if pytest_config.getoption("yls_call_timeout")
             else self.CALL_TIMEOUT_SECONDS
         )
 
@@ -101,13 +111,15 @@ class Context:
             new_files = {}
             yara_rules_root = pathlib.PurePath("yara-rules")
             subprocess.run(
-                ["git", "init", str(tmp_path / yara_rules_root)], capture_output=True, check=True
+                ["git", "init", str(tmp_path / yara_rules_root)],
+                capture_output=True,
+                check=True,
             )
             for name, contents in self.files.items():
                 new_name = yara_rules_root / pathlib.PurePath(name)
                 new_files[str(new_name)] = contents
 
-            schema_json = config.stash.get(SCHEMA_JSON_KEY, "")
+            schema_json = pytest_config.stash.get(SCHEMA_JSON_KEY, "")
             new_files[str(yara_rules_root / "schema.json")] = schema_json
             self.files = new_files
 
@@ -138,6 +150,9 @@ class Context:
         name = next(iter(self.files))
         self.open_file(name)
 
+        # Setup the config handler
+        client.editor_config = self.config
+
     def open_file(self, name: str) -> None:
         path = self.tmp_path / name
         if not path.exists():
@@ -159,7 +174,9 @@ class Context:
         self.opened_file = path
 
     def send_request(self, feature: str, params: Any) -> Any:
-        return self.client.lsp.send_request(feature, params).result(self.call_timeout_seconds)
+        return self.client.lsp.send_request(feature, params).result(
+            self.call_timeout_seconds
+        )
 
     def notify(self, feature: str, params: Any) -> None:
         self.client.lsp.notify(feature, params)
@@ -190,7 +207,9 @@ class Context:
             raise ValueError("No cursor in current workspace is set")
         return types.Range(
             start=self.cursor_pos,
-            end=types.Position(line=self.cursor_pos.line, character=self.cursor_pos.character + 1),
+            end=types.Position(
+                line=self.cursor_pos.line, character=self.cursor_pos.character + 1
+            ),
         )
 
     def get_file_path(self, name: str) -> Path:
@@ -214,7 +233,10 @@ class Context:
             )
             res.append(
                 types.Diagnostic(
-                    range=_range, message=diag.message, severity=diag.severity, source=diag.source
+                    range=_range,
+                    message=diag.message,
+                    severity=diag.severity,
+                    source=diag.source,
                 )
             )
 
@@ -246,7 +268,9 @@ def yls_prepare(client_server: Any, tmp_path: Any, pytestconfig) -> Any:
         yar_file = tmp_path / "file.yar"
         yar_file.write_text(contents)
 
-        return Context(client, server, tmp_path, pytestconfig, {yar_file: contents}, False)
+        return Context(
+            client, server, tmp_path, pytestconfig, {yar_file: contents}, False
+        )
 
     return prep
 
@@ -256,9 +280,19 @@ def yls_prepare_with_settings(client_server: Any, tmp_path: Any, pytestconfig) -
     client, server = client_server
 
     def prep(
-        files: dict[str, str] | None = None, is_valid_yara_rules_repo: bool = False
+        files: dict[str, str] | None = None,
+        is_valid_yara_rules_repo: bool = False,
+        config: dict[str, Any] | None = None,
     ) -> Context:
-        return Context(client, server, tmp_path, pytestconfig, files, is_valid_yara_rules_repo)
+        return Context(
+            client,
+            server,
+            tmp_path,
+            pytestconfig,
+            files,
+            is_valid_yara_rules_repo,
+            config=config,
+        )
 
     return prep
 
@@ -280,6 +314,26 @@ def _hook_feature(ls: LanguageServer, feature_name: str) -> None:
         ls.yls_notifications[feature_name].append(params)
 
 
+def configuration_hook(editor_config, params) -> None:
+    os.system("notify-send hi configuration hook")
+    log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {params=}")
+    # items = params["items"]
+    items = params.items
+    log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {items=}")
+    assert len(items) >= 1, "we currently only support single requests"
+    log.error(editor_config)
+    config = editor_config
+    item = items[0].section
+    log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {item=}")
+    try:
+        for part in item.split("."):
+            config = config[part]
+    except KeyError:
+        config = None
+
+    return [config]
+
+
 @pytest.fixture(scope="session")
 def client_server() -> Any:
     """A fixture to setup a client/server"""
@@ -295,7 +349,7 @@ def client_server() -> Any:
         target=server.start_io, args=(os.fdopen(c2s_r, "rb"), os.fdopen(s2c_w, "wb"))
     )
 
-    server_thread.daemon = True
+    # server_thread.daemon = True
     server_thread.start()
 
     # Add thread id to the server (just for testing)
@@ -306,16 +360,70 @@ def client_server() -> Any:
 
     reset_hooks(client)
 
+    client.editor_config = {}
+
+    log.error("Adding a workspace configuration hook")
+
+    os.system("notify-send hi")
+
+    @client.feature(methods.WORKSPACE_CONFIGURATION)
+    def _hook(ls, params):
+        os.system("notify-send hi hook")
+        log.error("PLLLLLLLLLLLLLLLLLLLLLLLZ")
+        configuration_hook(ls, params)
+
     client_thread = Thread(
-        target=client.start_io, args=(os.fdopen(s2c_r, "rb"), os.fdopen(c2s_w, "wb"))
+        target=start_editor,
+        args=(client, os.fdopen(s2c_r, "rb"), os.fdopen(c2s_w, "wb")),
     )
 
-    client_thread.daemon = True
+    # client_thread.daemon = True
     client_thread.start()
 
     yield client, server
 
     client.lsp.notify(methods.EXIT)
     server.lsp.notify(methods.EXIT)
-    server_thread.join()
     client_thread.join()
+    server_thread.join()
+
+
+def start_editor(client, stdin, stdout):
+    # original_methods_map = LSP_METHODS_MAP.copy()
+    # new_methods_map = original_methods_map.copy()
+    # new_methods_map[methods.WORKSPACE_CONFIGURATION] = (
+    #     None,
+    #     _params,
+    #     types.ConfigurationParams,
+    # )
+
+    original_deserialize_params = pygls.protocol.deserialize_params
+
+    # def _deserialize_message(data, get_params_type=get_method_params_type):
+    def _deserialize_params(data, get_params_type):
+        # raise ValueError("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        method = data.get("method")
+        params = data.get("params")
+        if method == methods.WORKSPACE_CONFIGURATION and params is not None:
+            data["params"] = pygls.protocol.dict_to_object(**params)
+            return data
+
+        return original_deserialize_params(data, get_params_type)
+
+    # log.error(f"{new_methods_map=}")
+    log.error(f"{client=}")
+    log.error(f"{dir(client)=}")
+    log.error(f"{dir(client.lsp)=}")
+
+    # patch("pygls.protocol.pygls.lsp.LSP_METHODS_MAP", new_methods_map).start()
+    # patch("pygls.protocol.LSP_METHODS_MAP", new_methods_map).start()
+    # patch("pygls.lsp.LSP_METHODS_MAP", new_methods_map).start()
+
+    # patch("pygls.protocol.pygls.lsp.LSP_METHODS_MAP", new_methods_map).start()
+    # patch("pygls.protocol.LSP_METHODS_MAP", new_methods_map).start()
+    # patch("pygls.lsp.get_method_return_type", _params).start()
+    patch("pygls.protocol.deserialize_params", _deserialize_params).start()
+    # patch("pygls.protocol.get_method_return_type", _params).start()
+    # patch("pygls.protocol.pygls.lsp.get_method_return_type", _params).start()
+
+    client.start_io(stdin, stdout)
