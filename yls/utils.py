@@ -772,7 +772,6 @@ async def get_config_from_editor(ls: Any, section: str) -> Any:
             items=[lsp_types.ConfigurationItem(scope_uri="", section=section)]
         )
     )
-    log.error(f"{config=}")
 
     # We should get list of configuration items here with exactly one element
     assert isinstance(config, list)

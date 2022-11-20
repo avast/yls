@@ -327,7 +327,7 @@ def client_server() -> Any:
         target=server.start_io, args=(os.fdopen(c2s_r, "rb"), os.fdopen(s2c_w, "wb"))
     )
 
-    # server_thread.daemon = True
+    server_thread.daemon = True
     server_thread.start()
 
     # Add thread id to the server (just for testing)
@@ -347,7 +347,7 @@ def client_server() -> Any:
         target=start_editor, args=(client, os.fdopen(s2c_r, "rb"), os.fdopen(c2s_w, "wb"))
     )
 
-    # client_thread.daemon = True
+    client_thread.daemon = True
     client_thread.start()
 
     yield client, server
