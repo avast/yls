@@ -43,12 +43,12 @@ def create_yaramod_instance() -> yaramod.Yaramod | None:
 
 
 @hookspec
-def yls_lint(document: Document) -> list[Diagnostic]:
+def yls_lint(document: Document) -> list[Diagnostic]:  # type: ignore
     ...
 
 
 @hookspec
-def yls_completion(params: CompletionParams, document: Document) -> list[CompletionItem]:
+def yls_completion(params: CompletionParams, document: Document) -> list[CompletionItem]:  # type: ignore
     ...
 
 
@@ -60,12 +60,12 @@ def yls_formatting(
 
 
 @hookspec
-def yls_code_actions(ls: Any, params: CodeActionParams) -> list[Command | CodeAction]:
+def yls_code_actions(ls: Any, params: CodeActionParams) -> list[Command | CodeAction]:  # type: ignore
     ...
 
 
 @hookspec
-def yls_supported_commands(ls: Any) -> list[str]:
+def yls_supported_commands(ls: Any) -> list[str]:  # type: ignore
     ...
 
 
@@ -75,22 +75,22 @@ def yls_execute_command(command: str, ls: Any, params: Any) -> PluggyRes[Any | N
 
 
 @hookspec
-def yls_code_lens(ls: Any, params: CodeLensParams) -> list[CodeLens]:
+def yls_code_lens(ls: Any, params: CodeLensParams) -> list[CodeLens]:  # type: ignore
     ...
 
 
 @hookspec
-def yls_scan(ls: Any, document: Document, rule_name: str | None) -> PluggyRes[list[Diagnostic]]:
+def yls_scan(ls: Any, document: Document, rule_name: str | None) -> PluggyRes[list[Diagnostic]]:  # type: ignore
     ...
 
 
 @hookspec
-def yls_scan_enabled() -> bool:
+def yls_scan_enabled() -> bool:  # type: ignore
     ...
 
 
 @hookspec
-def yls_eval_enabled() -> bool:
+def yls_eval_enabled() -> bool:  # type: ignore
     ...
 
 
@@ -119,10 +119,10 @@ class ErrorMessage(PopupMessage):
 
 
 @hookspec
-def yls_eval(ls: Any, expr: str) -> PluggyRes[str | PopupMessage]:
+def yls_eval(ls: Any, expr: str) -> PluggyRes[str | PopupMessage]:  # type: ignore
     ...
 
 
 @hookspec
-def yls_eval_set_context(ls: Any, _hash: str, ruleset: str) -> PluggyRes[PopupMessage]:
+def yls_eval_set_context(ls: Any, _hash: str, ruleset: str) -> PluggyRes[PopupMessage]:  # type: ignore
     ...
