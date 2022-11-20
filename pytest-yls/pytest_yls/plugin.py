@@ -12,16 +12,17 @@ import time
 from collections import defaultdict
 from pathlib import Path
 from threading import Thread
-from typing import Any, List
+from typing import Any
+from typing import List
 from unittest.mock import patch
 
+import pygls.protocol
 import pytest
 import pytest_yls.utils as _utils
 import yaramod
-import pygls.protocol
+from pygls.lsp import LSP_METHODS_MAP
 from pygls.lsp import methods
 from pygls.lsp import types
-from pygls.lsp import LSP_METHODS_MAP
 from pygls.server import LanguageServer
 from tenacity import retry
 from tenacity import stop_after_delay
@@ -109,9 +110,7 @@ class Context:
             new_files = {}
             yara_rules_root = pathlib.PurePath("yara-rules")
             subprocess.run(
-                ["git", "init", str(tmp_path / yara_rules_root)],
-                capture_output=True,
-                check=True,
+                ["git", "init", str(tmp_path / yara_rules_root)], capture_output=True, check=True
             )
             for name, contents in self.files.items():
                 new_name = yara_rules_root / pathlib.PurePath(name)
@@ -172,9 +171,7 @@ class Context:
         self.opened_file = path
 
     def send_request(self, feature: str, params: Any) -> Any:
-        return self.client.lsp.send_request(feature, params).result(
-            self.call_timeout_seconds
-        )
+        return self.client.lsp.send_request(feature, params).result(self.call_timeout_seconds)
 
     def notify(self, feature: str, params: Any) -> None:
         self.client.lsp.notify(feature, params)
@@ -205,9 +202,7 @@ class Context:
             raise ValueError("No cursor in current workspace is set")
         return types.Range(
             start=self.cursor_pos,
-            end=types.Position(
-                line=self.cursor_pos.line, character=self.cursor_pos.character + 1
-            ),
+            end=types.Position(line=self.cursor_pos.line, character=self.cursor_pos.character + 1),
         )
 
     def get_file_path(self, name: str) -> Path:
@@ -231,10 +226,7 @@ class Context:
             )
             res.append(
                 types.Diagnostic(
-                    range=_range,
-                    message=diag.message,
-                    severity=diag.severity,
-                    source=diag.source,
+                    range=_range, message=diag.message, severity=diag.severity, source=diag.source
                 )
             )
 
@@ -266,9 +258,7 @@ def yls_prepare(client_server: Any, tmp_path: Any, pytestconfig) -> Any:
         yar_file = tmp_path / "file.yar"
         yar_file.write_text(contents)
 
-        return Context(
-            client, server, tmp_path, pytestconfig, {yar_file: contents}, False
-        )
+        return Context(client, server, tmp_path, pytestconfig, {yar_file: contents}, False)
 
     return prep
 
@@ -283,13 +273,7 @@ def yls_prepare_with_settings(client_server: Any, tmp_path: Any, pytestconfig) -
         config: dict[str, Any] | None = None,
     ) -> Context:
         return Context(
-            client,
-            server,
-            tmp_path,
-            pytestconfig,
-            files,
-            is_valid_yara_rules_repo,
-            config=config,
+            client, server, tmp_path, pytestconfig, files, is_valid_yara_rules_repo, config=config
         )
 
     return prep
@@ -360,8 +344,7 @@ def client_server() -> Any:
     client.feature(methods.WORKSPACE_CONFIGURATION)(configuration_hook)
 
     client_thread = Thread(
-        target=start_editor,
-        args=(client, os.fdopen(s2c_r, "rb"), os.fdopen(c2s_w, "wb")),
+        target=start_editor, args=(client, os.fdopen(s2c_r, "rb"), os.fdopen(c2s_w, "wb"))
     )
 
     # client_thread.daemon = True
@@ -388,9 +371,7 @@ def start_editor(client, stdin, stdout):
         method = data.get("method")
         params = data.get("params")
         if method == methods.WORKSPACE_CONFIGURATION and params is not None:
-            log.warning(
-                "[TESTS] We are altering the return value for deserialize_params"
-            )
+            log.warning("[TESTS] We are altering the return value for deserialize_params")
             data["params"] = pygls.protocol.dict_to_object(**params)
             return data
 
@@ -401,9 +382,7 @@ def start_editor(client, stdin, stdout):
     # pylint: disable=dangerous-default-value
     def _get_method_return_type(method_name, lsp_methods_map=LSP_METHODS_MAP):
         if method_name == methods.WORKSPACE_CONFIGURATION:
-            log.warning(
-                "[TESTS] We are altering the return value for get_method_return_type"
-            )
+            log.warning("[TESTS] We are altering the return value for get_method_return_type")
             return List[Any]
 
         return original_get_method_return_type(method_name, lsp_methods_map)

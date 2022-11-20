@@ -4,8 +4,8 @@ from typing import Any
 
 import pygls.lsp.types as lsp_types
 
-from yls.snippet_string import SnippetString
 from yls import utils
+from yls.snippet_string import SnippetString
 
 
 class SnippetGenerator:

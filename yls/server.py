@@ -30,11 +30,11 @@ from yls import code_actions
 from yls import icons
 from yls import linting
 from yls import utils
-from yls.version import __version__
 from yls.completer import Completer
 from yls.hookspecs import ErrorMessage
 from yls.hover import Hoverer
 from yls.plugin_manager_provider import PluginManagerProvider
+from yls.version import __version__
 from yls.yaramod_provider import YaramodProvider
 
 log = logging.getLogger(__name__)
