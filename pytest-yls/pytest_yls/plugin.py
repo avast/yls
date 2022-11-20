@@ -9,11 +9,10 @@ import os
 import pathlib
 import subprocess
 import time
-import wrapt
 from collections import defaultdict
 from pathlib import Path
 from threading import Thread
-from typing import Any
+from typing import Any, List
 from unittest.mock import patch
 
 import pytest
@@ -386,7 +385,7 @@ def client_server() -> Any:
     def _hook(ls, params):
         os.system("notify-send configuration")
         log.error("PLLLLLLLLLLLLLLLLLLLLLLLZ")
-        configuration_hook(ls, params)
+        return configuration_hook(ls, params)
 
     client_thread = Thread(
         target=start_editor,
@@ -431,6 +430,18 @@ def start_editor(client, stdin, stdout):
     log.error(f"{dir(client)=}")
     log.error(f"{dir(client.lsp)=}")
 
+    original_get_method_return_type = pygls.lsp.get_method_return_type
+
+    # pylint: disable=dangerous-default-value
+    def _get_method_return_type(method_name, lsp_methods_map=LSP_METHODS_MAP):
+        if method_name == methods.WORKSPACE_CONFIGURATION:
+            log.warning(
+                "[TESTS] We are altering the return value for get_method_return_type"
+            )
+            return List[Any]
+
+        return original_get_method_return_type(method_name, lsp_methods_map)
+
     # patch("pygls.protocol.pygls.lsp.LSP_METHODS_MAP", new_methods_map).start()
     # patch("pygls.protocol.LSP_METHODS_MAP", new_methods_map).start()
     # patch("pygls.lsp.LSP_METHODS_MAP", new_methods_map).start()
@@ -439,6 +450,8 @@ def start_editor(client, stdin, stdout):
     # patch("pygls.protocol.LSP_METHODS_MAP", new_methods_map).start()
     # patch("pygls.lsp.get_method_return_type", _params).start()
     patch("pygls.protocol.deserialize_params", _deserialize_params).start()
+    patch("pygls.protocol.get_method_return_type", _get_method_return_type).start()
+    # patch("pygls.protocol.get_method_params_type", _raise).start()
     # patch("pygls.protocol.get_method_return_type", _params).start()
     # patch("pygls.protocol.pygls.lsp.get_method_return_type", _params).start()
 
