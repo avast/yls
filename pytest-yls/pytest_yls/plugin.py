@@ -328,7 +328,7 @@ def _hook_feature(ls: LanguageServer, feature_name: str) -> None:
         ls.yls_notifications[feature_name].append(params)
 
 
-def configuration_hook(ls, params) -> None:
+def configuration_hook(ls, params):
     os.system("notify-send hi configuration hook")
     log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {params=}")
     editor_config = ls.editor_config
@@ -346,9 +346,6 @@ def configuration_hook(ls, params) -> None:
     except KeyError:
         config = None
     log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {config=}")
-
-    if config is None:
-        return []
 
     return [config]
 

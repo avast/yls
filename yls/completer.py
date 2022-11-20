@@ -247,6 +247,12 @@ class Completer:
         return res
 
     async def complete_dynamic_snippets(self) -> list[lsp_types.CompletionItem]:
+        config = await utils.get_config_from_editor(self.ls, "test")
+        log.debug(f"[COMPLETION] lsp configuration {config=}")
+
+        config = await utils.get_config_from_editor(self.ls, "this.cannot.exist")
+        log.debug(f"[COMPLETION] lsp configuration {config=}")
+
         config = await utils.get_config_from_editor(self.ls, "yls.snippets")
         log.debug(f"[COMPLETION] lsp configuration {config=}")
         if config is None:
