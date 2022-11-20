@@ -605,7 +605,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.12"
-content-hash = "ba3047d70fedfe29670c153c447a87c8d124b973d0f55608369fe7bc086f52de"
+content-hash = "594dc625822e0fc7037dbc03d83b83b79d321b6876f2b64adebe2858187be113"
 
 [metadata.files]
 astroid = []

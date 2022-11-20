@@ -82,7 +82,6 @@ class Context:
         is_valid_yara_rules_repo: bool = False,
         config: dict[str, Any] | None = None,
     ):
-        log.error("BBBBBBBBBBBBBBBBBBB")
         self.client = client
         self.server = server
         self.cursor_pos = None
@@ -132,19 +131,6 @@ class Context:
             yar_file.write_text(new_text)
             self.cursor_pos = cursor_pos or self.cursor_pos
 
-        original_deserialize_params = pygls.protocol.deserialize_params
-
-        def _deserialize_params(data, get_params_type):
-            method = data.get("method")
-            params = data.get("params")
-            if method == methods.WORKSPACE_CONFIGURATION and params is not None:
-                data["params"] = pygls.protocol.dict_to_object(**params)
-                return data
-
-            return original_deserialize_params(data, get_params_type)
-
-        patch("pygls.protocol.deserialize_params", _deserialize_params).start()
-
         # Reset the captured notifications
         self.client.yls_notifications = defaultdict(list)
 
@@ -162,9 +148,8 @@ class Context:
         name = next(iter(self.files))
         self.open_file(name)
 
-        # Setup the config handler
-        log.error("CCCCCCC")
-        client.editor_config = self.config
+        # Setup the editor configuration
+        self.client.editor_config = self.config
 
     def open_file(self, name: str) -> None:
         path = self.tmp_path / name
@@ -328,23 +313,17 @@ def _hook_feature(ls: LanguageServer, feature_name: str) -> None:
 
 
 def configuration_hook(ls, params):
-    os.system("notify-send hi configuration hook")
-    log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {params=}")
+    """WORKSPACE_CONFIGURATION hook"""
     editor_config = ls.editor_config
-    log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {editor_config=}")
     items = params.items
-    log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {items=}")
     assert len(items) >= 1, "we currently only support single requests"
-    log.error(editor_config)
     config = editor_config
     item = items[0].section
-    log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {item=}")
     try:
         for part in item.split("."):
             config = config[part]
     except KeyError:
         config = None
-    log.error(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAA {config=}")
 
     return [config]
 
@@ -377,15 +356,8 @@ def client_server() -> Any:
 
     client.editor_config = {}
 
-    log.error("Adding a workspace configuration hook")
-
-    os.system("notify-send hi")
-
-    @client.feature(methods.WORKSPACE_CONFIGURATION)
-    def _hook(ls, params):
-        os.system("notify-send configuration")
-        log.error("PLLLLLLLLLLLLLLLLLLLLLLLZ")
-        return configuration_hook(ls, params)
+    # Hook configuration requests
+    client.feature(methods.WORKSPACE_CONFIGURATION)(configuration_hook)
 
     client_thread = Thread(
         target=start_editor,
@@ -404,31 +376,25 @@ def client_server() -> Any:
 
 
 def start_editor(client, stdin, stdout):
-    # original_methods_map = LSP_METHODS_MAP.copy()
-    # new_methods_map = original_methods_map.copy()
-    # new_methods_map[methods.WORKSPACE_CONFIGURATION] = (
-    #     None,
-    #     _params,
-    #     types.ConfigurationParams,
-    # )
+    """Hook client editor) methods for configuration.
 
+    We need to do this kind of setup because it is really hard to change LSP_METHODS_MAP.
+    If you want to change the configuration just call Context.set_configuration().
+    """
+    log.info("[TESTS] Setting up the client (editor) hooks...")
     original_deserialize_params = pygls.protocol.deserialize_params
 
-    # def _deserialize_message(data, get_params_type=get_method_params_type):
     def _deserialize_params(data, get_params_type):
-        # raise ValueError("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         method = data.get("method")
         params = data.get("params")
         if method == methods.WORKSPACE_CONFIGURATION and params is not None:
+            log.warning(
+                "[TESTS] We are altering the return value for deserialize_params"
+            )
             data["params"] = pygls.protocol.dict_to_object(**params)
             return data
 
         return original_deserialize_params(data, get_params_type)
-
-    # log.error(f"{new_methods_map=}")
-    log.error(f"{client=}")
-    log.error(f"{dir(client)=}")
-    log.error(f"{dir(client.lsp)=}")
 
     original_get_method_return_type = pygls.lsp.get_method_return_type
 
@@ -442,17 +408,7 @@ def start_editor(client, stdin, stdout):
 
         return original_get_method_return_type(method_name, lsp_methods_map)
 
-    # patch("pygls.protocol.pygls.lsp.LSP_METHODS_MAP", new_methods_map).start()
-    # patch("pygls.protocol.LSP_METHODS_MAP", new_methods_map).start()
-    # patch("pygls.lsp.LSP_METHODS_MAP", new_methods_map).start()
-
-    # patch("pygls.protocol.pygls.lsp.LSP_METHODS_MAP", new_methods_map).start()
-    # patch("pygls.protocol.LSP_METHODS_MAP", new_methods_map).start()
-    # patch("pygls.lsp.get_method_return_type", _params).start()
     patch("pygls.protocol.deserialize_params", _deserialize_params).start()
     patch("pygls.protocol.get_method_return_type", _get_method_return_type).start()
-    # patch("pygls.protocol.get_method_params_type", _raise).start()
-    # patch("pygls.protocol.get_method_return_type", _params).start()
-    # patch("pygls.protocol.pygls.lsp.get_method_return_type", _params).start()
 
     client.start_io(stdin, stdout)
