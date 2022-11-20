@@ -30,6 +30,7 @@ from yls import code_actions
 from yls import icons
 from yls import linting
 from yls import utils
+from yls.version import __version__
 from yls.completer import Completer
 from yls.hookspecs import ErrorMessage
 from yls.hover import Hoverer
@@ -183,7 +184,7 @@ class YaraLanguageServer(LanguageServer):
 
 
 # The main YLS Server instance
-SERVER = YaraLanguageServer()
+SERVER = YaraLanguageServer("yara-language-server", f"v{__version__}")
 
 
 @SERVER.feature(WORKSPACE_DID_CHANGE_CONFIGURATION)
