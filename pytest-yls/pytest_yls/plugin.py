@@ -13,10 +13,14 @@ from collections import defaultdict
 from pathlib import Path
 from threading import Thread
 from typing import Any
+from typing import List
+from unittest.mock import patch
 
+import pygls.protocol
 import pytest
 import pytest_yls.utils as _utils
 import yaramod
+from pygls.lsp import LSP_METHODS_MAP
 from pygls.lsp import methods
 from pygls.lsp import types
 from pygls.server import LanguageServer
@@ -61,6 +65,9 @@ class Context:
     server: YaraLanguageServer
     cursor_pos: types.Position | None = None
 
+    # Config from the client (editor)
+    config: dict[str, Any]
+
     NOTIFICATION_TIMEOUT_SECONDS = 2.00
     CALL_TIMEOUT_SECONDS = 2.00
     LANGUAGE_ID = "yara"
@@ -71,23 +78,25 @@ class Context:
         client: LanguageServer,
         server: YaraLanguageServer,
         tmp_path: Path,
-        config: Any,
+        pytest_config: Any,
         files: dict[str, str] | None = None,
         is_valid_yara_rules_repo: bool = False,
+        config: dict[str, Any] | None = None,
     ):
         self.client = client
         self.server = server
         self.cursor_pos = None
         self.files = files or {}
+        self.config = config or {}
         self.is_valid_yara_rules_repo = is_valid_yara_rules_repo
         self.notification_timeout_seconds = (
-            int(config.getoption("yls_notification_timeout"))
-            if config.getoption("yls_notification_timeout")
+            int(pytest_config.getoption("yls_notification_timeout"))
+            if pytest_config.getoption("yls_notification_timeout")
             else self.NOTIFICATION_TIMEOUT_SECONDS
         )
         self.call_timeout_seconds = (
-            int(config.getoption("yls_call_timeout"))
-            if config.getoption("yls_call_timeout")
+            int(pytest_config.getoption("yls_call_timeout"))
+            if pytest_config.getoption("yls_call_timeout")
             else self.CALL_TIMEOUT_SECONDS
         )
 
@@ -107,7 +116,7 @@ class Context:
                 new_name = yara_rules_root / pathlib.PurePath(name)
                 new_files[str(new_name)] = contents
 
-            schema_json = config.stash.get(SCHEMA_JSON_KEY, "")
+            schema_json = pytest_config.stash.get(SCHEMA_JSON_KEY, "")
             new_files[str(yara_rules_root / "schema.json")] = schema_json
             self.files = new_files
 
@@ -137,6 +146,9 @@ class Context:
         # Open the file
         name = next(iter(self.files))
         self.open_file(name)
+
+        # Setup the editor configuration
+        self.client.editor_config = self.config
 
     def open_file(self, name: str) -> None:
         path = self.tmp_path / name
@@ -256,9 +268,13 @@ def yls_prepare_with_settings(client_server: Any, tmp_path: Any, pytestconfig) -
     client, server = client_server
 
     def prep(
-        files: dict[str, str] | None = None, is_valid_yara_rules_repo: bool = False
+        files: dict[str, str] | None = None,
+        is_valid_yara_rules_repo: bool = False,
+        config: dict[str, Any] | None = None,
     ) -> Context:
-        return Context(client, server, tmp_path, pytestconfig, files, is_valid_yara_rules_repo)
+        return Context(
+            client, server, tmp_path, pytestconfig, files, is_valid_yara_rules_repo, config=config
+        )
 
     return prep
 
@@ -278,6 +294,22 @@ def _hook_feature(ls: LanguageServer, feature_name: str) -> None:
     @ls.feature(feature_name)
     def hook(ls: LanguageServer, params: Any) -> None:
         ls.yls_notifications[feature_name].append(params)
+
+
+def configuration_hook(ls, params):
+    """WORKSPACE_CONFIGURATION hook"""
+    editor_config = ls.editor_config
+    items = params.items
+    assert len(items) >= 1, "we currently only support single requests"
+    config = editor_config
+    item = items[0].section
+    try:
+        for part in item.split("."):
+            config = config[part]
+    except KeyError:
+        config = None
+
+    return [config]
 
 
 @pytest.fixture(scope="session")
@@ -306,8 +338,13 @@ def client_server() -> Any:
 
     reset_hooks(client)
 
+    client.editor_config = {}
+
+    # Hook configuration requests
+    client.feature(methods.WORKSPACE_CONFIGURATION)(configuration_hook)
+
     client_thread = Thread(
-        target=client.start_io, args=(os.fdopen(s2c_r, "rb"), os.fdopen(c2s_w, "wb"))
+        target=start_editor, args=(client, os.fdopen(s2c_r, "rb"), os.fdopen(c2s_w, "wb"))
     )
 
     client_thread.daemon = True
@@ -317,5 +354,40 @@ def client_server() -> Any:
 
     client.lsp.notify(methods.EXIT)
     server.lsp.notify(methods.EXIT)
-    server_thread.join()
     client_thread.join()
+    server_thread.join()
+
+
+def start_editor(client, stdin, stdout):
+    """Hook client editor) methods for configuration.
+
+    We need to do this kind of setup because it is really hard to change LSP_METHODS_MAP.
+    If you want to change the configuration just call Context.set_configuration().
+    """
+    log.info("[TESTS] Setting up the client (editor) hooks...")
+    original_deserialize_params = pygls.protocol.deserialize_params
+
+    def _deserialize_params(data, get_params_type):
+        method = data.get("method")
+        params = data.get("params")
+        if method == methods.WORKSPACE_CONFIGURATION and params is not None:
+            log.warning("[TESTS] We are altering the return value for deserialize_params")
+            data["params"] = pygls.protocol.dict_to_object(**params)
+            return data
+
+        return original_deserialize_params(data, get_params_type)
+
+    original_get_method_return_type = pygls.lsp.get_method_return_type
+
+    # pylint: disable=dangerous-default-value
+    def _get_method_return_type(method_name, lsp_methods_map=LSP_METHODS_MAP):
+        if method_name == methods.WORKSPACE_CONFIGURATION:
+            log.warning("[TESTS] We are altering the return value for get_method_return_type")
+            return List[Any]
+
+        return original_get_method_return_type(method_name, lsp_methods_map)
+
+    patch("pygls.protocol.deserialize_params", _deserialize_params).start()
+    patch("pygls.protocol.get_method_return_type", _get_method_return_type).start()
+
+    client.start_io(stdin, stdout)

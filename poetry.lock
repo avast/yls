@@ -480,16 +480,21 @@ toml = ">=0.7.1"
 
 [[package]]
 name = "pytest-yls"
-version = "0.1.0"
+version = "1.2.1"
 description = "Pytest plugin to test the YLS as a whole."
 category = "dev"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "^3.8"
+develop = false
 
 [package.dependencies]
-pytest = ">=7.1.2,<8.0.0"
-tenacity = ">=8.0.1,<9.0.0"
-yls = ">=1,<2"
+pytest = "^7.1.2"
+tenacity = "^8.0.1"
+yls = "^1"
+
+[package.source]
+type = "directory"
+url = "pytest-yls"
 
 [[package]]
 name = "pyyaml"
@@ -520,7 +525,7 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 
 [[package]]
 name = "tenacity"
-version = "8.0.1"
+version = "8.1.0"
 description = "Retry code until it succeeds"
 category = "dev"
 optional = false
@@ -600,7 +605,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.12"
-content-hash = "70ec90af03dc9b94202850cd6970b1bdfaf80b33f6dd3ad017a85e5004d9581a"
+content-hash = "594dc625822e0fc7037dbc03d83b83b79d321b6876f2b64adebe2858187be113"
 
 [metadata.files]
 astroid = []
