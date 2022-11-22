@@ -7,11 +7,11 @@ from typing import Any
 import pygls.lsp.types as lsp_types
 from pygls.workspace import Document
 
+from yls import snippets
 from yls import completion
 from yls import utils
 from yls.completion import CONDITION_KEYWORDS
 from yls.plugin_manager_provider import PluginManagerProvider
-from yls.snippets import SnippetGenerator
 from yls.strings import estimate_string_type
 from yls.strings import string_modifiers_completion_items
 
@@ -247,16 +247,10 @@ class Completer:
         return res
 
     async def complete_dynamic_snippets(self) -> list[lsp_types.CompletionItem]:
-        config = await utils.get_config_from_editor(self.ls, "test")
-        log.debug(f"[COMPLETION] lsp configuration {config=}")
-
-        config = await utils.get_config_from_editor(self.ls, "this.cannot.exist")
-        log.debug(f"[COMPLETION] lsp configuration {config=}")
-
+        # Get the configuration each time, in case it changed during the runtime
         config = await utils.get_config_from_editor(self.ls, "yls.snippets")
-        log.debug(f"[COMPLETION] lsp configuration {config=}")
-        if config is None:
+        log.debug(f"[COMPLETION] LSP configuration {config=}")
+        if config is None or not isinstance(config, dict):
             return []
 
-        generator = SnippetGenerator(config)
-        return generator.generate_snippets()
+        return snippets.generate_snippets_from_configuration(config)

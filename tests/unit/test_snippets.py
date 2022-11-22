@@ -2,24 +2,13 @@
 
 import pytest
 
-from yls.snippets import SnippetGenerator
+from yls import snippets
+from yls.snippet_string import SnippetString
 
 
 @pytest.mark.parametrize(
     "config, expected",
     (
-        (
-            None,
-            """rule ${1:my_rule} {
-\tmeta:
-\t\t${2:KEY} = ${3:"VALUE"}
-\tstrings:
-\t\t${4:\\$name} = ${5|"string",/regex/,{ HEX }|}
-\tcondition:
-\t\t${6:any of them}
-}
-""",
-        ),
         (
             {},
             """rule ${1:my_rule} {
@@ -97,6 +86,4 @@ from yls.snippets import SnippetGenerator
     ),
 )
 def test_basic(config, expected):
-    generator = SnippetGenerator(config)
-
-    assert expected == generator.generate()
+    assert expected == str(snippets._generate_rule_snippet(SnippetString(), config))

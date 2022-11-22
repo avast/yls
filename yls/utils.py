@@ -774,7 +774,7 @@ async def get_config_from_editor(ls: Any, section: str) -> Any:
     )
 
     # We should get list of configuration items here with exactly one element
-    assert isinstance(config, list)
-    assert len(config) == 1
+    assert isinstance(config, list), "get configuration result should be a list"
+    assert len(config) >= 1, "did not receive correct configuration response"
 
     return config[0]
