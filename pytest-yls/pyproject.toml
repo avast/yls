@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pytest-yls"
-version = "1.2.1"
+version = "1.2.4"
 description = "Pytest plugin to test the YLS as a whole."
 authors = ["Matej Kastak <matej.kastak@avast.com>"]
 maintainers = ["Matej Kašťák <matej.kastak@avast.com>"]
@@ -10,7 +10,7 @@ include = ["py.typed", "LICENSE"]
 
 [tool.poetry.dependencies]
 pytest = "^7.1.2"
-python = "^3.8"
+python = ">=3.8,<3.12"
 tenacity = "^8.0.1"
 yls = "^1"
 

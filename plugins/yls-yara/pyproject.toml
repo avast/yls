@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yls-yara"
-version = "1.2.1"
+version = "1.2.4"
 description = "YLS plugin adding linting using yara-python."
 authors = ["Matej Kastak <matej.kastak@avast.com>"]
 maintainers = ["Matej Kašťák <matej.kastak@avast.com>"]
@@ -9,7 +9,7 @@ license = "MIT"
 include = ["py.typed", "LICENSE"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8,<3.12"
 yara-python = "^4.2.0"
 yls = "^1.1.0"
 
