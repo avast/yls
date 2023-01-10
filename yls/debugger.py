@@ -64,7 +64,7 @@ class Debugger:
     def eval(self, expr: str) -> str | PopupMessage:
         log.info(f"[DEBUGGER] Evaluating {expr}")
         if not self.ctxs:
-            return ErrorMessage("YARI is not ready to evaluate... Ignoring evaluation request")
+            return ""
 
         if self.context_rule_name:
             expr = f"{self.context_rule_name}|{expr}"
