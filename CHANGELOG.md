@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.2.5 (2023-01-10)
+
+- fix: Don't show YARI error popup when debugging is not setup
+
 # 1.2.4 (2022-12-07)
 
 - fix: Revert the python requirement to >=3.8,<3.12

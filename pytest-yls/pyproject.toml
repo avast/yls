@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pytest-yls"
-version = "1.2.4"
+version = "1.2.5"
 description = "Pytest plugin to test the YLS as a whole."
 authors = ["Matej Kastak <matej.kastak@avast.com>"]
 maintainers = ["Matej Kašťák <matej.kastak@avast.com>"]
