@@ -28,6 +28,8 @@ rule test {
         in response_text
     )
 
+    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
+
 
 def test_hover_string_plain(yls_prepare):
     contents = """rule test {
@@ -48,6 +50,8 @@ def test_hover_string_plain(yls_prepare):
     assert response
     assert "$s" in response["contents"]["value"]
     assert "string" in response["contents"]["value"]
+
+    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
 
 
 def test_hover_string_hex(yls_prepare):
@@ -70,6 +74,8 @@ def test_hover_string_hex(yls_prepare):
     assert "$h" in response["contents"]["value"]
     assert "12 34 56 78" in response["contents"]["value"]
 
+    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
+
 
 def test_hover_string_regex(yls_prepare):
     contents = """rule test {
@@ -90,6 +96,8 @@ def test_hover_string_regex(yls_prepare):
     assert response
     assert "$r" in response["contents"]["value"]
     assert "/my.*custom.*regex/" in response["contents"]["value"]
+
+    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
 
 
 def test_hover_private_rule_same_file(yls_prepare):
@@ -116,6 +124,8 @@ rule test {
     assert "PRIV_TEST" in response["contents"]["value"]
     assert "Condition" in response["contents"]["value"]
 
+    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
+
 
 def test_hover_constant_symbol_value(yls_prepare):
     contents = """import "pe"
@@ -135,3 +145,5 @@ rule test {
     assert response
     assert "MACHINE_ARM" in response["contents"]["value"]
     assert "int" in response["contents"]["value"]
+
+    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
