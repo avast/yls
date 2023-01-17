@@ -10,7 +10,6 @@ include = ["py.typed", "LICENSE", "LICENSE-THIRD-PARTY"]
 
 [tool.black]
 line-length = 100
-target-version = ['py36', 'py37', 'py38', 'py39']
 skip-magic-trailing-comma = true
 include = '\.pyi?$'
 exclude = '''
