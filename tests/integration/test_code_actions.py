@@ -1,7 +1,6 @@
 # type: ignore
 
-from pygls.lsp import methods
-from pygls.lsp import types
+import lsprotocol.types as lsp_types
 
 from yls import utils
 
@@ -39,28 +38,25 @@ rule decoy {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.CODE_ACTION,
-        types.CodeActionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_CODE_ACTION,
+        lsp_types.CodeActionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             range=context.get_cursor_range(),
-            context=types.CodeActionContext(diagnostics=[]),
+            context=lsp_types.CodeActionContext(diagnostics=[]),
         ),
     )
 
     assert len(response) == 1
     fix = response[0]
-    assert fix["kind"] == "refactor.rewrite"
-    assert fix["title"] == "Extract as strings"
+    assert fix.kind == "refactor.rewrite"
+    assert fix.title == "Extract as strings"
 
-    fix_file = next(iter(fix["edit"]["changes"]))
+    fix_file = next(iter(fix.edit.changes))
     assert (
-        fix["edit"]["changes"][fix_file][0]["newText"]
+        fix.edit.changes[fix_file][0].new_text
         == '\t\t$s00 = "test00"\n\t\t$s01 = "test01"\n\t\t$s02 = "test02"\n\t\t$s03 = "test03"\n\t\t$s04 = "test04"\n\t\t$s05 = "test05"'
     )
-    assert (
-        fix["edit"]["changes"][fix_file][0]["range"]
-        == utils.range_from_coords((12, 0), (17, 12)).dict()
-    )
+    assert fix.edit.changes[fix_file][0].range == utils.range_from_coords((12, 0), (17, 12))
 
 
 def test_code_actions_extract_strings_with_strings_in_rule(yls_prepare):
@@ -98,25 +94,22 @@ rule decoy {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.CODE_ACTION,
-        types.CodeActionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_CODE_ACTION,
+        lsp_types.CodeActionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             range=context.get_cursor_range(),
-            context=types.CodeActionContext(diagnostics=[]),
+            context=lsp_types.CodeActionContext(diagnostics=[]),
         ),
     )
 
     assert len(response) == 1
     fix = response[0]
-    assert fix["kind"] == "refactor.rewrite"
-    assert fix["title"] == "Extract as strings"
+    assert fix.kind == "refactor.rewrite"
+    assert fix.title == "Extract as strings"
 
-    fix_file = next(iter(fix["edit"]["changes"]))
+    fix_file = next(iter(fix.edit.changes))
     assert (
-        fix["edit"]["changes"][fix_file][0]["newText"]
+        fix.edit.changes[fix_file][0].new_text
         == '\t\t$s02 = "test00"\n\t\t$s03 = "test01"\n\t\t$s04 = "test02"\n\t\t$s05 = "test03"\n\t\t$s06 = "test04"\n\t\t$s07 = "test05"'
     )
-    assert (
-        fix["edit"]["changes"][fix_file][0]["range"]
-        == utils.range_from_coords((14, 0), (19, 12)).dict()
-    )
+    assert fix.edit.changes[fix_file][0].range == utils.range_from_coords((14, 0), (19, 12))

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-import pygls.lsp.types as lsp_types
+import lsprotocol.types as lsp_types
 import yaramod
 
 
@@ -47,14 +47,14 @@ rule asd {{
 
 def assert_completable(expected: tuple[str | tuple[str, str]], response: Any) -> None:
     """Assert that response contains the expected completion items."""
-    assert response["items"]
-    completions = response["items"]
+    assert response.items
+    completions = response.items
 
     for item in expected:
         if isinstance(item, str):
-            assert any(item == completion["label"] for completion in completions)
+            assert any(item == completion.label for completion in completions)
         elif isinstance(item, tuple):
             assert any(
-                item[0] == completion["label"] and item[1] == completion["kind"]
+                item[0] == completion.label and item[1] == completion.kind
                 for completion in completions
             )

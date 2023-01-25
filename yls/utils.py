@@ -14,7 +14,7 @@ from typing import Any
 from typing import Iterator
 from typing import TypeVar
 
-import pygls.lsp.types as lsp_types
+import lsprotocol.types as lsp_types
 import yaramod
 from pluggy import PluginManager
 from pygls.workspace import Document

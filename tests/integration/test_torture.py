@@ -2,9 +2,8 @@
 
 import typing
 
+import lsprotocol.types as lsp_types
 import pytest
-from pygls.lsp import methods
-from pygls.lsp import types
 
 pytestmark = pytest.mark.slow
 
@@ -14,98 +13,98 @@ def torture_document(context: typing.Any) -> None:
 
     # DOCUMENT_SYMBOL
     _ = context.send_request(
-        methods.DOCUMENT_SYMBOL,
-        types.DocumentSymbolParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri())
+        lsp_types.TEXT_DOCUMENT_DOCUMENT_SYMBOL,
+        lsp_types.DocumentSymbolParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri())
         ),
     )
 
     # FORMATTING
     _ = context.send_request(
-        methods.FORMATTING,
-        types.DocumentFormattingParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
-            options=types.FormattingOptions(tab_size=4, insert_spaces=False),
+        lsp_types.TEXT_DOCUMENT_FORMATTING,
+        lsp_types.DocumentFormattingParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+            options=lsp_types.FormattingOptions(tab_size=4, insert_spaces=False),
         ),
     )
 
     # WORKSPACE_DID_CHANGE_CONFIGURATION
     # This should work after https://github.com/openlawlibrary/pygls/pull/201 is resolved
     # _ = context.send_request(
-    #     methods.WORKSPACE_DID_CHANGE_CONFIGURATION,
-    #     types.DidChangeConfigurationParams(settings=[]),
+    #     lsp_types.WORKSPACE_DID_CHANGE_CONFIGURATION,
+    #     lsp_types.DidChangeConfigurationParams(settings=[]),
     # )
 
 
-def torture_position(context: typing.Any, position: types.Position) -> None:
+def torture_position(context: typing.Any, position: lsp_types.Position) -> None:
     """Torture operations on a single position within a file."""
-    _range = types.Range(
-        start=position, end=types.Position(line=position.line, character=position.character + 1)
+    _range = lsp_types.Range(
+        start=position, end=lsp_types.Position(line=position.line, character=position.character + 1)
     )
 
     # Test the we won't throw an exception
 
     # CODE_ACTION
     _ = context.send_request(
-        methods.CODE_ACTION,
-        types.CodeActionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_CODE_ACTION,
+        lsp_types.CodeActionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             range=_range,
-            context=types.CodeActionContext(diagnostics=[]),
+            context=lsp_types.CodeActionContext(diagnostics=[]),
         ),
     )
 
     # COMPLETION
     _ = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=position,
         ),
     )
 
     # DEFINITION
     _ = context.send_request(
-        methods.DEFINITION,
-        types.DefinitionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_DEFINITION,
+        lsp_types.DefinitionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=position,
         ),
     )
 
     # DOCUMENT_HIGHLIGHT
     _ = context.send_request(
-        methods.DOCUMENT_HIGHLIGHT,
-        types.DocumentHighlightParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_DOCUMENT_HIGHLIGHT,
+        lsp_types.DocumentHighlightParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=position,
         ),
     )
 
     # HOVER
     _ = context.send_request(
-        methods.HOVER,
-        types.HoverParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_HOVER,
+        lsp_types.HoverParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=position,
         ),
     )
 
     # REFERENCES
     _ = context.send_request(
-        methods.REFERENCES,
-        types.ReferenceParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_REFERENCES,
+        lsp_types.ReferenceParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=position,
-            context=types.ReferenceContext(include_declaration=True),
+            context=lsp_types.ReferenceContext(include_declaration=True),
         ),
     )
 
     # SIGNATURE_HELP
     _ = context.send_request(
-        methods.SIGNATURE_HELP,
-        types.SignatureHelpParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_SIGNATURE_HELP,
+        lsp_types.SignatureHelpParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=position,
         ),
     )
@@ -115,7 +114,7 @@ def torture_file(context: typing.Any, file_contents: str) -> None:
     """Iterate over file contents and torture every position."""
     for y, line in enumerate(file_contents.splitlines()):
         for x in range(len(line)):
-            position = types.Position(line=y, character=x)
+            position = lsp_types.Position(line=y, character=x)
             torture_position(context, position)
 
 
@@ -178,5 +177,5 @@ def test_torture_empty_file(yls_prepare_with_settings, remove_file):
 
     torture_document(context)
 
-    position = types.Position(line=0, character=0)
+    position = lsp_types.Position(0, 0)
     torture_position(context, position)

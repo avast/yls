@@ -4,10 +4,10 @@ import logging
 from typing import Any
 
 import yaramod
+from lsprotocol.types import DocumentFormattingParams
+from lsprotocol.types import MessageType
+from lsprotocol.types import TextEdit
 from pluggy import PluginManager
-from pygls.lsp.types import DocumentFormattingParams
-from pygls.lsp.types import MessageType
-from pygls.lsp.types import TextEdit
 from pygls.workspace import Document
 
 from yls import hookimpl

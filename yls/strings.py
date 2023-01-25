@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from enum import Enum
 from functools import lru_cache
 
-import pygls.lsp.types as lsp_types
+import lsprotocol.types as lsp_types
 
 from yls import utils
 

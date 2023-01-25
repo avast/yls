@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
+import lsprotocol.types as lsp_types
 import pytest
-from pygls.lsp import methods
-from pygls.lsp import types
 from pytest_yls.utils import assert_completable
 
 from yls.completion import CONDITION_KEYWORDS
@@ -18,17 +17,15 @@ def test_completion_basic(yls_prepare):
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            textDocument=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
     for module in ["cuckoo", "elf", "pe", "time"]:
-        assert any(
-            module in item["label"] for item in response["items"]
-        ), f"{module=} is not in response"
+        assert any(module in item.label for item in response.items), f"{module=} is not in response"
 
 
 def test_completion_basic_with_word(yls_prepare):
@@ -39,14 +36,14 @@ def test_completion_basic_with_word(yls_prepare):
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
-    assert any("cuckoo" in item["label"] for item in response["items"]), "cuckoo is not in response"
+    assert any("cuckoo" in item.label for item in response.items), "cuckoo is not in response"
 
 
 def test_completion_basic_nested(yls_prepare):
@@ -57,17 +54,15 @@ def test_completion_basic_nested(yls_prepare):
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
     for struct in ["filesystem", "network", "sync"]:
-        assert any(
-            struct in item["label"] for item in response["items"]
-        ), f"{struct=} is not in response"
+        assert any(struct in item.label for item in response.items), f"{struct=} is not in response"
 
 
 def test_completion_in_condition(yls_prepare):
@@ -80,17 +75,15 @@ def test_completion_in_condition(yls_prepare):
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
     for struct in ["filesystem", "network", "sync"]:
-        assert any(
-            struct in item["label"] for item in response["items"]
-        ), f"{struct=} is not in response"
+        assert any(struct in item.label for item in response.items), f"{struct=} is not in response"
 
 
 def test_completion_no_suggestions(yls_prepare):
@@ -102,14 +95,14 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
-    assert not response["items"]
+    assert not response.items
 
 
 def test_completion_import(yls_prepare):
@@ -121,18 +114,16 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
 
     for module in ["cuckoo", "pe", "elf", "math", "time"]:
-        assert any(
-            module == item["label"] for item in response["items"]
-        ), f"{module=} is not in response"
+        assert any(module == item.label for item in response.items), f"{module=} is not in response"
 
 
 def test_completion_constant(yls_prepare):
@@ -144,18 +135,18 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
 
     expect = (
-        ("MACHINE_ARM", types.CompletionItemKind.Constant),
-        ("MACHINE_ARM64", types.CompletionItemKind.Constant),
-        ("MACHINE_ARMNT", types.CompletionItemKind.Constant),
+        ("MACHINE_ARM", lsp_types.CompletionItemKind.Constant),
+        ("MACHINE_ARM64", lsp_types.CompletionItemKind.Constant),
+        ("MACHINE_ARMNT", lsp_types.CompletionItemKind.Constant),
     )
     assert_completable(expect, response)
 
@@ -169,24 +160,24 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
 
-    expect = (("sections", types.CompletionItemKind.Struct),)
+    expect = (("sections", lsp_types.CompletionItemKind.Struct),)
     assert_completable(expect, response)
 
-    items = response["items"]
+    items = response.items
     for completion in items:
-        if completion["label"] in expect:
+        if completion.label in expect:
             # Assert that we are completing array indices
-            assert completion["insertTextFormat"] == types.InsertTextFormat.Snippet
-            assert "[" in completion["insertText"]
-            assert "]" in completion["insertText"]
+            assert completion.insert_text_format == lsp_types.InsertTextFormat.Snippet
+            assert "[" in completion.insert_text
+            assert "]" in completion.insert_text
 
 
 def test_completion_dictionary(yls_prepare):
@@ -198,26 +189,26 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
 
-    items = response["items"]
+    items = response.items
     expect = ("version_info",)
-    assert any(completion["label"] in expect for completion in items)
+    assert any(completion.label in expect for completion in items)
     for completion in items:
-        if completion["label"] in expect:
-            assert completion["kind"] == types.CompletionItemKind.Variable
+        if completion.label in expect:
+            assert completion.kind == lsp_types.CompletionItemKind.Variable
 
             # Assert that we are completing dictionary indexing
-            assert completion["insertTextFormat"] == types.InsertTextFormat.Snippet
-            assert "[" in completion["insertText"]
-            assert '"' in completion["insertText"]
-            assert "]" in completion["insertText"]
+            assert completion.insert_text_format == lsp_types.InsertTextFormat.Snippet
+            assert "[" in completion.insert_text
+            assert '"' in completion.insert_text
+            assert "]" in completion.insert_text
 
 
 def test_completion_fully_typed_symbol(yls_prepare):
@@ -229,15 +220,15 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
 
-    expect = (("MACHINE_ARM64", types.CompletionItemKind.Constant),)
+    expect = (("MACHINE_ARM64", lsp_types.CompletionItemKind.Constant),)
     assert_completable(expect, response)
 
 
@@ -250,14 +241,14 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
-    assert len(response["items"]) == 0
+    assert len(response.items) == 0
 
 
 def test_completion_fully_typed_symbol_with_more_completions(yls_prepare):
@@ -269,18 +260,18 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
 
     expect = (
-        ("MACHINE_ARM", types.CompletionItemKind.Constant),
-        ("MACHINE_ARMNT", types.CompletionItemKind.Constant),
-        ("MACHINE_ARM64", types.CompletionItemKind.Constant),
+        ("MACHINE_ARM", lsp_types.CompletionItemKind.Constant),
+        ("MACHINE_ARMNT", lsp_types.CompletionItemKind.Constant),
+        ("MACHINE_ARM64", lsp_types.CompletionItemKind.Constant),
     )
     assert_completable(expect, response)
 
@@ -315,17 +306,17 @@ def test_completion_string_modifiers(yls_prepare, line: str, expected: set[str])
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
 
     completed_modifiers = set()
-    for item in response["items"]:
-        completed_modifiers.add(item["label"])
+    for item in response.items:
+        completed_modifiers.add(item.label)
 
     assert completed_modifiers == expected
 
@@ -341,16 +332,16 @@ def test_completion_condition_keywords(yls_prepare, line: str, expected: set[str
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.COMPLETION,
-        types.CompletionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_COMPLETION,
+        lsp_types.CompletionParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
 
     completed_modifiers = set()
-    for item in response["items"]:
-        completed_modifiers.add(item["label"])
+    for item in response.items:
+        completed_modifiers.add(item.label)
 
     assert completed_modifiers.issuperset(expected)

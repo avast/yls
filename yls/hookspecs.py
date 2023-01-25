@@ -18,17 +18,17 @@ from typing import Union
 
 import pluggy
 import yaramod
-from pygls.lsp.types import CodeAction
-from pygls.lsp.types import CodeActionParams
-from pygls.lsp.types import CodeLens
-from pygls.lsp.types import CodeLensParams
-from pygls.lsp.types import Command
-from pygls.lsp.types import CompletionItem
-from pygls.lsp.types import CompletionParams
-from pygls.lsp.types import Diagnostic
-from pygls.lsp.types import DocumentFormattingParams
-from pygls.lsp.types import MessageType
-from pygls.lsp.types import TextEdit
+from lsprotocol.types import CodeAction
+from lsprotocol.types import CodeActionParams
+from lsprotocol.types import CodeLens
+from lsprotocol.types import CodeLensParams
+from lsprotocol.types import Command
+from lsprotocol.types import CompletionItem
+from lsprotocol.types import CompletionParams
+from lsprotocol.types import Diagnostic
+from lsprotocol.types import DocumentFormattingParams
+from lsprotocol.types import MessageType
+from lsprotocol.types import TextEdit
 from pygls.workspace import Document
 
 hookspec = pluggy.HookspecMarker("yls")

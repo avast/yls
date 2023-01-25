@@ -4,7 +4,7 @@ import logging
 import re
 from typing import Any
 
-import pygls.lsp.types as lsp_types
+import lsprotocol.types as lsp_types
 from pygls.workspace import Document
 
 from yls import completion

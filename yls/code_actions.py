@@ -5,7 +5,7 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
-import pygls.lsp.types as lsp_types
+import lsprotocol.types as lsp_types
 from pygls.workspace import Document
 
 from yls import utils
