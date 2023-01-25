@@ -8,6 +8,20 @@ readme = "README.md"
 license = "MIT"
 include = ["py.typed", "LICENSE", "LICENSE-THIRD-PARTY"]
 
+[tool.poetry.group.dev.dependencies]
+bandit = "^1.7.4"
+black = "^22.3.0"
+isort = "^5.10.1"
+poethepoet = "^0.13.1"
+pytest = "^7.1.2"
+pytest-asyncio = "^0.18.3"
+pytest-black = "^0.3.12"
+pytest-cov = "^3.0.0"
+pytest-mock = "^3.7.0"
+pytest-mypy = "^0.9.1"
+pytest-pylint = "0.19.0"
+pytest-yls = {path = "pytest-yls", develop = true}
+
 [tool.black]
 line-length = 100
 skip-magic-trailing-comma = true
@@ -37,38 +51,28 @@ force_single_line = true
 _black = "black ."
 _isort = "isort ."
 format = ["_isort", "_black"]
+test = "pytest -vvv --mypy --black --pylint --pylint-rcfile=pyproject.toml --cov=yls --cov-report=term-missing -l ./yls ./tests"
 
 [tool.poetry.scripts]
 yls = 'yls.server:main'
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
-pygls = "0.13.0"
+pygls = "^1.0.0"
 yaramod = "^3.16.0"
 yari-py = "^0.1.1"
 pluggy = "^1.0.0"
-
-[tool.poetry.dev-dependencies]
-pytest-asyncio = "^0.18.3"
-pytest-cov = "^3.0.0"
-pytest-mock = "^3.7.0"
-pytest = "^7.1.2"
-bandit = "^1.7.4"
-pytest-pylint = "0.19.0"
-pytest-mypy = "^0.9.1"
-black = "^22.3.0"
-isort = "^5.10.1"
-poethepoet = "^0.13.1"
-pytest-black = "^0.3.12"
-pytest-yls = "^0.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-addopts = "-vvv --cov-report term-missing --cov=yls -l --pylint --pylint-rcfile=pyproject.toml --mypy --black ./yls ./tests"
 asyncio_mode = "auto"
+testpaths = [
+    "tests"
+]
+
 
 [tool.mypy]
 disallow_untyped_calls = false
@@ -86,6 +90,7 @@ extension-pkg-allow-list = "yaramod"
 [tool.pylint.messages_control]
 disable = """,
     cyclic-import,
+    fixme,
     line-too-long,
     logging-format-interpolation,
     logging-fstring-interpolation,

@@ -4,8 +4,8 @@ import logging
 import re
 
 import yaramod
-from pygls.lsp.types import Diagnostic
-from pygls.lsp.types import DiagnosticSeverity
+from lsprotocol.types import Diagnostic
+from lsprotocol.types import DiagnosticSeverity
 from pygls.workspace import Document
 
 from yls import utils

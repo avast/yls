@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import pygls.lsp.types as lsp_types
+import lsprotocol.types as lsp_types
 import yaramod
 from pygls.workspace import Document
 

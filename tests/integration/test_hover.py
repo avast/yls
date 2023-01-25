@@ -1,7 +1,6 @@
 # type: ignore
 
-from pygls.lsp import methods
-from pygls.lsp import types
+import lsprotocol.types as lsp_types
 
 
 def test_hover_basic(yls_prepare):
@@ -13,14 +12,14 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.HOVER,
-        types.TextDocumentPositionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_HOVER,
+        lsp_types.HoverParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
-    response_text = response["contents"]["value"].lower()
+    response_text = response.contents.value.lower()
     assert "file_access(regex) -> int" in response_text
     assert "evaluation result" not in response_text
     assert (
@@ -28,7 +27,7 @@ rule test {
         in response_text
     )
 
-    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
+    assert not context.get_nofications(lsp_types.WINDOW_SHOW_MESSAGE)
 
 
 def test_hover_string_plain(yls_prepare):
@@ -41,17 +40,17 @@ def test_hover_string_plain(yls_prepare):
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.HOVER,
-        types.TextDocumentPositionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_HOVER,
+        lsp_types.HoverParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
-    assert "$s" in response["contents"]["value"]
-    assert "string" in response["contents"]["value"]
+    assert "$s" in response.contents.value
+    assert "string" in response.contents.value
 
-    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
+    assert not context.get_nofications(lsp_types.WINDOW_SHOW_MESSAGE)
 
 
 def test_hover_string_hex(yls_prepare):
@@ -64,17 +63,17 @@ def test_hover_string_hex(yls_prepare):
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.HOVER,
-        types.TextDocumentPositionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_HOVER,
+        lsp_types.HoverParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
-    assert "$h" in response["contents"]["value"]
-    assert "12 34 56 78" in response["contents"]["value"]
+    assert "$h" in response.contents.value
+    assert "12 34 56 78" in response.contents.value
 
-    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
+    assert not context.get_nofications(lsp_types.WINDOW_SHOW_MESSAGE)
 
 
 def test_hover_string_regex(yls_prepare):
@@ -87,17 +86,17 @@ def test_hover_string_regex(yls_prepare):
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.HOVER,
-        types.TextDocumentPositionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_HOVER,
+        lsp_types.HoverParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
-    assert "$r" in response["contents"]["value"]
-    assert "/my.*custom.*regex/" in response["contents"]["value"]
+    assert "$r" in response.contents.value
+    assert "/my.*custom.*regex/" in response.contents.value
 
-    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
+    assert not context.get_nofications(lsp_types.WINDOW_SHOW_MESSAGE)
 
 
 def test_hover_private_rule_same_file(yls_prepare):
@@ -113,18 +112,18 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.HOVER,
-        types.TextDocumentPositionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_HOVER,
+        lsp_types.HoverParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
-    assert "Rule name" in response["contents"]["value"]
-    assert "PRIV_TEST" in response["contents"]["value"]
-    assert "Condition" in response["contents"]["value"]
+    assert "Rule name" in response.contents.value
+    assert "PRIV_TEST" in response.contents.value
+    assert "Condition" in response.contents.value
 
-    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
+    assert not context.get_nofications(lsp_types.WINDOW_SHOW_MESSAGE)
 
 
 def test_hover_constant_symbol_value(yls_prepare):
@@ -136,14 +135,14 @@ rule test {
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.HOVER,
-        types.TextDocumentPositionParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+        lsp_types.TEXT_DOCUMENT_HOVER,
+        lsp_types.HoverParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
             position=context.get_cursor_position(),
         ),
     )
     assert response
-    assert "MACHINE_ARM" in response["contents"]["value"]
-    assert "int" in response["contents"]["value"]
+    assert "MACHINE_ARM" in response.contents.value
+    assert "int" in response.contents.value
 
-    assert not context.get_nofications(methods.WINDOW_SHOW_MESSAGE)
+    assert not context.get_nofications(lsp_types.WINDOW_SHOW_MESSAGE)

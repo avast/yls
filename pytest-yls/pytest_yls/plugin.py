@@ -14,11 +14,10 @@ from pathlib import Path
 from threading import Thread
 from typing import Any
 
+import lsprotocol.types as lsp_types
 import pytest
 import pytest_yls.utils as _utils
 import yaramod
-from pygls.lsp import methods
-from pygls.lsp import types
 from pygls.server import LanguageServer
 from tenacity import retry
 from tenacity import stop_after_delay
@@ -59,7 +58,7 @@ class Context:
 
     client: LanguageServer
     server: YaraLanguageServer
-    cursor_pos: types.Position | None = None
+    cursor_pos: lsp_types.Position | None = None
 
     NOTIFICATION_TIMEOUT_SECONDS = 2.00
     CALL_TIMEOUT_SECONDS = 2.00
@@ -126,11 +125,11 @@ class Context:
 
         # Initialize Language Server
         _ = self.send_request(
-            methods.INITIALIZE,
-            types.InitializeParams(
+            lsp_types.INITIALIZE,
+            lsp_types.InitializeParams(
                 process_id=1234,
                 root_uri=self.tmp_path.as_uri(),
-                capabilities=types.ClientCapabilities(),
+                capabilities=lsp_types.ClientCapabilities(),
             ),
         )
 
@@ -146,9 +145,9 @@ class Context:
             )
 
         self.notify(
-            methods.TEXT_DOCUMENT_DID_OPEN,
-            types.DidOpenTextDocumentParams(
-                textDocument=types.TextDocumentItem(
+            lsp_types.TEXT_DOCUMENT_DID_OPEN,
+            lsp_types.DidOpenTextDocumentParams(
+                text_document=lsp_types.TextDocumentItem(
                     uri=path.as_uri(),
                     language_id=Context.LANGUAGE_ID,
                     version=1,
@@ -180,17 +179,19 @@ class Context:
 
         return self.client.yls_notifications[feature_name]
 
-    def get_cursor_position(self) -> types.Position | None:
+    def get_cursor_position(self) -> lsp_types.Position | None:
         if self.cursor_pos is None:
             raise ValueError("No cursor in current workspace is set")
         return self.cursor_pos
 
-    def get_cursor_range(self) -> types.Range | None:
+    def get_cursor_range(self) -> lsp_types.Range | None:
         if self.cursor_pos is None:
             raise ValueError("No cursor in current workspace is set")
-        return types.Range(
+        return lsp_types.Range(
             start=self.cursor_pos,
-            end=types.Position(line=self.cursor_pos.line, character=self.cursor_pos.character + 1),
+            end=lsp_types.Position(
+                line=self.cursor_pos.line, character=self.cursor_pos.character + 1
+            ),
         )
 
     def get_file_path(self, name: str) -> Path:
@@ -199,21 +200,21 @@ class Context:
         except KeyError as e:
             raise ValueError("File is not valid for this test-case.") from e
 
-    def get_diagnostics(self) -> list[types.Diagnostic]:
+    def get_diagnostics(self) -> list[lsp_types.Diagnostic]:
         """Construct a list of Diagnostic objects for the file."""
-        response = self.wait_for_notification(methods.TEXT_DOCUMENT_PUBLISH_DIAGNOSTICS)
+        response = self.wait_for_notification(lsp_types.TEXT_DOCUMENT_PUBLISH_DIAGNOSTICS)
 
         res = []
         # Construct the Diagnostic objects from the raw response
         for diag in response.diagnostics:
             start = diag.range.start
             end = diag.range.end
-            _range = types.Range(
-                start=types.Position(line=start.line, character=start.character),
-                end=types.Position(line=end.line, character=end.character),
+            _range = lsp_types.Range(
+                start=lsp_types.Position(line=start.line, character=start.character),
+                end=lsp_types.Position(line=end.line, character=end.character),
             )
             res.append(
-                types.Diagnostic(
+                lsp_types.Diagnostic(
                     range=_range, message=diag.message, severity=diag.severity, source=diag.source
                 )
             )
@@ -270,8 +271,8 @@ def reset_hooks(ls: LanguageServer) -> None:
     ls.yls_notifications = defaultdict(list)
 
     # Hook notifications
-    _hook_feature(ls, methods.TEXT_DOCUMENT_PUBLISH_DIAGNOSTICS)
-    _hook_feature(ls, methods.WINDOW_SHOW_MESSAGE)
+    _hook_feature(ls, lsp_types.TEXT_DOCUMENT_PUBLISH_DIAGNOSTICS)
+    _hook_feature(ls, lsp_types.WINDOW_SHOW_MESSAGE)
 
 
 def _hook_feature(ls: LanguageServer, feature_name: str) -> None:
@@ -302,7 +303,7 @@ def client_server() -> Any:
     server.thread_id = server_thread.ident
 
     # Setup client
-    client = LanguageServer(asyncio.new_event_loop())
+    client = LanguageServer("editor", "v0.0.0")
 
     reset_hooks(client)
 
@@ -315,7 +316,7 @@ def client_server() -> Any:
 
     yield client, server
 
-    client.lsp.notify(methods.EXIT)
-    server.lsp.notify(methods.EXIT)
+    client.lsp.notify(lsp_types.EXIT)
+    server.lsp.notify(lsp_types.EXIT)
     server_thread.join()
     client_thread.join()

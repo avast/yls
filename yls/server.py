@@ -6,23 +6,23 @@ import pathlib
 import re
 from typing import Any
 
-import pygls.lsp.types as lsp_types
+import lsprotocol.types as lsp_types
 import yaramod
-from pygls.lsp.methods import CODE_ACTION
-from pygls.lsp.methods import CODE_LENS
-from pygls.lsp.methods import COMPLETION
-from pygls.lsp.methods import DEFINITION
-from pygls.lsp.methods import DOCUMENT_HIGHLIGHT
-from pygls.lsp.methods import DOCUMENT_SYMBOL
-from pygls.lsp.methods import FORMATTING
-from pygls.lsp.methods import HOVER
-from pygls.lsp.methods import INITIALIZED
-from pygls.lsp.methods import REFERENCES
-from pygls.lsp.methods import SIGNATURE_HELP
-from pygls.lsp.methods import TEXT_DOCUMENT_DID_CHANGE
-from pygls.lsp.methods import TEXT_DOCUMENT_DID_OPEN
-from pygls.lsp.methods import TEXT_DOCUMENT_DID_SAVE
-from pygls.lsp.methods import WORKSPACE_DID_CHANGE_CONFIGURATION
+from lsprotocol.types import INITIALIZED
+from lsprotocol.types import TEXT_DOCUMENT_CODE_ACTION
+from lsprotocol.types import TEXT_DOCUMENT_CODE_LENS
+from lsprotocol.types import TEXT_DOCUMENT_COMPLETION
+from lsprotocol.types import TEXT_DOCUMENT_DEFINITION
+from lsprotocol.types import TEXT_DOCUMENT_DID_CHANGE
+from lsprotocol.types import TEXT_DOCUMENT_DID_OPEN
+from lsprotocol.types import TEXT_DOCUMENT_DID_SAVE
+from lsprotocol.types import TEXT_DOCUMENT_DOCUMENT_HIGHLIGHT
+from lsprotocol.types import TEXT_DOCUMENT_DOCUMENT_SYMBOL
+from lsprotocol.types import TEXT_DOCUMENT_FORMATTING
+from lsprotocol.types import TEXT_DOCUMENT_HOVER
+from lsprotocol.types import TEXT_DOCUMENT_REFERENCES
+from lsprotocol.types import TEXT_DOCUMENT_SIGNATURE_HELP
+from lsprotocol.types import WORKSPACE_DID_CHANGE_CONFIGURATION
 from pygls.server import LanguageServer
 from pygls.uris import from_fs_path
 
@@ -113,8 +113,12 @@ class YaraLanguageServer(LanguageServer):
                 log.error(f"[did_change_configuration] Error occurred: {e}")
 
         # Request the configuration from the client for "yls"
+        # FIXME: There seems to be a bug in `get_configuration` that expects a
+        # wrong type. It should be already fixed in the
+        # https://github.com/openlawlibrary/pygls/pull/310, after pygls
+        # releases a new version we can remove the `# type: ignore`
         self.get_configuration(
-            lsp_types.ConfigurationParams(
+            lsp_types.WorkspaceConfigurationParams(  # type: ignore
                 items=[lsp_types.ConfigurationItem(scope_uri="", section="yls")]
             ),
             _config_callback,
@@ -226,32 +230,34 @@ def initiliazed(ls: YaraLanguageServer, _params: Any) -> None:
     # NOTE: In the future we can parse all files in the workspace
 
 
-@SERVER.feature(COMPLETION, lsp_types.CompletionOptions(trigger_characters=["."]))
+@SERVER.feature(TEXT_DOCUMENT_COMPLETION, lsp_types.CompletionOptions(trigger_characters=["."]))
 def completion(
     ls: YaraLanguageServer, params: lsp_types.CompletionParams
 ) -> lsp_types.CompletionList:
     """Code completion."""
-    utils.log_command(COMPLETION)
+    utils.log_command(TEXT_DOCUMENT_COMPLETION)
 
     return ls.completer.complete(params)
 
 
-@SERVER.feature(SIGNATURE_HELP, lsp_types.SignatureHelpOptions(trigger_characters=["("]))
+@SERVER.feature(
+    TEXT_DOCUMENT_SIGNATURE_HELP, lsp_types.SignatureHelpOptions(trigger_characters=["("])
+)
 def signature_help(
     ls: YaraLanguageServer, params: lsp_types.CompletionParams
 ) -> lsp_types.SignatureHelp | None:
     """Signature help."""
-    utils.log_command(SIGNATURE_HELP)
+    utils.log_command(TEXT_DOCUMENT_SIGNATURE_HELP)
 
     return ls.completer.signature_help(params)
 
 
-@SERVER.feature(HOVER)
+@SERVER.feature(TEXT_DOCUMENT_HOVER)
 async def hover(
     ls: YaraLanguageServer, params: lsp_types.TextDocumentPositionParams
 ) -> lsp_types.Hover | None:
     """Cursor over information."""
-    utils.log_command(HOVER)
+    utils.log_command(TEXT_DOCUMENT_HOVER)
 
     return await ls.hoverer.hover(params)
 
@@ -303,12 +309,12 @@ def did_change(ls: YaraLanguageServer, params: lsp_types.DidChangeTextDocumentPa
         lint(ls, params)
 
 
-@SERVER.feature(FORMATTING)
+@SERVER.feature(TEXT_DOCUMENT_FORMATTING)
 def formatting(
     ls: YaraLanguageServer, params: lsp_types.DocumentFormattingParams
 ) -> list[lsp_types.TextEdit]:
     """Format the whole buffer."""
-    utils.log_command(FORMATTING)
+    utils.log_command(TEXT_DOCUMENT_FORMATTING)
 
     document = ls.workspace.get_document(params.text_document.uri)
     source = document.source
@@ -338,12 +344,12 @@ def formatting(
     return res
 
 
-@SERVER.feature(DEFINITION)
+@SERVER.feature(TEXT_DOCUMENT_DEFINITION)
 def definition(
     ls: YaraLanguageServer, params: lsp_types.TextDocumentPositionParams
 ) -> list[lsp_types.Location] | None:
     """Jump to definition."""
-    utils.log_command(DEFINITION)
+    utils.log_command(TEXT_DOCUMENT_DEFINITION)
     text_doc = ls.workspace.get_document(params.text_document.uri)
     token = utils.cursor_token(text_doc, params.position)
     if not token:
@@ -396,12 +402,12 @@ def definition(
     return res
 
 
-@SERVER.feature(REFERENCES)
+@SERVER.feature(TEXT_DOCUMENT_REFERENCES)
 def references(
     ls: YaraLanguageServer, params: lsp_types.ReferenceParams
 ) -> list[lsp_types.Location]:
     """Provide a list of references for the object under the cursor."""
-    utils.log_command(REFERENCES)
+    utils.log_command(TEXT_DOCUMENT_REFERENCES)
     text_doc = ls.workspace.get_document(params.text_document.uri)
     cursor_string = utils.cursor_word(text_doc, params.position)
     log.debug(f'[REFERENCES] Searching for references of "{cursor_string}"')
@@ -410,12 +416,12 @@ def references(
     return []
 
 
-@SERVER.feature(DOCUMENT_HIGHLIGHT)
+@SERVER.feature(TEXT_DOCUMENT_DOCUMENT_HIGHLIGHT)
 def document_highlight(
     ls: YaraLanguageServer, params: lsp_types.TextDocumentPositionParams
 ) -> list[lsp_types.DocumentHighlight]:
     """Highlight references of the object under the cursor."""
-    utils.log_command(DOCUMENT_HIGHLIGHT)
+    utils.log_command(TEXT_DOCUMENT_DOCUMENT_HIGHLIGHT)
     text_doc = ls.workspace.get_document(params.text_document.uri)
     token = utils.cursor_token(text_doc, params.position)
     if not token:
@@ -454,12 +460,12 @@ def document_highlight(
 #     return None
 
 
-@SERVER.feature(DOCUMENT_SYMBOL)
+@SERVER.feature(TEXT_DOCUMENT_DOCUMENT_SYMBOL)
 def document_symbol(
     ls: YaraLanguageServer, params: lsp_types.DocumentSymbolParams
 ) -> list[lsp_types.DocumentSymbol]:
     """Provide a list of symbols in the current document."""
-    utils.log_command(DOCUMENT_SYMBOL)
+    utils.log_command(TEXT_DOCUMENT_DOCUMENT_SYMBOL)
     text_doc = ls.workspace.get_document(params.text_document.uri)
 
     res: list[lsp_types.DocumentSymbol] = []
@@ -508,12 +514,12 @@ def document_symbol(
     return res
 
 
-@SERVER.feature(CODE_ACTION)
+@SERVER.feature(TEXT_DOCUMENT_CODE_ACTION)
 def code_action(
     ls: YaraLanguageServer, params: lsp_types.CodeActionParams
 ) -> list[lsp_types.Command | lsp_types.CodeAction] | None:
     """List available code actions for given context."""
-    utils.log_command(CODE_ACTION)
+    utils.log_command(TEXT_DOCUMENT_CODE_ACTION)
 
     # Provide hoverer service with selected text range context
     ls.hoverer.selected_range = params.range
@@ -578,9 +584,9 @@ def code_lens_scan(yara_file: yaramod.YaraFile, uri: str) -> list[lsp_types.Code
     return res
 
 
-@SERVER.feature(CODE_LENS)
+@SERVER.feature(TEXT_DOCUMENT_CODE_LENS)
 def code_lens(ls: YaraLanguageServer, params: lsp_types.CodeLensParams) -> list[lsp_types.CodeLens]:
-    utils.log_command(CODE_LENS)
+    utils.log_command(TEXT_DOCUMENT_CODE_LENS)
 
     text_doc = ls.workspace.get_document(params.text_document.uri)
     path = text_doc.path

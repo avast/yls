@@ -1,8 +1,7 @@
 # pylint: disable=trailing-whitespace
 # type: ignore
 
-from pygls.lsp import methods
-from pygls.lsp import types
+import lsprotocol.types as lsp_types
 
 
 def make_formatting_test(contents: str, expected: str = None):
@@ -16,20 +15,20 @@ def make_formatting_test(contents: str, expected: str = None):
         context = yls_prepare(contents)
 
         response = context.send_request(
-            methods.FORMATTING,
-            types.DocumentFormattingParams(
-                text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
-                options=types.FormattingOptions(tab_size=4, insert_spaces=True),
+            lsp_types.TEXT_DOCUMENT_FORMATTING,
+            lsp_types.DocumentFormattingParams(
+                text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+                options=lsp_types.FormattingOptions(tab_size=4, insert_spaces=True),
             ),
         )
 
         if expected is None:
             yfile = ymod.parse_string(contents)
-            assert response[0]["newText"] == yfile.text_formatted
+            assert response[0].new_text == yfile.text_formatted
         else:
-            assert response[0]["newText"] == expected
+            assert response[0].new_text == expected
 
-        assert response[0]["range"]["end"]["line"] == len(contents.splitlines()) + 1
+        assert response[0].range.end.line == len(contents.splitlines()) + 1
 
     return _test
 
@@ -41,15 +40,15 @@ def test_formatting_with_syntax_error(yls_prepare):
     context = yls_prepare(contents)
 
     response = context.send_request(
-        methods.FORMATTING,
-        types.DocumentFormattingParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
-            options=types.FormattingOptions(tab_size=4, insert_spaces=True),
+        lsp_types.TEXT_DOCUMENT_FORMATTING,
+        lsp_types.DocumentFormattingParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+            options=lsp_types.FormattingOptions(tab_size=4, insert_spaces=True),
         ),
     )
     assert not response, "server should not send any edits"
 
-    params = context.wait_for_notification(methods.WINDOW_SHOW_MESSAGE)
+    params = context.wait_for_notification(lsp_types.WINDOW_SHOW_MESSAGE)
     assert hasattr(params, "message")
     assert params.message
 
@@ -152,10 +151,10 @@ rule asd
     )
 
     response = context.send_request(
-        methods.FORMATTING,
-        types.DocumentFormattingParams(
-            text_document=types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
-            options=types.FormattingOptions(tab_size=4, insert_spaces=True),
+        lsp_types.TEXT_DOCUMENT_FORMATTING,
+        lsp_types.DocumentFormattingParams(
+            text_document=lsp_types.TextDocumentIdentifier(uri=context.opened_file.as_uri()),
+            options=lsp_types.FormattingOptions(tab_size=4, insert_spaces=True),
         ),
     )
 
@@ -169,4 +168,4 @@ rule asd
 		false
 }
 """
-    assert response[0]["newText"] == expected
+    assert response[0].new_text == expected

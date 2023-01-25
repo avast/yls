@@ -12,7 +12,6 @@ include = ["py.typed", "LICENSE"]
 pytest = "^7.1.2"
 python = ">=3.8,<3.12"
 tenacity = "^8.0.1"
-yls = "^1"
 
 [tool.poetry.plugins.pytest11]
 pytest_yls = "pytest_yls"
