@@ -1009,24 +1009,25 @@ files = [
 
 [[package]]
 name = "yari-py"
-version = "0.1.3"
+version = "0.1.5"
 description = "Python bindings for YARI."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "yari_py-0.1.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:76c51d809d4c1cd812ee02901e0ee132079cb772c1839d1473ce7097dd980525"},
-    {file = "yari_py-0.1.3-cp310-none-win_amd64.whl", hash = "sha256:7ba9c6f92c2976e181036a04052d5ae4a6818251aff4c79f8ac6b00a17feb819"},
-    {file = "yari_py-0.1.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8827e10e0d4d09c5c2c96dbae8b6bcd03de9ede91b2f06f60d2d1263565a4f43"},
-    {file = "yari_py-0.1.3-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:75aa93a66dd2d1ee491ca7b46cd2c1d05643fedc349a95c4b721e9ea36d569de"},
-    {file = "yari_py-0.1.3-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0ceebbf1961f506e99a2ae50a309f5f19d437820d71ca2e8accc20e23064db76"},
-    {file = "yari_py-0.1.3-cp38-none-win_amd64.whl", hash = "sha256:f65fa4733dd9bc3e04dc22032d9955a88c68e3726e40ab75eac0c16f023567b8"},
-    {file = "yari_py-0.1.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:989ea0c909d9e91876fa1dbac3ddbad7d589ee797adc11e68425ace51e284e14"},
-    {file = "yari_py-0.1.3-cp39-none-win_amd64.whl", hash = "sha256:3c139de994ad6400766acb90d133750aa80a83cb1fac149de9a18b5e7640b17c"},
-    {file = "yari_py-0.1.3-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:513f21ca8ddd4f01993c36bf263ed61098fbf0a7afabc307fa7649a3918bb9c7"},
+    {file = "yari_py-0.1.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a838861424c2a372a2cb8f6401f487cfb2f28dae1f0aac3ea7833eb4dba5f762"},
+    {file = "yari_py-0.1.5-cp310-none-win_amd64.whl", hash = "sha256:3e39890adf9d39b08b6eff7ba0f2e5050b9d8a2a0a33cb6548a2e5f2704398b9"},
+    {file = "yari_py-0.1.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fae39d047c5165bf415b5c8093617498b40690c93b9ea3d2666a025fe36ea4a6"},
+    {file = "yari_py-0.1.5-cp311-none-win_amd64.whl", hash = "sha256:701fca8a1ee79fc9563d9277b7252c4ed0f209ce4fce77add34cf63aa5e19a7d"},
+    {file = "yari_py-0.1.5-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1001925a7cc10495191f6cf77260c1f57f65685dc980c034e64ecf9401099345"},
+    {file = "yari_py-0.1.5-cp37-none-win_amd64.whl", hash = "sha256:230d371575fe80b9461744e2e612d468ebcadfc17a487e279f6ce2f2ead4efd1"},
+    {file = "yari_py-0.1.5-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:53308d427abe14d02431b824626842a65eb2497c82786fe8fa36aa372fbe15a9"},
+    {file = "yari_py-0.1.5-cp38-none-win_amd64.whl", hash = "sha256:051cd6874dac5a0f9765c76ccc531244db2c1769ad4d1b81312b16b35a682373"},
+    {file = "yari_py-0.1.5-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4bb51169e7afe582117cee547bdec05ae8705636fbec5613e7e2b2b338a4995d"},
+    {file = "yari_py-0.1.5-cp39-none-win_amd64.whl", hash = "sha256:a06d6749c63b6482d767a1aa537fa70dd00da85be33f7cd1630274ff56ad6c72"},
 ]
 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "0fc3182656ac298b34e23d5a5888036310c25641285152f4d2b7ef3b1e0ac124"
+content-hash = "856a7b715e03fbc0320f442d07d8d7d96b1917e131b05bc31f97790d47455a23"
