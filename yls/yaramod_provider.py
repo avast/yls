@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 class YaramodProvider:
     """Singleton class providing Yaramod parser object."""
 
-    ymod = None
+    ymod: yaramod.Yaramod | None = None
 
     @classmethod
     def instance(cls) -> yaramod.Yaramod:
