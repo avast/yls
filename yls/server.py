@@ -73,7 +73,7 @@ class YaraLanguageServer(LanguageServer):
 
         # Cached version of yara file used for completions
         # NOTE: We need to create dict not only one variable
-        self.last_valid_yara_file = None
+        self.last_valid_yara_file: yaramod.YaraFile | None = None
 
         self.register_plugin_commands()
 
