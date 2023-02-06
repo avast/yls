@@ -995,17 +995,21 @@ files = [
 
 [[package]]
 name = "yaramod"
-version = "3.17.0"
+version = "3.18.0"
 description = "Library for manipulation of YARA files."
 category = "main"
 optional = false
 python-versions = ">=3"
 files = [
-    {file = "yaramod-3.17.0-cp310-cp310-win_amd64.whl", hash = "sha256:65f4bead50c987c1e2adaf0305a51169dd8f9dd7d45e1d55a09970c3fa3aa55c"},
-    {file = "yaramod-3.17.0-cp311-cp311-win_amd64.whl", hash = "sha256:29a2e4cdeccfd155b83692b75f177be062f5354409b31db8aceacde08db45253"},
-    {file = "yaramod-3.17.0-cp38-cp38-win_amd64.whl", hash = "sha256:5dbae5bac93c4098e3894b84610ffb861713f93b2b19707a1a8ca9e1c98a8249"},
-    {file = "yaramod-3.17.0-cp39-cp39-win_amd64.whl", hash = "sha256:d77ad53d0a46c94544053df9f47b8f7d9eebf5fcf4c597fc9c5d9010308c01d7"},
-    {file = "yaramod-3.17.0.tar.gz", hash = "sha256:874dbe592f91ce5811a4d922778ed6c031b61e88b479abf06f28146f65e65c04"},
+    {file = "yaramod-3.18.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8cd2dcc65a19183fd91bac789c4ff82e01a6579a1091b225944fefad71095f36"},
+    {file = "yaramod-3.18.0-cp310-cp310-win_amd64.whl", hash = "sha256:7399e307d393b4ca17d3e900ce4f02cae5d0bb4efee7beb6d6bea5e14440f3cd"},
+    {file = "yaramod-3.18.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:48b9c3daa2ef5f4485dd83d2332cbdca6a5397247c1336449aaf790cbdf72004"},
+    {file = "yaramod-3.18.0-cp311-cp311-win_amd64.whl", hash = "sha256:a2fb1b63be623ed7e701830b78f7c7b7c93e1ece053751e7721a599fdee4ad49"},
+    {file = "yaramod-3.18.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f4de1739544088498764721390b4f609ffcc4ea76f65e508de3ac20145f83e34"},
+    {file = "yaramod-3.18.0-cp38-cp38-win_amd64.whl", hash = "sha256:2cd19f377f6c8846634eb2159b7fb305205c4c7ebfe7d5bf589899c3b36160ac"},
+    {file = "yaramod-3.18.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4050e3f72a57af3bd0a947a4ec2cc503321959044689d86bd52ddf1cafabee4d"},
+    {file = "yaramod-3.18.0-cp39-cp39-win_amd64.whl", hash = "sha256:7aff97dc4f0ebcbb095b3e29b85c74cc2aa1ece8e45fc4c097d3eb28a3432a87"},
+    {file = "yaramod-3.18.0.tar.gz", hash = "sha256:af34df84581e7df26c50f10ebda8ba30df17d27de44d6acde00ac5cbcfe47be1"},
 ]
 
 [[package]]
@@ -1031,4 +1035,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "006afafc3200a24a0efc0ee407f9e61f2d74e2aaeba4e522b1d4bd9131af99ab"
+content-hash = "cbc2354ac7508df3b1214fa5d07dbb631e8cc85400fee7e4c58f886afc499ede"
