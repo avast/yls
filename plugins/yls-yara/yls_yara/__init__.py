@@ -1,1 +1,1 @@
-__version__ = "0.1.0"
+from yls_yara.linting import yls_lint
