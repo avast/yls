@@ -285,14 +285,14 @@ files = [
 
 [[package]]
 name = "yls"
-version = "1.3.0"
+version = "1.3.1"
 description = "YARA Language Server"
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.12"
 files = [
-    {file = "yls-1.3.0-py3-none-any.whl", hash = "sha256:00a82acd63c0facdcaa7f737a17c34569ed5656cd5286c9a5293b63144ca79ad"},
-    {file = "yls-1.3.0.tar.gz", hash = "sha256:8d7f53ff368b31e18f16e0ebd59ae96f86a61a6ee5fca1cf5122fddce81e63a9"},
+    {file = "yls-1.3.1-py3-none-any.whl", hash = "sha256:db9921c19f692c8a4e2ef427a13013dd9041dc7ac0f72063a86fa46c51fb19a3"},
+    {file = "yls-1.3.1.tar.gz", hash = "sha256:7a49df0512cb3acf6d7a94074e051dd07123e5ae8592c72b9ea8ca9cd487ecfd"},
 ]
 
 [package.dependencies]
@@ -304,4 +304,4 @@ yari-py = ">=0.1.6,<0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "074deef0acd07b09b916a9acc7f5eae42b8e0c276349961a8201ec36ba62e69b"
+content-hash = "858b76bb1cbe071410947b16b428b3873af6c688f52a090b66ca82b746386ce8"

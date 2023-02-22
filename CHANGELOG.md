@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.3.1 (2023-02-22)
+
+- fix: Pygls imports in yls-yara
+
 # 1.3.0 (2023-02-22)
 
 - feat: Update to pygls v1.0.0
