@@ -7,9 +7,9 @@ import yara
 
 from yls import hookimpl
 from yls import utils
-from yls.lsp_types import Diagnostic
-from yls.lsp_types import DiagnosticSeverity
-from yls.lsp_types import Position
+from lsprotocol.types import Diagnostic
+from lsprotocol.types import DiagnosticSeverity
+from lsprotocol.types import Position
 
 log = logging.getLogger(__name__)
 
