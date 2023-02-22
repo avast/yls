@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.3.0 (2023-02-22)
+
+- feat: Update to pygls v1.0.0
+- chore: Update yari-py to v0.1.6
+- chore: Update yaramod to v3.18.0
+- chore: Update yaramod to v3.17.0
+- chore: Update yari-py to v0.1.5
+
 # 1.2.5 (2023-01-10)
 
 - fix: Don't show YARI error popup when debugging is not setup

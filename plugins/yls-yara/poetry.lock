@@ -4,7 +4,7 @@
 name = "attrs"
 version = "22.1.0"
 description = "Classes Without Boilerplate"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 files = [
@@ -19,6 +19,22 @@ tests = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy (>=0.900
 tests-no-zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy (>=0.900,!=0.940)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins"]
 
 [[package]]
+name = "cattrs"
+version = "22.2.0"
+description = "Composable complex class support for attrs and dataclasses."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "cattrs-22.2.0-py3-none-any.whl", hash = "sha256:bc12b1f0d000b9f9bee83335887d532a1d3e99a833d1bf0882151c97d3e68c21"},
+    {file = "cattrs-22.2.0.tar.gz", hash = "sha256:f0eed5642399423cf656e7b66ce92cdc5b963ecafd041d1b24d136fdde7acf6d"},
+]
+
+[package.dependencies]
+attrs = ">=20"
+exceptiongroup = {version = "*", markers = "python_version < \"3.11\""}
+
+[[package]]
 name = "colorama"
 version = "0.4.5"
 description = "Cross-platform colored terminal text."
@@ -31,6 +47,21 @@ files = [
 ]
 
 [[package]]
+name = "exceptiongroup"
+version = "1.1.0"
+description = "Backport of PEP 654 (exception groups)"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "exceptiongroup-1.1.0-py3-none-any.whl", hash = "sha256:327cbda3da756e2de031a3107b81ab7b3770a602c4d16ca618298c526f4bec1e"},
+    {file = "exceptiongroup-1.1.0.tar.gz", hash = "sha256:bcb67d800a4497e1b404c2dd44fca47d3b7a5e5433dbab67f96c1a685cdfdf23"},
+]
+
+[package.extras]
+test = ["pytest (>=6)"]
+
+[[package]]
 name = "iniconfig"
 version = "1.1.1"
 description = "iniconfig: brain-dead simple config-ini parsing"
@@ -41,6 +72,22 @@ files = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
 ]
+
+[[package]]
+name = "lsprotocol"
+version = "2022.0.0a10"
+description = "Python implementation of the Language Server Protocol."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "lsprotocol-2022.0.0a10-py3-none-any.whl", hash = "sha256:ef516aec43c2b3c8debc06e84558ea9a64c36d635422d1614fd7fd2a45b1d291"},
+    {file = "lsprotocol-2022.0.0a10.tar.gz", hash = "sha256:2cd78770b7a4ec979f3ee3761265effd50ea0f5e858ce21bf2fba972e1783c50"},
+]
+
+[package.dependencies]
+attrs = "*"
+cattrs = "*"
 
 [[package]]
 name = "packaging"
@@ -86,75 +133,19 @@ files = [
 ]
 
 [[package]]
-name = "pydantic"
-version = "1.10.2"
-description = "Data validation and settings management using python type hints"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "pydantic-1.10.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:bb6ad4489af1bac6955d38ebcb95079a836af31e4c4f74aba1ca05bb9f6027bd"},
-    {file = "pydantic-1.10.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:a1f5a63a6dfe19d719b1b6e6106561869d2efaca6167f84f5ab9347887d78b98"},
-    {file = "pydantic-1.10.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:352aedb1d71b8b0736c6d56ad2bd34c6982720644b0624462059ab29bd6e5912"},
-    {file = "pydantic-1.10.2-cp310-cp310-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:19b3b9ccf97af2b7519c42032441a891a5e05c68368f40865a90eb88833c2559"},
-    {file = "pydantic-1.10.2-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:e9069e1b01525a96e6ff49e25876d90d5a563bc31c658289a8772ae186552236"},
-    {file = "pydantic-1.10.2-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:355639d9afc76bcb9b0c3000ddcd08472ae75318a6eb67a15866b87e2efa168c"},
-    {file = "pydantic-1.10.2-cp310-cp310-win_amd64.whl", hash = "sha256:ae544c47bec47a86bc7d350f965d8b15540e27e5aa4f55170ac6a75e5f73b644"},
-    {file = "pydantic-1.10.2-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:a4c805731c33a8db4b6ace45ce440c4ef5336e712508b4d9e1aafa617dc9907f"},
-    {file = "pydantic-1.10.2-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:d49f3db871575e0426b12e2f32fdb25e579dea16486a26e5a0474af87cb1ab0a"},
-    {file = "pydantic-1.10.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:37c90345ec7dd2f1bcef82ce49b6235b40f282b94d3eec47e801baf864d15525"},
-    {file = "pydantic-1.10.2-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:7b5ba54d026c2bd2cb769d3468885f23f43710f651688e91f5fb1edcf0ee9283"},
-    {file = "pydantic-1.10.2-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:05e00dbebbe810b33c7a7362f231893183bcc4251f3f2ff991c31d5c08240c42"},
-    {file = "pydantic-1.10.2-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:2d0567e60eb01bccda3a4df01df677adf6b437958d35c12a3ac3e0f078b0ee52"},
-    {file = "pydantic-1.10.2-cp311-cp311-win_amd64.whl", hash = "sha256:c6f981882aea41e021f72779ce2a4e87267458cc4d39ea990729e21ef18f0f8c"},
-    {file = "pydantic-1.10.2-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:c4aac8e7103bf598373208f6299fa9a5cfd1fc571f2d40bf1dd1955a63d6eeb5"},
-    {file = "pydantic-1.10.2-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:81a7b66c3f499108b448f3f004801fcd7d7165fb4200acb03f1c2402da73ce4c"},
-    {file = "pydantic-1.10.2-cp37-cp37m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:bedf309630209e78582ffacda64a21f96f3ed2e51fbf3962d4d488e503420254"},
-    {file = "pydantic-1.10.2-cp37-cp37m-musllinux_1_1_i686.whl", hash = "sha256:9300fcbebf85f6339a02c6994b2eb3ff1b9c8c14f502058b5bf349d42447dcf5"},
-    {file = "pydantic-1.10.2-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:216f3bcbf19c726b1cc22b099dd409aa371f55c08800bcea4c44c8f74b73478d"},
-    {file = "pydantic-1.10.2-cp37-cp37m-win_amd64.whl", hash = "sha256:dd3f9a40c16daf323cf913593083698caee97df2804aa36c4b3175d5ac1b92a2"},
-    {file = "pydantic-1.10.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:b97890e56a694486f772d36efd2ba31612739bc6f3caeee50e9e7e3ebd2fdd13"},
-    {file = "pydantic-1.10.2-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:9cabf4a7f05a776e7793e72793cd92cc865ea0e83a819f9ae4ecccb1b8aa6116"},
-    {file = "pydantic-1.10.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:06094d18dd5e6f2bbf93efa54991c3240964bb663b87729ac340eb5014310624"},
-    {file = "pydantic-1.10.2-cp38-cp38-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:cc78cc83110d2f275ec1970e7a831f4e371ee92405332ebfe9860a715f8336e1"},
-    {file = "pydantic-1.10.2-cp38-cp38-musllinux_1_1_i686.whl", hash = "sha256:1ee433e274268a4b0c8fde7ad9d58ecba12b069a033ecc4645bb6303c062d2e9"},
-    {file = "pydantic-1.10.2-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:7c2abc4393dea97a4ccbb4ec7d8658d4e22c4765b7b9b9445588f16c71ad9965"},
-    {file = "pydantic-1.10.2-cp38-cp38-win_amd64.whl", hash = "sha256:0b959f4d8211fc964772b595ebb25f7652da3f22322c007b6fed26846a40685e"},
-    {file = "pydantic-1.10.2-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:c33602f93bfb67779f9c507e4d69451664524389546bacfe1bee13cae6dc7488"},
-    {file = "pydantic-1.10.2-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:5760e164b807a48a8f25f8aa1a6d857e6ce62e7ec83ea5d5c5a802eac81bad41"},
-    {file = "pydantic-1.10.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6eb843dcc411b6a2237a694f5e1d649fc66c6064d02b204a7e9d194dff81eb4b"},
-    {file = "pydantic-1.10.2-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:4b8795290deaae348c4eba0cebb196e1c6b98bdbe7f50b2d0d9a4a99716342fe"},
-    {file = "pydantic-1.10.2-cp39-cp39-musllinux_1_1_i686.whl", hash = "sha256:e0bedafe4bc165ad0a56ac0bd7695df25c50f76961da29c050712596cf092d6d"},
-    {file = "pydantic-1.10.2-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:2e05aed07fa02231dbf03d0adb1be1d79cabb09025dd45aa094aa8b4e7b9dcda"},
-    {file = "pydantic-1.10.2-cp39-cp39-win_amd64.whl", hash = "sha256:c1ba1afb396148bbc70e9eaa8c06c1716fdddabaf86e7027c5988bae2a829ab6"},
-    {file = "pydantic-1.10.2-py3-none-any.whl", hash = "sha256:1b6ee725bd6e83ec78b1aa32c5b1fa67a3a65badddde3976bca5fe4568f27709"},
-    {file = "pydantic-1.10.2.tar.gz", hash = "sha256:91b8e218852ef6007c2b98cd861601c6a09f1aa32bbbb74fab5b1c33d4a1e410"},
-]
-
-[package.dependencies]
-typing-extensions = ">=4.1.0"
-
-[package.extras]
-dotenv = ["python-dotenv (>=0.10.4)"]
-email = ["email-validator (>=1.0.3)"]
-
-[[package]]
 name = "pygls"
-version = "0.13.0"
+version = "1.0.1"
 description = "a pythonic generic language server (pronounced like \"pie glass\")."
 category = "main"
 optional = false
-python-versions = "<3.12,>=3.7"
+python-versions = "<4,>=3.7"
 files = [
-    {file = "pygls-0.13.0-py3-none-any.whl", hash = "sha256:a018a007a3ca9079e060e5ebb88bfbbcc9157bac4f9ae45c5e24e569cbc93bd1"},
-    {file = "pygls-0.13.0.tar.gz", hash = "sha256:d76e44768d75805da26dfbaec187c6251450af4b7b1cc0b7eb3587e6e27e32a4"},
+    {file = "pygls-1.0.1-py3-none-any.whl", hash = "sha256:adacc96da77598c70f46acfdfd1481d3da90cd54f639f7eee52eb6e4dbd57b55"},
+    {file = "pygls-1.0.1.tar.gz", hash = "sha256:f3ee98ddbb4690eb5c755bc32ba7e129607f14cbd313575f33d0cea443b78cb2"},
 ]
 
 [package.dependencies]
-pydantic = [
-    {version = ">=1.9.1", markers = "python_version < \"3.11\""},
-    {version = ">=1.10.2", markers = "python_version >= \"3.11\""},
-]
+lsprotocol = "*"
 typeguard = ">=2.10.0,<3"
 
 [package.extras]
@@ -231,18 +222,6 @@ doc = ["sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
 test = ["mypy", "pytest", "typing-extensions"]
 
 [[package]]
-name = "typing-extensions"
-version = "4.4.0"
-description = "Backported and Experimental Type Hints for Python 3.7+"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "typing_extensions-4.4.0-py3-none-any.whl", hash = "sha256:16fa4864408f655d35ec496218b85f79b3437c829e93320c7c9215ccfd92489e"},
-    {file = "typing_extensions-4.4.0.tar.gz", hash = "sha256:1511434bb92bf8dd198c12b1cc812e800d4181cfcb867674e0f8279cc93087aa"},
-]
-
-[[package]]
 name = "yara-python"
 version = "4.2.3"
 description = "Python interface for YARA"
@@ -267,54 +246,60 @@ files = [
 
 [[package]]
 name = "yaramod"
-version = "3.16.0"
+version = "3.18.0"
 description = "Library for manipulation of YARA files."
 category = "main"
 optional = false
 python-versions = ">=3"
 files = [
-    {file = "yaramod-3.16.0-cp310-cp310-win_amd64.whl", hash = "sha256:6ba24750f5e9dcae4344cb2d486024e4cd3ee25f4e5e37ccd524508c5cbf01fd"},
-    {file = "yaramod-3.16.0-cp38-cp38-win_amd64.whl", hash = "sha256:192a5c85de1d0683afb499afcdeb2fedd398b170f6b7a4eb4fdd1f6fb2206398"},
-    {file = "yaramod-3.16.0-cp39-cp39-win_amd64.whl", hash = "sha256:9a872b4c7b9fc3d7931811b7af44b9d11103974964b60d497b1b7adc8add8a23"},
-    {file = "yaramod-3.16.0.tar.gz", hash = "sha256:ea393cdbf31e8411aa673615c8d5e0139228eeae297f6ba8b58843a03dd2c308"},
+    {file = "yaramod-3.18.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8cd2dcc65a19183fd91bac789c4ff82e01a6579a1091b225944fefad71095f36"},
+    {file = "yaramod-3.18.0-cp310-cp310-win_amd64.whl", hash = "sha256:7399e307d393b4ca17d3e900ce4f02cae5d0bb4efee7beb6d6bea5e14440f3cd"},
+    {file = "yaramod-3.18.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:48b9c3daa2ef5f4485dd83d2332cbdca6a5397247c1336449aaf790cbdf72004"},
+    {file = "yaramod-3.18.0-cp311-cp311-win_amd64.whl", hash = "sha256:a2fb1b63be623ed7e701830b78f7c7b7c93e1ece053751e7721a599fdee4ad49"},
+    {file = "yaramod-3.18.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f4de1739544088498764721390b4f609ffcc4ea76f65e508de3ac20145f83e34"},
+    {file = "yaramod-3.18.0-cp38-cp38-win_amd64.whl", hash = "sha256:2cd19f377f6c8846634eb2159b7fb305205c4c7ebfe7d5bf589899c3b36160ac"},
+    {file = "yaramod-3.18.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4050e3f72a57af3bd0a947a4ec2cc503321959044689d86bd52ddf1cafabee4d"},
+    {file = "yaramod-3.18.0-cp39-cp39-win_amd64.whl", hash = "sha256:7aff97dc4f0ebcbb095b3e29b85c74cc2aa1ece8e45fc4c097d3eb28a3432a87"},
+    {file = "yaramod-3.18.0.tar.gz", hash = "sha256:af34df84581e7df26c50f10ebda8ba30df17d27de44d6acde00ac5cbcfe47be1"},
 ]
 
 [[package]]
 name = "yari-py"
-version = "0.1.3"
+version = "0.1.6"
 description = "Python bindings for YARI."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "yari_py-0.1.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:76c51d809d4c1cd812ee02901e0ee132079cb772c1839d1473ce7097dd980525"},
-    {file = "yari_py-0.1.3-cp310-none-win_amd64.whl", hash = "sha256:7ba9c6f92c2976e181036a04052d5ae4a6818251aff4c79f8ac6b00a17feb819"},
-    {file = "yari_py-0.1.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8827e10e0d4d09c5c2c96dbae8b6bcd03de9ede91b2f06f60d2d1263565a4f43"},
-    {file = "yari_py-0.1.3-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:75aa93a66dd2d1ee491ca7b46cd2c1d05643fedc349a95c4b721e9ea36d569de"},
-    {file = "yari_py-0.1.3-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0ceebbf1961f506e99a2ae50a309f5f19d437820d71ca2e8accc20e23064db76"},
-    {file = "yari_py-0.1.3-cp38-none-win_amd64.whl", hash = "sha256:f65fa4733dd9bc3e04dc22032d9955a88c68e3726e40ab75eac0c16f023567b8"},
-    {file = "yari_py-0.1.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:989ea0c909d9e91876fa1dbac3ddbad7d589ee797adc11e68425ace51e284e14"},
-    {file = "yari_py-0.1.3-cp39-none-win_amd64.whl", hash = "sha256:3c139de994ad6400766acb90d133750aa80a83cb1fac149de9a18b5e7640b17c"},
-    {file = "yari_py-0.1.3-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:513f21ca8ddd4f01993c36bf263ed61098fbf0a7afabc307fa7649a3918bb9c7"},
+    {file = "yari_py-0.1.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:20f72229e086bd0f457a9e2466ee2934b6ca2dd7919a18ea7414f13000b156c5"},
+    {file = "yari_py-0.1.6-cp310-none-win_amd64.whl", hash = "sha256:f5222972488601261fa7f23f7e65afa0f47fef1bff8f511e9a85e811f9d9d23f"},
+    {file = "yari_py-0.1.6-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2359bcb57504465d2c89cdd7ecef5791df5e5f9e7f806b246546ae09817214db"},
+    {file = "yari_py-0.1.6-cp311-none-win_amd64.whl", hash = "sha256:582ded9a2addd08d1abbbb0187d13c69b178fbf3bb6eaf2c06f318643e6f260c"},
+    {file = "yari_py-0.1.6-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2d3a82fdb585f314a17b0e21ba67b86f3923f7328b6e40315e9fd32c10c1354e"},
+    {file = "yari_py-0.1.6-cp37-none-win_amd64.whl", hash = "sha256:5d9628fb2bba4d7aa29227c120ba13f691c0d79f52c2b17e1f83ab8f7952b698"},
+    {file = "yari_py-0.1.6-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bfb338e0a3d2cde918a2a4408eaa340b9deb4fbefdcdeeacf6778eab87b51506"},
+    {file = "yari_py-0.1.6-cp38-none-win_amd64.whl", hash = "sha256:7a7788224705e57b71e38ca92e88dde2ef6c64fee7ea58f4f278b05358d79858"},
+    {file = "yari_py-0.1.6-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c6942eefbf6e7f905abdc6ca7c689136afa71f32b0aa5f77f53434a967b3772a"},
+    {file = "yari_py-0.1.6-cp39-none-win_amd64.whl", hash = "sha256:eac1e82cbb5c72079c5d21aff44ad7ad762aae60b6e1d878e06b6190b80757b3"},
 ]
 
 [[package]]
 name = "yls"
-version = "1.2.5"
+version = "1.3.0"
 description = "YARA Language Server"
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.12"
 files = [
-    {file = "yls-1.2.5-py3-none-any.whl", hash = "sha256:753488ebc07879cfe68576a2b7533088e8a8daf5ea22e07a53f89be8fd8841c6"},
-    {file = "yls-1.2.5.tar.gz", hash = "sha256:16912a62d2f67614c2430a381a3e50fc3925d7dcb3545b97bf3ffd14e236257e"},
+    {file = "yls-1.3.0-py3-none-any.whl", hash = "sha256:00a82acd63c0facdcaa7f737a17c34569ed5656cd5286c9a5293b63144ca79ad"},
+    {file = "yls-1.3.0.tar.gz", hash = "sha256:8d7f53ff368b31e18f16e0ebd59ae96f86a61a6ee5fca1cf5122fddce81e63a9"},
 ]
 
 [package.dependencies]
 pluggy = ">=1.0.0,<2.0.0"
-pygls = "0.13.0"
-yaramod = ">=3.16.0,<4.0.0"
-yari-py = ">=0.1.1,<0.2.0"
+pygls = ">=1.0.0,<2.0.0"
+yaramod = ">=3.18.0,<4.0.0"
+yari-py = ">=0.1.6,<0.2.0"
 
 [metadata]
 lock-version = "2.0"
