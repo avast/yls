@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.3.2 (2023-03-06)
+
+- ci: Create dependabot.yml
+- chore: Update yaramod to v3.19.0
+- chore: Dependency updates
+
 # 1.3.1 (2023-02-22)
 
 - fix: Pygls imports in yls-yara
