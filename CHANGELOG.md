@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.3.3 (2023-03-29)
+
+* chore: Update yaramod to v3.19.1
+* chore: Update pytest to v7.2.2
+
 # 1.3.2 (2023-03-06)
 
 - ci: Create dependabot.yml

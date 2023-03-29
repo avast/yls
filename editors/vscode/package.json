@@ -4,7 +4,7 @@
   "description": "A Visual Studio Code extension for YARA based on YLS (Yara Language Server).",
   "author": "Matej Kastak",
   "license": "MIT",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/avast/yls"
