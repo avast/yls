@@ -106,6 +106,6 @@
     "vsce": "^2.15.0"
   },
   "dependencies": {
-    "vscode-languageclient": "^7.0.0"
+    "vscode-languageclient": "^8.1.0"
   }
 }
