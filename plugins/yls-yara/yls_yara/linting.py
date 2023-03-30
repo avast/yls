@@ -4,12 +4,12 @@ import re
 from typing import List
 
 import yara
-
-from yls import hookimpl
-from yls import utils
 from lsprotocol.types import Diagnostic
 from lsprotocol.types import DiagnosticSeverity
 from lsprotocol.types import Position
+
+from yls import hookimpl
+from yls import utils
 
 log = logging.getLogger(__name__)
 

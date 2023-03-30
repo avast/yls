@@ -1,0 +1,16 @@
+repos:
+  - repo: local
+    hooks:
+      - id: format
+        name: Formatting project files
+        entry: poetry run poe format
+        stages: [ commit ]
+        language: system
+        pass_filenames: false
+        fail_fast: true
+      - id: tests
+        name: Running project tests
+        entry: poetry run poe test
+        stages: [ commit ]
+        language: system
+        pass_filenames: false

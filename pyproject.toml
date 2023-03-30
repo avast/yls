@@ -101,5 +101,6 @@ disable = """,
     redefined-outer-name,
     too-few-public-methods,
     too-many-arguments,
-    too-many-return-statements
+    too-many-return-statements,
+    wrong-import-order
     """
