@@ -22,7 +22,6 @@ from lsprotocol.types import TEXT_DOCUMENT_FORMATTING
 from lsprotocol.types import TEXT_DOCUMENT_HOVER
 from lsprotocol.types import TEXT_DOCUMENT_REFERENCES
 from lsprotocol.types import TEXT_DOCUMENT_SIGNATURE_HELP
-from lsprotocol.types import WORKSPACE_DID_CHANGE_CONFIGURATION
 from pygls.server import LanguageServer
 from pygls.uris import from_fs_path
 
@@ -97,33 +96,6 @@ class YaraLanguageServer(LanguageServer):
             func = functools.partial(command_wrapper, command)
             self.command(command)(func)
 
-    def did_change_configuration(self) -> None:
-        """Server changed the configuration.
-
-        This function will fetch the latest configuration and set the YLS state accordingly.
-        """
-
-        def _config_callback(config: Any) -> None:
-            try:
-                conf = config[0]
-                log.debug(f"[did_change_configuration] yls configuration is: {config[0]}")
-                self.debug_hover = conf.debug.hover
-
-            except Exception as e:  # pylint: disable=broad-except
-                log.error(f"[did_change_configuration] Error occurred: {e}")
-
-        # Request the configuration from the client for "yls"
-        # FIXME: There seems to be a bug in `get_configuration` that expects a
-        # wrong type. It should be already fixed in the
-        # https://github.com/openlawlibrary/pygls/pull/310, after pygls
-        # releases a new version we can remove the `# type: ignore`
-        self.get_configuration(
-            lsp_types.WorkspaceConfigurationParams(  # type: ignore
-                items=[lsp_types.ConfigurationItem(scope_uri="", section="yls")]
-            ),
-            _config_callback,
-        )
-
     def get_current_rule(
         self, uri: str, position: lsp_types.Position, yara_file: yaramod.YaraFile | None = None
     ) -> yaramod.Rule | None:
@@ -191,42 +163,11 @@ class YaraLanguageServer(LanguageServer):
 SERVER = YaraLanguageServer("yara-language-server", f"v{__version__}")
 
 
-@SERVER.feature(WORKSPACE_DID_CHANGE_CONFIGURATION)
-def did_change_configuration(ls: YaraLanguageServer, _params: Any) -> None:
-    """Configuration was changed.
-
-    This notification is somehow not being triggered. See `set_traceback` comment.
-    """
-    utils.log_command(WORKSPACE_DID_CHANGE_CONFIGURATION)
-    log.debug("[DID_CHANGE_CONFIGURATION] Configuration was changed")
-    ls.did_change_configuration()
-
-
-@SERVER.feature("$/setTraceNotification")
-def set_traceback(ls: YaraLanguageServer, params: Any) -> None:
-    """Set traceback notification.
-
-    This feature is declared manually because the pygls does not support it yet.
-    It is proposed in the 3.16 version. Params include `TraceValue` which can be
-    one of `{'off', 'message', 'verbose'}`.
-
-    Based on tests it looks like this is send in the event of configuration change
-    instead of WORKSPACE_DID_CHANGE_CONFIGURATION.
-    """
-    log.debug(
-        "[SET_TRACE_NOTIFICATION] Received setTraceNotification, "
-        "this could mean that the configuration was changed."
-    )
-    log.debug(params)
-    ls.did_change_configuration()
-
-
 @SERVER.feature(INITIALIZED)
-def initiliazed(ls: YaraLanguageServer, _params: Any) -> None:
+def initiliazed(_ls: YaraLanguageServer, _params: Any) -> None:
     """Connection is initialized."""
     utils.log_command(INITIALIZED)
     log.debug("[INITIALIZED] Connection was established")
-    ls.did_change_configuration()
     # NOTE: In the future we can parse all files in the workspace
 
 
