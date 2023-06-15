@@ -14,7 +14,7 @@
 - Linting
 - Go-to definition and references
 - Symbol highlighting under the cursor
-- Debugging? Stay tuned...
+- Debugging using [yari](https://github.com/avast/yari)
 - ...
 
 ![Showcase](https://github.com/avast/yls/raw/master/docs/assets/yls.png)
