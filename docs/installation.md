@@ -97,6 +97,26 @@ autocmd BufNewFile,BufRead *.yar,*.yara setlocal filetype=yara
 Plug 's3rvac/vim-syntax-yara'
 ```
 
+#### [nvim-lsp](https://neovim.io/doc/user/lsp.html)
+```lua
+-- use 'neovim/nvim-lspconfig'
+
+local configs = require('lspconfig.configs')
+if not configs.yls then
+ configs.yls = {
+   default_config = {
+     cmd = {'yls', '-vvv'},
+     filetypes = {'yara'},
+     root_dir = util.find_git_ancestor,
+     settings = {},
+   },
+ }
+end
+
+-- you can provide on_attach method or other settings here
+require('lspconfig')['yls'].setup{}
+```
+
 #### [coc.vim](https://github.com/neoclide/coc.nvim)
 
 vimrc:
