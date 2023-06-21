@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.3.4 (2023-06-21)
+
+* chore(deps): Update yaramod to v3.20.1
+* chore(deps): Bump yara-python from 4.3.0 to 4.3.1 in /plugins/yls-yara
+* chore(deps): Update pygls to v1.0.1
+* chore(deps-dev): Bump pytest from 7.2.2 to 7.3.1 in /plugins/yls-yara
+* chore: Add pre-commit configuration
+* chore: Remove unused configuration code
+* docs: Mention YARI in README.md
+* docs: Add instructions how to use YLS in nvim-lsp
+
 # 1.3.3 (2023-03-29)
 
 * chore: Update yaramod to v3.19.1
