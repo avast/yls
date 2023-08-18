@@ -462,7 +462,7 @@
     "regexp-strings": {
       "name": "string.regexp.yara",
       "begin": "(?<!/)(/)(?!/|\\n)",
-      "end": "(?<!\\\\)(/)(i?s?)|((?:\\\\/)?[^/]*\\n)",
+      "end": "(?<![^\\\\]\\\\)(/)(i?s?)|((?:\\\\/)?[^/]*\\n)",
       "beginCaptures": {
         "1": {"name": "punctuation.definition.regexp.begin.yara"}
       },
