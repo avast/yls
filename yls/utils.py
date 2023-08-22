@@ -139,7 +139,10 @@ def range_from_line(
     """Helper function to create a range from line index.
 
     This function will ignore any leading/trailing whitespace."""
-    line_content = document.lines[line]
+    try:
+        line_content = document.lines[line]
+    except IndexError:
+        return range_for_first_line()
     line_len = len(line_content)
 
     if strip_whitespace:
