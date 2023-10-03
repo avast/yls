@@ -229,6 +229,25 @@ docs = ["furo (>=2022.6.21)", "sphinx (>=5.1.1)", "sphinx-autodoc-typehints (>=1
 testing = ["covdefaults (>=2.2)", "coverage (>=6.4.2)", "pytest (>=7.1.2)", "pytest-cov (>=3)", "pytest-timeout (>=2.1)"]
 
 [[package]]
+name = "importlib-metadata"
+version = "6.8.0"
+description = "Read metadata from Python packages"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "importlib_metadata-6.8.0-py3-none-any.whl", hash = "sha256:3ebb78df84a805d7698245025b975d9d67053cd94c79245ba4b3eb694abe68bb"},
+    {file = "importlib_metadata-6.8.0.tar.gz", hash = "sha256:dbace7892d8c0c4ac1ad096662232f831d4e64f4c4545bd53016a3e9d4654743"},
+]
+
+[package.dependencies]
+zipp = ">=0.5"
+
+[package.extras]
+docs = ["furo", "jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-lint"]
+perf = ["ipython"]
+testing = ["flufl.flake8", "importlib-resources (>=1.3)", "packaging", "pyfakefs", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-mypy (>=0.9.1)", "pytest-perf (>=0.9.2)", "pytest-ruff"]
+
+[[package]]
 name = "iniconfig"
 version = "1.1.1"
 description = "iniconfig: brain-dead simple config-ini parsing"
@@ -286,17 +305,17 @@ files = [
 
 [[package]]
 name = "lsprotocol"
-version = "2022.0.0a10"
+version = "2023.0.0b1"
 description = "Python implementation of the Language Server Protocol."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "lsprotocol-2022.0.0a10-py3-none-any.whl", hash = "sha256:ef516aec43c2b3c8debc06e84558ea9a64c36d635422d1614fd7fd2a45b1d291"},
-    {file = "lsprotocol-2022.0.0a10.tar.gz", hash = "sha256:2cd78770b7a4ec979f3ee3761265effd50ea0f5e858ce21bf2fba972e1783c50"},
+    {file = "lsprotocol-2023.0.0b1-py3-none-any.whl", hash = "sha256:ade2cd0fa0ede7965698cb59cd05d3adbd19178fd73e83f72ef57a032fbb9d62"},
+    {file = "lsprotocol-2023.0.0b1.tar.gz", hash = "sha256:f7a2d4655cbd5639f373ddd1789807450c543341fa0a32b064ad30dbb9f510d4"},
 ]
 
 [package.dependencies]
-attrs = "*"
+attrs = ">=21.3.0"
 cattrs = "*"
 
 [[package]]
@@ -457,24 +476,21 @@ poetry-plugin = ["poetry (>=1.0,<2.0)"]
 
 [[package]]
 name = "pygls"
-version = "1.0.1"
-description = "a pythonic generic language server (pronounced like \"pie glass\")."
+version = "1.1.1"
+description = "A pythonic generic language server (pronounced like 'pie glass')"
 optional = false
-python-versions = "<4,>=3.7"
+python-versions = ">=3.7.9,<4"
 files = [
-    {file = "pygls-1.0.1-py3-none-any.whl", hash = "sha256:adacc96da77598c70f46acfdfd1481d3da90cd54f639f7eee52eb6e4dbd57b55"},
-    {file = "pygls-1.0.1.tar.gz", hash = "sha256:f3ee98ddbb4690eb5c755bc32ba7e129607f14cbd313575f33d0cea443b78cb2"},
+    {file = "pygls-1.1.1-py3-none-any.whl", hash = "sha256:330704551a335b443bf1cdfb0507f121608591095898d451f0007eeb1510067c"},
+    {file = "pygls-1.1.1.tar.gz", hash = "sha256:b1b4ddd6f800a5573f61f0ec2cd3bc7a859d171f48142b46e1de35a1357c00fe"},
 ]
 
 [package.dependencies]
-lsprotocol = "*"
-typeguard = ">=2.10.0,<3"
+lsprotocol = "2023.0.0b1"
+typeguard = ">=3.0.0,<4.0.0"
 
 [package.extras]
-dev = ["bandit (==1.7.4)", "flake8 (==4.0.1)", "mypy (==0.961)"]
-docs = ["sphinx (==5.0.1)", "sphinx-rtd-theme (==1.0.0)"]
-test = ["mock (==4.0.3)", "pytest (==7.1.2)", "pytest-asyncio (==0.18.3)"]
-ws = ["websockets (==10.*)"]
+ws = ["websockets (>=11.0.3,<12.0.0)"]
 
 [[package]]
 name = "pylint"
@@ -712,18 +728,22 @@ files = [
 
 [[package]]
 name = "typeguard"
-version = "2.13.3"
+version = "3.0.2"
 description = "Run-time type checker for Python"
 optional = false
-python-versions = ">=3.5.3"
+python-versions = ">=3.7.4"
 files = [
-    {file = "typeguard-2.13.3-py3-none-any.whl", hash = "sha256:5e3e3be01e887e7eafae5af63d1f36c849aaa94e3a0112097312aabfa16284f1"},
-    {file = "typeguard-2.13.3.tar.gz", hash = "sha256:00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4"},
+    {file = "typeguard-3.0.2-py3-none-any.whl", hash = "sha256:bbe993854385284ab42fd5bd3bee6f6556577ce8b50696d6cb956d704f286c8e"},
+    {file = "typeguard-3.0.2.tar.gz", hash = "sha256:fee5297fdb28f8e9efcb8142b5ee219e02375509cd77ea9d270b5af826358d5a"},
 ]
 
+[package.dependencies]
+importlib-metadata = {version = ">=3.6", markers = "python_version < \"3.10\""}
+typing-extensions = {version = ">=4.4.0", markers = "python_version < \"3.11\""}
+
 [package.extras]
-doc = ["sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
-test = ["mypy", "pytest", "typing-extensions"]
+doc = ["packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
+test = ["mypy (>=0.991)", "pytest (>=7)"]
 
 [[package]]
 name = "typing-extensions"
@@ -846,7 +866,22 @@ files = [
     {file = "yari_py-0.1.6-cp39-none-win_amd64.whl", hash = "sha256:eac1e82cbb5c72079c5d21aff44ad7ad762aae60b6e1d878e06b6190b80757b3"},
 ]
 
+[[package]]
+name = "zipp"
+version = "3.17.0"
+description = "Backport of pathlib-compatible object wrapper for zip files"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "zipp-3.17.0-py3-none-any.whl", hash = "sha256:0e923e726174922dce09c53c59ad483ff7bbb8e572e00c7f7c46b88556409f31"},
+    {file = "zipp-3.17.0.tar.gz", hash = "sha256:84e64a1c28cf7e91ed2078bb8cc8c259cb19b76942096c8d7b84947690cabaf0"},
+]
+
+[package.extras]
+docs = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx (<7.2.5)", "sphinx (>=3.5)", "sphinx-lint"]
+testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-ignore-flaky", "pytest-mypy (>=0.9.1)", "pytest-ruff"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "e6783602a0f3b30d917ac3ffd1efbeb7c2fb97ff09b8bda049ff95440e51438b"
+content-hash = "394a29df96d7b7bb9f7efad5d0784247031d620e824f1bc8ba9a46ad0fc26df5"
