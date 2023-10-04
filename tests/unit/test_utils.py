@@ -67,12 +67,13 @@ def test_first_non_space():
 
 
 def test_is_sha():
-    assert utils.is_sha256_hash("f3b7edffa346c23f24beba4d93880f358532085b3598319fed0cfa3010bbe675")
-    assert not utils.is_sha256_hash("")
-    assert utils.is_sha256_hash("a" * 64)
-    assert not utils.is_sha256_hash("A" * 64)
-    assert not utils.is_sha256_hash(" " + "A" * 64)
-    assert not utils.is_sha256_hash("A" * 64 + " ")
+    assert utils.is_hash("f3b7edffa346c23f24beba4d93880f358532085b3598319fed0cfa3010bbe675")
+    assert utils.is_hash("93880f358532085b3598319fed0cfa3010bbe675")
+    assert utils.is_hash("8532085b3598319fed0cfa3010bbe675")
+    assert utils.is_hash("8532085B3598319FED0CFA3010BBE675")
+    assert not utils.is_hash("")
+    assert not utils.is_hash(" " + "A" * 64)
+    assert not utils.is_hash("A" * 64 + " ")
 
 
 def test_range_from_line(mocker: MockerFixture):

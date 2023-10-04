@@ -477,7 +477,7 @@ def code_lens_eval(yara_file: yaramod.YaraFile) -> list[lsp_types.CodeLens]:
     for rule in utils.yaramod_rules_in_file(yara_file):
         for meta in rule.metas:
             # Consider only hash metas that have valid hash as value
-            if meta.key != "hash" and not utils.is_sha256_hash(meta.value.pure_text):
+            if meta.key != "hash" or not utils.is_hash(meta.value.pure_text):
                 continue
 
             # Create code lens for debugging
@@ -595,7 +595,7 @@ async def command_eval_set_context(ls: YaraLanguageServer, args: list[Any]) -> N
     utils.log_command(YaraLanguageServer.COMMAND_EVAL_SET_CONTEXT)
     log.debug(f"{args=}")
 
-    if len(args) != 2 or not utils.is_sha256_hash(args[0]):
+    if len(args) != 2 or not utils.is_hash(args[0]):
         return
 
     _hash = args[0]
