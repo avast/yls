@@ -64,7 +64,7 @@ class Hoverer:
             )
 
         log.debug(f'[HOVER] Hover request with token "{token}" and type "{token.type}"')
-        if token.type == yaramod.TokenType.StringId:
+        if token.type == yaramod.TokenType.StringId or token.type == yaramod.TokenType.StringIdAfterNewline:
             return await self.hover_string(token, document, position)
         elif token.type == yaramod.TokenType.Id:
             yara_file = utils.yaramod_parse_file(document.path)
