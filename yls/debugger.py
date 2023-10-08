@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import re
 from pathlib import Path
+from os import path
 from typing import Any
 
 import yari
@@ -34,7 +35,7 @@ class Debugger:
 
         log.debug(f'[DEBUGGER] Found sample and module files for hash "{sample_hash}": {files}')
         if not files:
-            return ErrorMessage(f"Sample {sample_hash} not found in {samples_dir}")
+            return ErrorMessage(f"Sample {sample_hash} not found in {path.abspath(samples_dir)}")
 
         # Sort files into groups by type of source
         sample: str | None = None
