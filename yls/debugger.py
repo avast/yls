@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import logging
 import re
-from pathlib import Path
 from os import path
+from pathlib import Path
 from typing import Any
 
 import yari
