@@ -489,10 +489,10 @@ def is_hash(i: str) -> bool:
 
     We accept upper and lowercase hashes"""
     return (
-                re.fullmatch("[0-9a-f]{32}", i, flags=re.IGNORECASE) or
-                re.fullmatch("[0-9a-f]{40}", i, flags=re.IGNORECASE) or
-                re.fullmatch("[0-9a-f]{64}", i, flags=re.IGNORECASE)
-            ) is not None
+        re.fullmatch("[0-9a-f]{32}", i, flags=re.IGNORECASE)
+        or re.fullmatch("[0-9a-f]{40}", i, flags=re.IGNORECASE)
+        or re.fullmatch("[0-9a-f]{64}", i, flags=re.IGNORECASE)
+    ) is not None
 
 
 def markdown_content(value: str) -> lsp_types.MarkupContent:
