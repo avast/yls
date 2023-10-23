@@ -484,11 +484,15 @@ def debug_hover(document: Document, position: lsp_types.Position) -> lsp_types.H
     return lsp_types.Hover(contents=f"Token = {token}\nLSP Position = {position}")
 
 
-def is_sha256_hash(i: str) -> bool:
-    """Check if the `i` looks like a sha256 hash.
+def is_hash(i: str) -> bool:
+    """Check if the `i` looks like a md5, sha1 or sha256 hash.
 
-    We accept only lowercase hashes because it is the same behavior as YRTC."""
-    return re.fullmatch("[0-9a-f]{64}", i) is not None
+    We accept upper and lowercase hashes"""
+    return (
+        re.fullmatch("[0-9a-f]{32}", i, flags=re.IGNORECASE)
+        or re.fullmatch("[0-9a-f]{40}", i, flags=re.IGNORECASE)
+        or re.fullmatch("[0-9a-f]{64}", i, flags=re.IGNORECASE)
+    ) is not None
 
 
 def markdown_content(value: str) -> lsp_types.MarkupContent:
@@ -526,7 +530,7 @@ def yaramod_rule_has_hashes(rule: yaramod.Rule) -> bool:
     """Check if YARA rule contains sample hashes in hash meta."""
     for meta in rule.metas:
         # Consider only hash metas that have valid hash as value
-        if meta.key != "hash" or not is_sha256_hash(meta.value.pure_text):
+        if meta.key != "hash" or not is_hash(meta.value.pure_text):
             continue
 
         return True
