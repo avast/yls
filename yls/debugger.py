@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import re
-from os import path
 from pathlib import Path
 from typing import Any
 
@@ -35,7 +34,7 @@ class Debugger:
 
         log.debug(f'[DEBUGGER] Found sample and module files for hash "{sample_hash}": {files}')
         if not files:
-            return ErrorMessage(f"Sample {sample_hash} not found in {path.abspath(samples_dir)}")
+            return ErrorMessage(f"Sample {sample_hash} not found in {samples_dir}")
 
         # Sort files into groups by type of source
         sample: str | None = None
@@ -106,7 +105,8 @@ class Debugger:
     async def get_samples_dir(ls: Any) -> Path | None:
         samples_dir_config = await utils.get_config_from_editor(ls, "yls.yari.samplesDirectory")
         log.debug(f"[DEBUGGER] Got {samples_dir_config=}")
-        samples_dir_path = Path(samples_dir_config)
+        samples_dir_path = Path(samples_dir_config).expanduser().resolve()
+        log.debug(f"[DEBUGGER] Resolved {samples_dir_config=}")
 
         if not samples_dir_path.is_dir():
             log.debug("[DEBUGGER] Samples dir does not exist or is not a directory")
