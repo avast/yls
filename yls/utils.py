@@ -487,7 +487,7 @@ def debug_hover(document: Document, position: lsp_types.Position) -> lsp_types.H
 def is_hash(i: str) -> bool:
     """Check if the `i` looks like a md5, sha1 or sha256 hash.
 
-    We accept upper and lowercase hashes"""
+    We accept upper and lowercase hashes."""
     return (
         re.fullmatch("[0-9a-f]{32}", i, flags=re.IGNORECASE)
         or re.fullmatch("[0-9a-f]{40}", i, flags=re.IGNORECASE)
