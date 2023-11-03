@@ -476,18 +476,18 @@ poetry-plugin = ["poetry (>=1.0,<2.0)"]
 
 [[package]]
 name = "pygls"
-version = "1.1.1"
+version = "1.1.2"
 description = "A pythonic generic language server (pronounced like 'pie glass')"
 optional = false
 python-versions = ">=3.7.9,<4"
 files = [
-    {file = "pygls-1.1.1-py3-none-any.whl", hash = "sha256:330704551a335b443bf1cdfb0507f121608591095898d451f0007eeb1510067c"},
-    {file = "pygls-1.1.1.tar.gz", hash = "sha256:b1b4ddd6f800a5573f61f0ec2cd3bc7a859d171f48142b46e1de35a1357c00fe"},
+    {file = "pygls-1.1.2-py3-none-any.whl", hash = "sha256:783d29c93679bb6756772f2de9b9f53b1a6fdf3fba66aeca23e87aa8aab20ecf"},
+    {file = "pygls-1.1.2.tar.gz", hash = "sha256:93fe17c01fd03307774290e685e7fa25bc1411cd72f243ff33eef21927fd0ad5"},
 ]
 
 [package.dependencies]
 lsprotocol = "2023.0.0b1"
-typeguard = ">=3.0.0,<4.0.0"
+typeguard = ">=3.0.0,<5"
 
 [package.extras]
 ws = ["websockets (>=11.0.3,<12.0.0)"]
@@ -884,4 +884,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "394a29df96d7b7bb9f7efad5d0784247031d620e824f1bc8ba9a46ad0fc26df5"
+content-hash = "0f18a3b5f758f30c5e81d52a14f5a66b7be8b0f0eb2384c4bfd0df4d35beb08c"
