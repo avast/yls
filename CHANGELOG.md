@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.4.0 (2023-11-03)
+
+* feat(debugger): Select hash for context and SHA1 & MD5 (#137)
+* feat(debugger): Enable debug hovers in strings section (#138)
+* feat(debugger): Normalize the `samples_dir` path (#139)
+* fix(syntax): Incorrect syntax on regexp end
+* fix(utils): Return range for first line on exception in range_from_line
+* chore(deps): Update pygls to v1.1.2
+* chore(deps): Remove unused bandit dependency
+
 # 1.3.4 (2023-06-21)
 
 * chore(deps): Update yaramod to v3.20.1
