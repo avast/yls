@@ -667,7 +667,7 @@ name = "pytest-yls"
 version = "1.4.0"
 description = "Pytest plugin to test the YLS as a whole."
 optional = false
-python-versions = ">=3.8,<3.12"
+python-versions = "^3.8"
 files = []
 develop = true
 
@@ -887,5 +887,5 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.8,<3.12"
-content-hash = "127fca01fa5cfa703700ab82b9d74dd90668d807e9d38d25ab9a2419a2458f5f"
+python-versions = "^3.8"
+content-hash = "146ac0aca49e63e59217210d0d5e29156f8adfc8a4fe1da6a666707d867bf1db"
