@@ -59,7 +59,7 @@ yls = 'yls.server:main'
 python = ">=3.8,<3.12"
 pygls = "^1.1.2"
 yaramod = "^3.21.0"
-yari-py = "^0.1.6"
+yari-py = "^0.2.1"
 pluggy = "^1.0.0"
 
 [build-system]
