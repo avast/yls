@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.4.1 (2024-01-11)
+
+* chore: Expand python compatibility to ^3.8
+* chore(deps): Update typing-extensions to v4.9.0
+* chore(deps): Update yari-py to v0.2.1
+* chore(deps): Update yaramod to v3.21.0
+* chore(deps): Update pylint to v3.0.3
+* chore(deps): Update pytest-pylint to v0.21.0
+* chore: Fix pylint arguments-renamed error in visitors
+* ci: Enable testing for python3.12
+* ci: Force python version in tests
+
 # 1.4.0 (2023-11-03)
 
 * feat(debugger): Select hash for context and SHA1 & MD5 (#137)

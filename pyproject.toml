@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yls"
-version = "1.4.0"
+version = "1.4.1"
 description = "YARA Language Server"
 authors = ["Matej Kašťák <matej.kastak@avast.com>"]
 maintainers = ["Matej Kašťák <matej.kastak@avast.com>"]
