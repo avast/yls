@@ -337,120 +337,120 @@ class YaramodExpressionExtractor(yaramod.ObservingVisitor):
             self.expr = expr
 
     # pylint: disable-next=invalid-name
-    def visit_FunctionCallExpression(self, expr: yaramod.FunctionCallExpression) -> None:  # type: ignore
-        self.extract(expr)
+    def visit_FunctionCallExpression(self, arg0: yaramod.FunctionCallExpression) -> None:  # type: ignore
+        self.extract(arg0)
 
     # pylint: disable-next=invalid-name
-    def visit_IdExpression(self, expr: yaramod.IdExpression) -> None:  # type: ignore
-        self.extract(expr)
+    def visit_IdExpression(self, arg0: yaramod.IdExpression) -> None:  # type: ignore
+        self.extract(arg0)
 
     # pylint: disable-next=invalid-name
-    def visit_StructAccessExpression(self, expr: yaramod.StructAccessExpression) -> None:  # type: ignore
-        self.extract(expr)
+    def visit_StructAccessExpression(self, arg0: yaramod.StructAccessExpression) -> None:  # type: ignore
+        self.extract(arg0)
 
     # pylint: disable-next=invalid-name
-    def visit_ArrayAccessExpression(self, expr: yaramod.ArrayAccessExpression) -> None:  # type: ignore
-        self.extract(expr)
+    def visit_ArrayAccessExpression(self, arg0: yaramod.ArrayAccessExpression) -> None:  # type: ignore
+        self.extract(arg0)
 
     # pylint: disable-next=invalid-name
-    def visit_StringExpression(self, expr: yaramod.StringExpression) -> None:  # type: ignore
-        self.extract(expr)
+    def visit_StringExpression(self, arg0: yaramod.StringExpression) -> None:  # type: ignore
+        self.extract(arg0)
 
     # pylint: disable-next=invalid-name
-    def visit_StringCountExpression(self, expr: yaramod.StringCountExpression) -> None:  # type: ignore
-        self.extract(expr)
+    def visit_StringCountExpression(self, arg0: yaramod.StringCountExpression) -> None:  # type: ignore
+        self.extract(arg0)
 
     # pylint: disable-next=invalid-name
-    def visit_StringOffsetExpression(self, expr: yaramod.StringOffsetExpression) -> None:  # type: ignore
-        self.extract(expr)
+    def visit_StringOffsetExpression(self, arg0: yaramod.StringOffsetExpression) -> None:  # type: ignore
+        self.extract(arg0)
 
     # pylint: disable-next=invalid-name
-    def visit_StringLengthExpression(self, expr: yaramod.StringLengthExpression) -> None:  # type: ignore
-        self.extract(expr)
+    def visit_StringLengthExpression(self, arg0: yaramod.StringLengthExpression) -> None:  # type: ignore
+        self.extract(arg0)
 
     # pylint: disable-next=invalid-name
-    def visit_OfExpression(self, expr: yaramod.OfExpression) -> None:  # type: ignore
-        self.extract(expr)
+    def visit_OfExpression(self, arg0: yaramod.OfExpression) -> None:  # type: ignore
+        self.extract(arg0)
 
     # pylint: disable-next=invalid-name
-    def visit_ForExpression(self, expr: yaramod.ForExpression) -> None:
-        self.extract(expr)
+    def visit_ForExpression(self, arg0: yaramod.ForExpression) -> None:
+        self.extract(arg0)
 
     # pylint: disable-next=invalid-name
-    def visit_IequalsExpression(self, expr: yaramod.IequalsExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_IequalsExpression(self, arg0: yaramod.IequalsExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_LtExpression(self, expr: yaramod.LtExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_LtExpression(self, arg0: yaramod.LtExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_GtExpression(self, expr: yaramod.GtExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_GtExpression(self, arg0: yaramod.GtExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_LeExpression(self, expr: yaramod.LeExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_LeExpression(self, arg0: yaramod.LeExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_GeExpression(self, expr: yaramod.GeExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_GeExpression(self, arg0: yaramod.GeExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_EqExpression(self, expr: yaramod.EqExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_EqExpression(self, arg0: yaramod.EqExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_NeqExpression(self, expr: yaramod.NeqExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_NeqExpression(self, arg0: yaramod.NeqExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_AndExpression(self, expr: yaramod.AndExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_AndExpression(self, arg0: yaramod.AndExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_OrExpression(self, expr: yaramod.OrExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_OrExpression(self, arg0: yaramod.OrExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_NotExpression(self, expr: yaramod.NotExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.operand.accept(self)
+    def visit_NotExpression(self, arg0: yaramod.NotExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_DefinedExpression(self, expr: yaramod.DefinedExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.operand.accept(self)
+    def visit_DefinedExpression(self, arg0: yaramod.DefinedExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_ContainsExpression(self, expr: yaramod.ContainsExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_ContainsExpression(self, arg0: yaramod.ContainsExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
     # pylint: disable-next=invalid-name
-    def visit_MatchesExpression(self, expr: yaramod.MatchesExpression) -> None:  # type: ignore
-        self.extract(expr)
-        expr.left_operand.accept(self)
-        expr.right_operand.accept(self)
+    def visit_MatchesExpression(self, arg0: yaramod.MatchesExpression) -> None:  # type: ignore
+        self.extract(arg0)
+        arg0.left_operand.accept(self)
+        arg0.right_operand.accept(self)
 
 
 def cursor_expression(
@@ -705,9 +705,9 @@ class RuleDependencyIdentifier(yaramod.ObservingVisitor):
 
         return self.discovered_rules
 
-    def visit_IdExpression(self, expr: yaramod.IdExpression) -> None:  # type: ignore
+    def visit_IdExpression(self, arg0: yaramod.IdExpression) -> None:  # type: ignore
         if self.last_rule and self.last_rule.name in self.discovered_rules:
-            self.discovered_rules.add(expr.symbol.name)
+            self.discovered_rules.add(arg0.symbol.name)
 
 
 def extract_rule_context_from_yarafile(yara_file: yaramod.YaraFile, rule: yaramod.Rule) -> str:
