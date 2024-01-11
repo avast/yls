@@ -648,19 +648,19 @@ pytest = [
 
 [[package]]
 name = "pytest-pylint"
-version = "0.19.0"
+version = "0.21.0"
 description = "pytest plugin to check source code with pylint"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pytest-pylint-0.19.0.tar.gz", hash = "sha256:d88e83c1023c641548a9ec3567707ceee7616632a986af133426d4a74d066932"},
-    {file = "pytest_pylint-0.19.0-py3-none-any.whl", hash = "sha256:b51d3f93bed9c192e2b046f16520981bee5abe7bd61b070306e7ee685219fdd3"},
+    {file = "pytest-pylint-0.21.0.tar.gz", hash = "sha256:88764b8e1d5cfa18809248e0ccc2fc05035f08c35f0b0222ddcfea1c3c4e553e"},
+    {file = "pytest_pylint-0.21.0-py3-none-any.whl", hash = "sha256:f10d9eaa72b9fbe624ee4b55da0481f56482eee0a467afc1ee3ae8b1fefbd0b4"},
 ]
 
 [package.dependencies]
-pylint = ">=2.3.0"
-pytest = ">=5.4"
-toml = ">=0.7.1"
+pylint = ">=2.15.0"
+pytest = ">=7.0"
+tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "pytest-yls"
@@ -888,4 +888,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "146ac0aca49e63e59217210d0d5e29156f8adfc8a4fe1da6a666707d867bf1db"
+content-hash = "81fc74829ead7111203404382cbb3063f54db5363fb0f248d88006a3d3c81270"
