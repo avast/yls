@@ -205,9 +205,11 @@ async def hover(
 
 def lint(
     ls: YaraLanguageServer,
-    params: lsp_types.DidOpenTextDocumentParams
-    | lsp_types.DidChangeTextDocumentParams
-    | lsp_types.DidSaveTextDocumentParams,
+    params: (
+        lsp_types.DidOpenTextDocumentParams
+        | lsp_types.DidChangeTextDocumentParams
+        | lsp_types.DidSaveTextDocumentParams
+    ),
 ) -> None:
     """Lint and publish diagnostics."""
     # NOTE: DiagnosticRelatedInformation can be used to show the redefinition of a rule/string

@@ -38,8 +38,7 @@ PluggyRes = Union[Awaitable[T], Callable[[], T], T]
 
 
 @hookspec(firstresult=True)
-def create_yaramod_instance() -> yaramod.Yaramod | None:
-    ...
+def create_yaramod_instance() -> yaramod.Yaramod | None: ...
 
 
 @hookspec
@@ -55,8 +54,7 @@ def yls_completion(params: CompletionParams, document: Document) -> list[Complet
 @hookspec(firstresult=True)
 def yls_formatting(
     ls: Any, params: DocumentFormattingParams, document: Document
-) -> list[TextEdit] | None:
-    ...
+) -> list[TextEdit] | None: ...
 
 
 @hookspec
@@ -70,8 +68,7 @@ def yls_supported_commands(ls: Any) -> list[str]:  # type: ignore
 
 
 @hookspec
-def yls_execute_command(command: str, ls: Any, params: Any) -> PluggyRes[Any | None]:
-    ...
+def yls_execute_command(command: str, ls: Any, params: Any) -> PluggyRes[Any | None]: ...
 
 
 @hookspec
