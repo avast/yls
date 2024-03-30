@@ -81,9 +81,11 @@ def parse_yara_warnings_and_hints(document, problems: List[str]) -> List[Diagnos
                 range=utils.range_from_coords((line, start_char), (line, end_char)),
                 message=error_msg,
                 source=SOURCE_YARA,
-                severity=DiagnosticSeverity.Hint
-                if problem_full.startswith("hint")
-                else DiagnosticSeverity.Warning,
+                severity=(
+                    DiagnosticSeverity.Hint
+                    if problem_full.startswith("hint")
+                    else DiagnosticSeverity.Warning
+                ),
             )
             res.append(diagnostic)
 
