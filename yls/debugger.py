@@ -105,6 +105,9 @@ class Debugger:
     async def get_samples_dir(ls: Any) -> Path | None:
         samples_dir_config = await utils.get_config_from_editor(ls, "yls.yari.samplesDirectory")
         log.debug(f"[DEBUGGER] Got {samples_dir_config=}")
+        if not samples_dir_config:
+            return None
+
         samples_dir_path = Path(samples_dir_config).expanduser().resolve()
         log.debug(f"[DEBUGGER] Resolved {samples_dir_config=}")
 
