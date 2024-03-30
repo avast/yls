@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.4.2 (2024-03-30)
+
+* fix: Handle the case where samples_dir has no value
+* Changed security notice
+* chore(deps): Update pygls to v1.3.0
+* chore(deps): Update black to v24.3.0
+* chore(deps): Bump semver from 5.7.1 to 5.7.2 in /editors/vscode
+
 # 1.4.1 (2024-01-11)
 
 * chore: Expand python compatibility to ^3.8
