@@ -16,7 +16,7 @@ pytest = "^8.3.3"
 pytest-asyncio = "^0.18.3"
 pytest-black = "^0.3.12"
 pytest-cov = "^5.0.0"
-pytest-mock = "^3.7.0"
+pytest-mock = "^3.14.0"
 pytest-mypy = "^0.9.1"
 pytest-pylint = "^0.21.0"
 pytest-yls = {path = "./pytest-yls", develop = true}
