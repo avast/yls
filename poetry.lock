@@ -434,13 +434,13 @@ poetry-plugin = ["poetry (>=1.0,<2.0)"]
 
 [[package]]
 name = "pygls"
-version = "1.3.0"
+version = "1.3.1"
 description = "A pythonic generic language server (pronounced like 'pie glass')"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pygls-1.3.0-py3-none-any.whl", hash = "sha256:d4a01414b6ed4e34e7e8fd29b77d3e88c29615df7d0bbff49bf019e15ec04b8f"},
-    {file = "pygls-1.3.0.tar.gz", hash = "sha256:1b44ace89c9382437a717534f490eadc6fda7c0c6c16ac1eaaf5568e345e4fb8"},
+    {file = "pygls-1.3.1-py3-none-any.whl", hash = "sha256:6e00f11efc56321bdeb6eac04f6d86131f654c7d49124344a9ebb968da3dd91e"},
+    {file = "pygls-1.3.1.tar.gz", hash = "sha256:140edceefa0da0e9b3c533547c892a42a7d2fd9217ae848c330c53d266a55018"},
 ]
 
 [package.dependencies]
@@ -791,4 +791,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "fc76c3ecd701fc16aa2d5fd93226ccbdcbbc8bcb6e51aac3f51d0330b0a1c294"
+content-hash = "1777ea6075ca136b0db2f156f1b0d159f6f3c040265d92ea6fab6f319e79a12c"
