@@ -9,7 +9,7 @@ license = "MIT"
 include = ["py.typed", "LICENSE"]
 
 [tool.poetry.dependencies]
-pytest = "^7.2.2"
+pytest = "^8.3.3"
 python = "^3.8"
 tenacity = "^8.0.1"
 

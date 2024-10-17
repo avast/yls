@@ -400,13 +400,13 @@ test = ["appdirs (==1.4.4)", "pytest (>=7.2)", "pytest-cov (>=4)", "pytest-mock 
 
 [[package]]
 name = "pluggy"
-version = "1.0.0"
+version = "1.5.0"
 description = "plugin and hook calling mechanisms for python"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.8"
 files = [
-    {file = "pluggy-1.0.0-py2.py3-none-any.whl", hash = "sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"},
-    {file = "pluggy-1.0.0.tar.gz", hash = "sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"},
+    {file = "pluggy-1.5.0-py3-none-any.whl", hash = "sha256:44e1ad92c8ca002de6377e165f3e0f1be63266ab4d554740532335b9d75ea669"},
+    {file = "pluggy-1.5.0.tar.gz", hash = "sha256:2cffa88e94fdc978c4c574f15f9e59b7f4201d439195c3715ca9e2486f1d0cf1"},
 ]
 
 [package.extras]
@@ -482,26 +482,25 @@ testutils = ["gitpython (>3)"]
 
 [[package]]
 name = "pytest"
-version = "7.2.2"
+version = "8.3.3"
 description = "pytest: simple powerful testing with Python"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "pytest-7.2.2-py3-none-any.whl", hash = "sha256:130328f552dcfac0b1cec75c12e3f005619dc5f874f0a06e8ff7263f0ee6225e"},
-    {file = "pytest-7.2.2.tar.gz", hash = "sha256:c99ab0c73aceb050f68929bc93af19ab6db0558791c6a0715723abe9d0ade9d4"},
+    {file = "pytest-8.3.3-py3-none-any.whl", hash = "sha256:a6853c7375b2663155079443d2e45de913a911a11d669df02a50814944db57b2"},
+    {file = "pytest-8.3.3.tar.gz", hash = "sha256:70b98107bd648308a7952b06e6ca9a50bc660be218d53c257cc1fc94fda10181"},
 ]
 
 [package.dependencies]
-attrs = ">=19.2.0"
 colorama = {version = "*", markers = "sys_platform == \"win32\""}
 exceptiongroup = {version = ">=1.0.0rc8", markers = "python_version < \"3.11\""}
 iniconfig = "*"
 packaging = "*"
-pluggy = ">=0.12,<2.0"
-tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
+pluggy = ">=1.5,<2"
+tomli = {version = ">=1", markers = "python_version < \"3.11\""}
 
 [package.extras]
-testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
+dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
 name = "pytest-asyncio"
@@ -620,7 +619,7 @@ files = []
 develop = true
 
 [package.dependencies]
-pytest = "^7.2.2"
+pytest = "^8.3.3"
 tenacity = "^8.0.1"
 
 [package.source]
@@ -791,4 +790,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "1777ea6075ca136b0db2f156f1b0d159f6f3c040265d92ea6fab6f319e79a12c"
+content-hash = "9d1a66551b69d2aa7dcca02d33850ebe1bd84f394b3ee265945a0c193d771914"
