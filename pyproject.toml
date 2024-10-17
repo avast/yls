@@ -9,7 +9,7 @@ license = "MIT"
 include = ["py.typed", "LICENSE", "LICENSE-THIRD-PARTY"]
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.3.0"
+black = "^24.8.0"
 isort = "^5.13.2"
 poethepoet = "^0.29.0"
 pytest = "^8.3.3"
