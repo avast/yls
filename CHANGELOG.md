@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.4.3 (2024-10-18)
+
+* chore(deps): update yara-python to v4.5.1
+* chore(deps): update yaramod to v3.23.0
+* chore(deps): Update other dependencies
+* chore(dependabot): Update dependabot configuration
+
 # 1.4.2 (2024-03-30)
 
 * fix: Handle the case where samples_dir has no value
