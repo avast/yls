@@ -747,22 +747,22 @@ files = [
 
 [[package]]
 name = "yaramod"
-version = "3.23.0"
+version = "4.0.0"
 description = "Library for manipulation of YARA files."
 optional = false
 python-versions = ">=3"
 files = [
-    {file = "yaramod-3.23.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5f9b8ced1f64bd5061f762b2b46f889974fff8bd291c8ee7e4dbc668685622c5"},
-    {file = "yaramod-3.23.0-cp310-cp310-win_amd64.whl", hash = "sha256:b8416928926d05435ab30853fffd8db0834f5cd0264971fb73cdc3e7f657fc43"},
-    {file = "yaramod-3.23.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:24de7c564ed3dc15d9f169b9da9baf7056ea9b56fb77eb6a0557ca05a9b67de0"},
-    {file = "yaramod-3.23.0-cp311-cp311-win_amd64.whl", hash = "sha256:22e16b4630f10852b10c28a47fa828b3265869463e4cde6ca969ca483c5a771e"},
-    {file = "yaramod-3.23.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c389faa66ab5bc96da46660d1dab2e1c6a2fd0f4af850ac6aefbe57f56128961"},
-    {file = "yaramod-3.23.0-cp312-cp312-win_amd64.whl", hash = "sha256:2eac9b9367aa6b68a12ab31047ca998d1d7df6154bcab2a4c325104ab16590e6"},
-    {file = "yaramod-3.23.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7eced35ae53ac903603d8f6529db9defafa917d983d8cae794ff1e8517e540d5"},
-    {file = "yaramod-3.23.0-cp38-cp38-win_amd64.whl", hash = "sha256:442a23106ce972e57e9f155c9337f3c6018f39fab4fe9e7837359c6236daf5d9"},
-    {file = "yaramod-3.23.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:328c881147562a70b13bcd829c8b5e96e51056f13e6185618c134a0e0abe4621"},
-    {file = "yaramod-3.23.0-cp39-cp39-win_amd64.whl", hash = "sha256:ba7bdc3f6733df79cd1adecd54a94f676644b154ed0f0032e348dada44c819b6"},
-    {file = "yaramod-3.23.0.tar.gz", hash = "sha256:d29206338e91ac556cc079f9b7127e4a28923e598262e1af7768efe4137f2d3a"},
+    {file = "yaramod-4.0.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1a2cc0c7d3ed1884eab10382f73346622d366b7922453e0f19e30353176e0fd1"},
+    {file = "yaramod-4.0.0-cp310-cp310-win_amd64.whl", hash = "sha256:62ae17b4672eb6cd6a0dfa1e803d8954827a43173c2e63f3b2d7976ceecc79db"},
+    {file = "yaramod-4.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:721c6d19c5bf4f47df529b56cdd27412cb03d823633265586cd0564e4c440712"},
+    {file = "yaramod-4.0.0-cp311-cp311-win_amd64.whl", hash = "sha256:eb93a71e4494b66e707c5b313de73143bdd12ff313abe0941038fd580136f161"},
+    {file = "yaramod-4.0.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7e5c62127debda7b38d5ccfac80fc70024104a638c2bd5fbc77f29cee1ad4a62"},
+    {file = "yaramod-4.0.0-cp312-cp312-win_amd64.whl", hash = "sha256:f76f4c61e6ca00c7e928ebf927a5bcfd460f4527fe3bce1fbc661e2225123d15"},
+    {file = "yaramod-4.0.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d8e8bc5933cf7fdef195264a3c7402d3df6861f467aa9b57178194144e00292e"},
+    {file = "yaramod-4.0.0-cp38-cp38-win_amd64.whl", hash = "sha256:f45786a21b5607b66cf02b5508d4ffd958f081abaf156b359849cebc820f5257"},
+    {file = "yaramod-4.0.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:38327474b7bd7fd4b4191afd2a58583a5b8c4405db32eaf05fe6ba1199cc068f"},
+    {file = "yaramod-4.0.0-cp39-cp39-win_amd64.whl", hash = "sha256:62e39c19f8bcc79114d4859dd4c971bcf54f6fd161d32c9abd66bdafc211e2f6"},
+    {file = "yaramod-4.0.0.tar.gz", hash = "sha256:8635b1ef0816dfa1be94086f6fd65be3c4760ea5971be712bc526ac66b7eab38"},
 ]
 
 [[package]]
@@ -789,4 +789,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "6603098f9a24abfdf209ee1db8348dd550f5de06278f4629dc9306381ea3254f"
+content-hash = "eaa910a486c169a055e8a2cd5f047bc655fb730454a519dd1d727b43781aa256"
