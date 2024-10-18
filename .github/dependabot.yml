@@ -5,23 +5,26 @@
 
 version: 2
 updates:
-  - package-ecosystem: "pip" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "daily"  
-    versioning-strategy: increase
-  - package-ecosystem: "pip" # See documentation for possible values
-    directory: "/plugins/yls-yara" # Location of package manifests
+  - package-ecosystem: "pip"
+    directories:
+      - "/"
+      - "/plugins/yls-yara"
+      - "/pytest-yls"
     schedule:
       interval: "daily"
     versioning-strategy: increase
-  - package-ecosystem: "pip" # See documentation for possible values
-    directory: "/pytest-yls" # Location of package manifests
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
+  - package-ecosystem: "npm"
+    directory: "/editors/vscode"
     schedule:
       interval: "daily"
     versioning-strategy: increase
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/editors/vscode" # Location of package manifests
-    schedule:
-      interval: "daily"
-    versioning-strategy: increase
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
