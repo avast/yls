@@ -11,7 +11,7 @@ export function activate(_context: ExtensionContext) {
   console.log("YARA vscode initialization");
 
   workspace.onDidChangeConfiguration((event) => {
-    let langServerAffected = event.affectsConfiguration("yls.executablePath");
+    const langServerAffected = event.affectsConfiguration("yls.executablePath");
     if (langServerAffected) {
       restartLanguageClient();
     }
@@ -30,9 +30,9 @@ async function restartLanguageClient(): Promise<void> {
   const config = workspace.getConfiguration("yls");
   console.log("YLS configuration ", config);
 
-  let execPath: string =
+  const execPath: string =
     process.env.YLS_EXECUTABLE_PATH || config.get("executablePath") || "yls";
-  let execArgs: Array<string> = ["-vv"];
+  const execArgs: string[] = ["-vv"];
 
   console.log("Exec path: ", execPath);
   console.log("Exec args: ", execArgs);
@@ -44,7 +44,7 @@ async function restartLanguageClient(): Promise<void> {
   };
 
   // Register the server for yara files
-  let clientOptions: LanguageClientOptions = {
+  const clientOptions: LanguageClientOptions = {
     documentSelector: [{ scheme: "file", language: "yara" }],
   };
 
