@@ -11,8 +11,8 @@ include = ["py.typed", "LICENSE", "LICENSE-THIRD-PARTY"]
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
 isort = "^5.13.2"
-poethepoet = "^0.29.0"
-pytest = "^8.3.3"
+poethepoet = "^0.30.0"
+pytest = "^8.3.4"
 pytest-asyncio = "^0.24.0"
 pytest-black = "^0.3.12"
 pytest-cov = "^5.0.0"
