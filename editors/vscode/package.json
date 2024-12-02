@@ -87,22 +87,24 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
-    "lint": "eslint src --ext ts",
+    "lint": "eslint",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "@stylistic/eslint-plugin": "^2.11.0",
     "@types/glob": "^8.0.1",
     "@types/mocha": "^10.0.9",
     "@types/node": "16.x",
     "@types/vscode": "^1.68.0",
-    "@typescript-eslint/eslint-plugin": "^8.9.0",
-    "@typescript-eslint/parser": "^8.9.0",
     "@vscode/test-electron": "^2.4.1",
-    "eslint": "^9.12.0",
+    "eslint": "^9.16.0",
     "glob": "^8.1.0",
+    "globals": "^15.13.0",
     "mocha": "^10.0.0",
     "ovsx": "^0.10.0",
     "typescript": "^4.9.5",
+    "typescript-eslint": "^8.16.0",
     "vsce": "^2.15.0"
   },
   "dependencies": {
