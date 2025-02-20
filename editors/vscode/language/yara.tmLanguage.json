@@ -427,7 +427,7 @@
     },
     "relational-operators-text": {
       "name": "keyword.operator.comparison.yara",
-      "match": "\\b(contains|icontains|startswith|istartswith|endswith|iendswith|iequals)(?=\\s*\")"
+      "match": "\\b(contains|icontains|startswith|istartswith|endswith|iendswith|iequals)\\b"
     },
     "relational-operators-regexp": {
       "name": "keyword.operator.comparison.yara",
