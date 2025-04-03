@@ -360,7 +360,7 @@
         },
         {
           "name": "keyword.other.yara",
-          "match": "\\b(at|for|in|of)\\b"
+          "match": "\\b(at|for|in|of|with)\\b"
         },
         {
           "name": "support.function.other.yara",
@@ -733,7 +733,7 @@
     },
     "reserved-identifiers": {
       "name": "invalid.illegal.identifier.yara",
-      "match": "\\b(all|and|any|ascii|at|base64|base64wide|condition|contains|endswith|entrypoint|false|filesize|for|fullword|global|import|icontains|iendswith|iequals|in|include|int16|int16be|int32|int32be|int8|int8be|istartswith|matches|meta|nocase|none|not|of|or|private|rule|startswith|strings|them|true|uint16|uint16be|uint32|uint32be|uint8|uint8be|wide|xor|defined)\\b"
+      "match": "\\b(all|and|any|ascii|at|base64|base64wide|condition|contains|endswith|entrypoint|false|filesize|for|fullword|global|import|icontains|iendswith|iequals|in|include|int16|int16be|int32|int32be|int8|int8be|istartswith|matches|meta|nocase|none|not|of|or|private|rule|startswith|strings|them|true|uint16|uint16be|uint32|uint32be|uint8|uint8be|wide|xor|defined|with)\\b"
     },
     "unmatched-characters": {
       "name": "invalid.illegal.character.yara",
