@@ -329,6 +329,7 @@
       "patterns": [
         {"include": "#comments"},
         {"include": "#condition-nested-expression"},
+        {"include": "#with-expression"},
         {"include": "#boolean-operators"},
         {"include": "#struct-member-access"},
         {"include": "#array-subscripting"},
@@ -376,6 +377,28 @@
         },
         {"include": "#identifiers"},
         {"include": "#unmatched-characters"}
+      ]
+    },
+    "with-expression": {
+      "name": "meta.with.expression.yara",
+      "begin": "\\b(with)\\b",
+      "beginCaptures": {
+        "1": {"name": "keyword.control.with.yara"}
+      },
+      "end": ":",
+      "patterns": [
+        {
+          "match": "\\b([A-Z_a-z][0-9A-Z_a-z]{0,127})\\s*(=)",
+          "captures": {
+            "1": {"name": "variable.other.assignment.yara"},
+            "2": {"name": "keyword.operator.assignment.yara"}
+          }
+        },
+        {
+          "name": "punctuation.separator.with-items.yara",
+          "match": ","
+        },
+        {"include": "#condition-expression"}
       ]
     },
     "condition-nested-expression": {
