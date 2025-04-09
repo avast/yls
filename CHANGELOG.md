@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.4.4 (2025-04-09)
+
+* feat(vscode): Extend syntax highlighting for with expressions
+* fix(vscode): Fix relational operators text syntax
+* chore(deps): Update yaramod to v4.3.0
+* chore(deps): Bump @eslint/plugin-kit in /editors/vscode
+* chore(deps): Bump cross-spawn from 7.0.3 to 7.0.6 in /editors/vscode
+* chore(deps): Bump tar-fs from 2.1.1 to 2.1.2 in /editors/vscode
+* chore(deps-dev): Bump the development-dependencies group across 1 directory with 3 updates
+
 # 1.4.3 (2024-10-18)
 
 * chore(deps): update yara-python to v4.5.1
