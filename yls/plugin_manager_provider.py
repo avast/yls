@@ -13,9 +13,6 @@ from pygls.workspace import Document
 from yls import hookimpl
 from yls import hookspecs
 from yls import utils
-from yls.debugger import DebuggerProvider
-from yls.hookspecs import PluggyRes
-from yls.hookspecs import PopupMessage
 
 log = logging.getLogger(__name__)
 
@@ -80,20 +77,6 @@ class YlsCorePlugin:
     @hookimpl
     def yls_scan_enabled(self) -> bool:
         return False
-
-    @hookimpl(trylast=True)
-    def yls_eval(
-        self,  # pylint: disable=unused-argument
-        ls: Any,  # pylint: disable=unused-argument
-        expr: str,
-    ) -> PluggyRes[str | PopupMessage]:
-        return DebuggerProvider().instance().eval(expr)
-
-    @hookimpl
-    def yls_eval_set_context(
-        self, ls: Any, _hash: str, ruleset: str  # pylint: disable=unused-argument
-    ) -> PluggyRes[PopupMessage]:
-        return DebuggerProvider().instance().set_context(ls, _hash, ruleset)
 
     @hookimpl
     def yls_eval_enabled(self) -> bool:
